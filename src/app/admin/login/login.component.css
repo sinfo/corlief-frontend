@@ -26,7 +26,29 @@
     padding-left: 3%;
 }
 
+.footer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.without-message {
+    justify-content: flex-end;
+}
+
+.with-message {
+    justify-content: space-between;
+}
+
 .card-body button {
     width: 25%;
-    align-self: center;
+    align-self: flex-start;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.errorMessage {
+    color: red;
 }

@@ -2,8 +2,12 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClientModule } from '@angular/common/http';
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { fas } from '@fortawesome/free-solid-svg-icons';
 
 import { AppRoutes } from './app.routes';
 
@@ -16,6 +20,8 @@ import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
 import { HomeComponent } from './admin/home/home.component';
 
+library.add(fas);
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -27,7 +33,8 @@ import { HomeComponent } from './admin/home/home.component';
     FormsModule,
     HttpClientModule,
     AppRoutes,
-    NgbModule
+    NgbModule,
+    FontAwesomeModule
   ],
   providers: [
     StorageService,

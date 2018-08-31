@@ -20,7 +20,18 @@
         <input [(ngModel)]="token" placeholder="token">
       </div>
 
-      <button class="btn btn-primary" (click)="login()">Login</button>
+      <span class="footer" [ngClass]="error ? 'with-message' : 'without-message'">
+
+        <span class="errorMessage" [hidden]="error === undefined">
+          <h6>{{error}}</h6>
+        </span>
+
+        <button class="btn" [ngClass]="loading ? 'btn-warning': 'btn-primary'" (click)="login()">
+          <fa-icon [icon]="['fas', 'sync']" [spin]="true" [hidden]="!loading"></fa-icon>
+          Login
+        </button>
+
+      </span>
 
     </div>
   </div>
