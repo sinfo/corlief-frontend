@@ -1,0 +1,32 @@
+.wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 25%;
+}
+
+.card {
+    width: 50%;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.input-group-prepend {
+    width: 15%;
+}
+
+.input-group-prepend span {
+    width: 100%;
+}
+
+.input-group input {
+    flex-grow: 1;
+    padding-left: 3%;
+}
+
+.card-body button {
+    width: 25%;
+    align-self: center;
+}

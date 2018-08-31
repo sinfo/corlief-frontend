@@ -1,3 +1,27 @@
-<p>
-  login works!
-</p>
+<span class="wrapper">
+  <div class="card">
+
+    <div class="card-header">
+      SINFO's login
+    </div>
+
+    <div class="card-body">
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">User</span>
+        </div>
+        <input [(ngModel)]="user" placeholder="user">
+      </div>
+
+      <div class="input-group mb-3">
+        <div class="input-group-prepend">
+          <span class="input-group-text">Token</span>
+        </div>
+        <input [(ngModel)]="token" placeholder="token">
+      </div>
+
+      <button class="btn btn-primary" (click)="login()">Login</button>
+
+    </div>
+  </div>
+</span>
