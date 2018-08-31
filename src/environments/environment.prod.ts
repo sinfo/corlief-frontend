@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  corlief: 'http://localhost:8888'
+  corlief: 'https://api.corlief.sinfo.org',
+  deck: 'https://deck.sinfo.org'
 };

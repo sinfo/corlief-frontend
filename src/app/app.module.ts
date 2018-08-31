@@ -15,11 +15,13 @@ import { AdminGuard } from './auth/admin.guard';
 
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
+import { HomeService } from 'src/app/admin/home/home.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
 import { HomeComponent } from './admin/home/home.component';
 import { NotfoundComponent } from './notfound/notfound.component';
+import { AdminComponent } from './admin/admin.component';
 
 library.add(fas);
 
@@ -28,7 +30,8 @@ library.add(fas);
     AppComponent,
     HomeComponent,
     LoginComponent,
-    NotfoundComponent
+    NotfoundComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,
@@ -41,7 +44,8 @@ library.add(fas);
   providers: [
     StorageService,
     LoginService,
-    AdminGuard
+    AdminGuard,
+    HomeService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,0 +1,20 @@
+.bg-dark {
+    background-color: #00254a !important;
+}
+
+.routers {
+    display: flex;
+    align-items: center;
+}
+
+.nav-link {
+    color: #8c9aa9;
+}
+
+.nav-link:hover, .selected, .selected:hover {
+    color: white;
+}
+
+.logo img {
+    max-height: 40px;
+}
