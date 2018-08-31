@@ -30,12 +30,12 @@ export class LoginComponent implements OnInit {
       .subscribe(
       (credentials: Credentials) => {
         this.changeLoading();
+        this.error = undefined;
         this.loginService.saveCredentials(credentials);
-        this.router.navigate(['/admin']);
+        this.router.navigate(['/']);
       },
       error => {
         this.changeLoading();
-        console.log(error.status);
 
         if (error.status === 401) {
           this.error = 'Invalid credentials';

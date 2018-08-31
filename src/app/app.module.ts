@@ -19,6 +19,7 @@ import { StorageService } from 'src/app/storage.service';
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
 import { HomeComponent } from './admin/home/home.component';
+import { NotfoundComponent } from './notfound/notfound.component';
 
 library.add(fas);
 
@@ -26,7 +27,8 @@ library.add(fas);
   declarations: [
     AppComponent,
     HomeComponent,
-    LoginComponent
+    LoginComponent,
+    NotfoundComponent
   ],
   imports: [
     BrowserModule,

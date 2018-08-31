@@ -9,10 +9,9 @@ export class AdminGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
     const isAuthenticated = this.login.isLoggedIn();
-    console.log('isAuthenticated', isAuthenticated);
 
     if (!isAuthenticated) {
-      this.router.navigate(['admin/login']);
+      this.router.navigate(['login']);
     }
 
     return isAuthenticated;

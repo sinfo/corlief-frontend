@@ -5,20 +5,21 @@ import { AdminGuard } from 'src/app/auth/admin.guard';
 
 import { HomeComponent } from 'src/app/admin/home/home.component';
 import { LoginComponent } from 'src/app/admin/login/login.component';
+import { NotfoundComponent } from 'src/app/notfound/notfound.component';
 
 const appRoutes: Routes = [
   {
-    path: 'admin',
+    path: '',
     component: HomeComponent,
     canActivate: [AdminGuard]
   },
   {
-    path: 'admin/login',
+    path: 'login',
     component: LoginComponent
   },
   {
     path: '**',
-    redirectTo: 'admin'
+    component: NotfoundComponent
   }
 ];
 
