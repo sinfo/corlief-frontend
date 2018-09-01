@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
 import { Venue } from './venue';
 
 @Component({
@@ -11,7 +11,10 @@ export class VenueComponent implements OnInit {
   @Input() venue: Venue;
   @Input() canBeEdited: boolean;
 
+  @ViewChild('venueImage') venueView: ElementRef;
+
   loadingSrc: String = 'assets/img/loading.gif';
+  loadingCompleted = false;
 
   constructor() { }
 
@@ -19,7 +22,9 @@ export class VenueComponent implements OnInit {
   }
 
   loaded(event: any) {
-    console.log('done');
+    this.loadingCompleted = true;
+    console.log('done!');
+    console.log('offsetheight', this.venueView.nativeElement.offsetHeight);
   }
 
 }

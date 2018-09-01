@@ -14,7 +14,10 @@
 <div class="wrapper" *ngIf="venue">
 
   <div class="venue-image">
-    <img [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
+    <span class="image-wrapper">
+      <img #venueImage [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
+      <canvas #canvas class="venue-canvas"></canvas>
+    </span>
   </div>
 
   <div class="stands">
