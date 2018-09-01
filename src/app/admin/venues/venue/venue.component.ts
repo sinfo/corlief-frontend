@@ -21,10 +21,13 @@ export class VenueComponent implements OnInit {
   ngOnInit() {
   }
 
-  loaded(event: any) {
-    this.loadingCompleted = true;
-    console.log('done!');
-    console.log('offsetheight', this.venueView.nativeElement.offsetHeight);
+  onUpdateVenue(venue: Venue) {
+    // As the new url is the same, but the image stored is different,
+    // the img tag has no way of knowing that it changed, so it doesn't
+    // make the request for the new image.
+    // By changing the url, it forces the reload.
+    this.venue.image = this.loadingSrc;
+    this.venue = venue;
   }
 
 }

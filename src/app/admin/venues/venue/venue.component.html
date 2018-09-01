@@ -5,7 +5,7 @@
   </span>
 
   <span class="upload" *ngIf="venue === null || canBeEdited">
-    <app-upload></app-upload>
+    <app-upload (newVenue)="onUpdateVenue($event)"></app-upload>
   </span>
 
 </div>
