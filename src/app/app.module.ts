@@ -18,6 +18,7 @@ import { StorageService } from 'src/app/storage.service';
 import { HomeService } from 'src/app/admin/home/home.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 import { VenuesService } from 'src/app/admin/venues/venues.service';
+import { UploadService } from 'src/app/admin/venues/upload/upload.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
@@ -26,6 +27,7 @@ import { NotfoundComponent } from './notfound/notfound.component';
 import { AdminComponent } from './admin/admin.component';
 import { LinksComponent } from './admin/links/links.component';
 import { VenuesComponent } from './admin/venues/venues.component';
+import { UploadComponent } from './admin/venues/upload/upload.component';
 
 library.add(fas);
 
@@ -37,7 +39,8 @@ library.add(fas);
     NotfoundComponent,
     AdminComponent,
     LinksComponent,
-    VenuesComponent
+    VenuesComponent,
+    UploadComponent
   ],
   imports: [
     BrowserModule,
@@ -53,7 +56,8 @@ library.add(fas);
     AdminGuard,
     HomeService,
     LinksService,
-    VenuesService
+    VenuesService,
+    UploadService
   ],
   bootstrap: [AppComponent]
 })

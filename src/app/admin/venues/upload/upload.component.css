@@ -1,0 +1,27 @@
+.uploadVenue {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.uploadVenue label {
+    padding-left: 0;
+}
+
+.spaced {
+    margin-top: 5%;
+}
+
+.progressbar {
+    width: 100%;
+}
+
+.venueUploaded {
+    display: flex;
+    justify-content: center;
+}
+
+.venueUploaded img {
+    max-height: 200px;
+}

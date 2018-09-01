@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 
 import { environment } from '../../../environments/environment';
@@ -27,18 +27,4 @@ export class VenuesService {
   getLatestVenue(): Observable<Venue> {
     return this.http.get<Venue>(`${this.corlief}/venue`, { headers: this.headers });
   }
-
-  uploadVenue(image: File): Observable<HttpEvent<{}>> {
-    const formdata: FormData = new FormData();
-    formdata.append('file', image);
-
-    const req = new HttpRequest('POST', `${this.corlief}/venue/image`, formdata, {
-      headers: this.headers,
-      reportProgress: true,
-      responseType: 'text'
-    });
-
-    return this.http.request(req);
-  }
-
 }
