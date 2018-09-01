@@ -5,7 +5,7 @@ import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { UploadService } from 'src/app/admin/venues/upload/upload.service';
 import { LoginService } from 'src/app/admin/login/login.service';
 
-import { Venue } from '../venue';
+import { Venue } from '../venue/venue';
 
 @Component({
   selector: 'app-upload',

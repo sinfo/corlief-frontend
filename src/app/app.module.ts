@@ -8,6 +8,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
+import { LazyLoadImageModule } from 'ng-lazyload-image';
 
 import { AppRoutes } from './app.routes';
 
@@ -28,6 +29,7 @@ import { AdminComponent } from './admin/admin.component';
 import { LinksComponent } from './admin/links/links.component';
 import { VenuesComponent } from './admin/venues/venues.component';
 import { UploadComponent } from './admin/venues/upload/upload.component';
+import { VenueComponent } from './admin/venues/venue/venue.component';
 
 library.add(fas);
 
@@ -40,7 +42,8 @@ library.add(fas);
     AdminComponent,
     LinksComponent,
     VenuesComponent,
-    UploadComponent
+    UploadComponent,
+    VenueComponent
   ],
   imports: [
     BrowserModule,
@@ -48,7 +51,8 @@ library.add(fas);
     HttpClientModule,
     AppRoutes,
     NgbModule.forRoot(),
-    FontAwesomeModule
+    FontAwesomeModule,
+    LazyLoadImageModule
   ],
   providers: [
     StorageService,

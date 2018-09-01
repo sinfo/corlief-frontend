@@ -1,0 +1,44 @@
+<div class="header">
+
+  <span class="edition" *ngIf="venue">
+    <h2>Edition: {{venue.edition}}</h2>
+  </span>
+
+  <span class="upload" *ngIf="venue === null || canBeEdited">
+    <app-upload></app-upload>
+  </span>
+
+</div>
+
+
+<div class="wrapper" *ngIf="venue">
+
+  <div class="venue-image">
+    <img [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
+  </div>
+
+  <div class="stands">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Stands</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+        </tr>
+        <tr>
+          <td>2</td>
+        </tr>
+        <tr>
+          <td>3</td>
+        </tr>
+        <tr>
+          <td>4</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>

@@ -6,7 +6,7 @@ import { environment } from '../../../environments/environment';
 import { StorageService } from 'src/app/storage.service';
 import { Credentials } from '../login/credentials';
 
-import { Venue } from './venue';
+import { Venue } from './venue/venue';
 
 @Injectable({
   providedIn: 'root'
@@ -24,7 +24,7 @@ export class VenuesService {
     });
   }
 
-  getLatestVenue(): Observable<Venue> {
-    return this.http.get<Venue>(`${this.corlief}/venue`, { headers: this.headers });
+  getCurrentVenue(): Observable<Venue> {
+    return this.http.get<Venue>(`${this.corlief}/venue/current`, { headers: this.headers });
   }
 }

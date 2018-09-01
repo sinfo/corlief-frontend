@@ -1,3 +1,9 @@
+.content {
+    padding-left: 2%;
+    padding-right: 2%;
+    padding-top: 2%;
+}
+
 .bg-dark {
     background-color: #00254a !important;
 }
