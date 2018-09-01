@@ -6,6 +6,7 @@ import { environment } from '../../../environments/environment';
 import { Credentials } from './credentials';
 
 import { StorageService } from 'src/app/storage.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,11 @@ export class LoginService {
 
   corlief: String = environment.corlief;
 
-  constructor(private http: HttpClient, private storage: StorageService) { }
+  constructor(
+    private http: HttpClient,
+    private storage: StorageService,
+    private router: Router
+  ) { }
 
   saveCredentials(credentials: Credentials) {
     this.storage.setItem('credentials', credentials);
@@ -27,6 +32,7 @@ export class LoginService {
 
   logout() {
     this.storage.removeItem('credentials');
+    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
