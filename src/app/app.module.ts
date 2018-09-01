@@ -30,6 +30,7 @@ import { LinksComponent } from './admin/links/links.component';
 import { VenuesComponent } from './admin/venues/venues.component';
 import { UploadComponent } from './admin/venues/upload/upload.component';
 import { VenueComponent } from './admin/venues/venue/venue.component';
+import { CanvasComponent } from './admin/venues/venue/canvas/canvas.component';
 
 library.add(fas);
 
@@ -43,7 +44,8 @@ library.add(fas);
     LinksComponent,
     VenuesComponent,
     UploadComponent,
-    VenueComponent
+    VenueComponent,
+    CanvasComponent
   ],
   imports: [
     BrowserModule,

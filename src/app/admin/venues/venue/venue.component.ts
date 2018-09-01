@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnChanges, Input, ElementRef, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
 import { Venue } from './venue';
 
 @Component({
@@ -6,7 +7,7 @@ import { Venue } from './venue';
   templateUrl: './venue.component.html',
   styleUrls: ['./venue.component.css']
 })
-export class VenueComponent implements OnInit {
+export class VenueComponent {
 
   @Input() venue: Venue;
   @Input() canBeEdited: boolean;
@@ -14,11 +15,13 @@ export class VenueComponent implements OnInit {
   @ViewChild('venueImage') venueView: ElementRef;
 
   loadingSrc: String = 'assets/img/loading.gif';
-  loadingCompleted = false;
+
+  private canvasOnSubject: Subject<boolean> = new Subject<boolean>();
 
   constructor() { }
 
-  ngOnInit() {
+  restartCanvas() {
+    this.canvasOnSubject.next();
   }
 
   onUpdateVenue(venue: Venue) {
