@@ -15,7 +15,7 @@
 
   <div class="venue-image">
     <span class="image-wrapper">
-      <img #venueImage (onLoad)="restartCanvas()" [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
+      <img #venueImage (onLoad)="updateCanvasState()" [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
       <span class="venue-canvas">
         <app-canvas [state]="canvasOnSubject.asObservable()"></app-canvas>
       </span>

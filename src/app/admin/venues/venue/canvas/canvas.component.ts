@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, SimpleChanges, SimpleChange, Input } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { fromEvent } from 'rxjs';
-import { switchMap, takeUntil, pairwise } from 'rxjs/operators';
+import { switchMap, takeUntil, pairwise, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 @Component({
@@ -15,14 +15,15 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas') public canvas: ElementRef;
 
-  private stateSubscription: Subscription;
+  stateSubscription: Subscription;
   @Input() state: Observable<boolean>;
 
-  private cx: CanvasRenderingContext2D;
+  cx: CanvasRenderingContext2D;
+  canvasEventsSubscription: Subscription;
 
   ngOnInit(): void {
-    this.stateSubscription = this.state.subscribe(() => {
-      this.start();
+    this.stateSubscription = this.state.subscribe((canBeEdited: boolean) => {
+      canBeEdited ? this.start() : this.stop();
     });
   }
 
@@ -46,57 +47,69 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.captureEvents(canvasEl);
   }
 
+  stop() {
+    this.canvasEventsSubscription.unsubscribe();
+  }
+
   private captureEvents(canvasEl: HTMLCanvasElement) {
-    fromEvent(canvasEl, 'mousedown')
+    let startPosition: { x: number, y: number };
+    this.canvasEventsSubscription = fromEvent(canvasEl, 'mousedown')
       .pipe(
-      switchMap((e) => {
+      tap(start => {
+        const mouse: MouseEvent = <MouseEvent>start;
+        const rect = canvasEl.getBoundingClientRect();
+
+        const pos = {
+          x: mouse.clientX - rect.left,
+          y: mouse.clientY - rect.top
+        };
+
+        startPosition = pos;
+      }),
+      switchMap(e => {
         return fromEvent(canvasEl, 'mousemove')
           .pipe(
           takeUntil(fromEvent(canvasEl, 'mouseup')),
-          takeUntil(fromEvent(canvasEl, 'mouseleave')),
-          pairwise()
+          takeUntil(fromEvent(canvasEl, 'mouseleave'))
           );
       })
-      )
-      .subscribe((res: [MouseEvent, MouseEvent]) => {
+      ).subscribe((mouse: MouseEvent) => {
         const rect = canvasEl.getBoundingClientRect();
 
         // previous and current position with the offset
-        const prevPos = {
-          x: res[0].clientX - rect.left,
-          y: res[0].clientY - rect.top
-        };
-
         const currentPos = {
-          x: res[1].clientX - rect.left,
-          y: res[1].clientY - rect.top
+          x: mouse.clientX - rect.left,
+          y: mouse.clientY - rect.top
         };
 
         // this method we'll implement soon to do the actual drawing
-        this.drawOnCanvas(prevPos, currentPos);
+        this.drawRectOnCanvas(startPosition, currentPos);
       });
   }
 
-  private drawOnCanvas(
-    prevPos: { x: number, y: number },
-    currentPos: { x: number, y: number }
+  private drawRectOnCanvas(
+    pos1: { x: number, y: number },
+    pos2: { x: number, y: number }
   ) {
     // incase the context is not set
     if (!this.cx) { return; }
+
+    this.cx.clearRect(0, 0, this.canvas.nativeElement.offsetWidth, this.canvas.nativeElement.offsetHeight);
 
     // start our drawing path
     this.cx.beginPath();
 
     // we're drawing lines so we need a previous position
-    if (prevPos) {
-      // sets the start point
-      this.cx.moveTo(prevPos.x, prevPos.y); // from
-      // draws a line from the start pos until the current position
-      this.cx.lineTo(currentPos.x, currentPos.y);
+    this.cx.moveTo(pos1.x, pos1.y);
 
-      // strokes the current path with the styles we set earlier
-      this.cx.stroke();
-    }
+    // draws a line from the start pos until the current position
+    this.cx.lineTo(pos2.x, pos1.y);
+    this.cx.lineTo(pos2.x, pos2.y);
+    this.cx.lineTo(pos1.x, pos2.y);
+    this.cx.lineTo(pos1.x, pos1.y);
+
+    // strokes the current path with the styles we set earlier
+    this.cx.stroke();
   }
 
 }

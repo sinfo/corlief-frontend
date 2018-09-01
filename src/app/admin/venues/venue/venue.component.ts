@@ -20,8 +20,8 @@ export class VenueComponent {
 
   constructor() { }
 
-  restartCanvas() {
-    this.canvasOnSubject.next();
+  updateCanvasState() {
+    this.canvasOnSubject.next(this.canBeEdited);
   }
 
   onUpdateVenue(venue: Venue) {
