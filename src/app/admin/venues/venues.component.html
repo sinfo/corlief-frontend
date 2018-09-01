@@ -1,3 +1,7 @@
-<p>
-  venues works!
-</p>
+<label class="btn btn-default">
+  <input type="file" (change)="selectFile($event)">
+</label>
+
+<ngb-progressbar type="info" [value]="progress.percentage" [max]="100"></ngb-progressbar>
+
+<button class="btn btn-primary" [disabled]="!selectedFiles" (click)="upload()">Upload</button>

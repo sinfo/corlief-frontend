@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 
 import { environment } from '../../../environments/environment';
@@ -15,18 +15,30 @@ import { Venue } from './venue';
 export class VenuesService {
 
   corlief: String = environment.corlief;
-  credentials: Credentials;
+  headers: HttpHeaders;
 
   constructor(private http: HttpClient, private storage: StorageService) {
-    this.credentials = <Credentials>this.storage.getItem('credentials');
+    const credentials = <Credentials>this.storage.getItem('credentials');
+    this.headers = new HttpHeaders({
+      Authorization: `${credentials.user} ${credentials.token}`
+    });
   }
 
   getLatestVenue(): Observable<Venue> {
-    const headers = new HttpHeaders({
-      Authorization: `${this.credentials.user} ${this.credentials.token}`
+    return this.http.get<Venue>(`${this.corlief}/venue`, { headers: this.headers });
+  }
+
+  uploadVenue(image: File): Observable<HttpEvent<{}>> {
+    const formdata: FormData = new FormData();
+    formdata.append('file', image);
+
+    const req = new HttpRequest('POST', `${this.corlief}/venue/image`, formdata, {
+      headers: this.headers,
+      reportProgress: true,
+      responseType: 'text'
     });
 
-    return this.http.get<Venue>(`${this.corlief}/venue`, { headers: headers });
+    return this.http.request(req);
   }
 
 }
