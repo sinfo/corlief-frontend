@@ -20,7 +20,7 @@
       </div>
 
       <div class="venueUploaded" *ngIf="venue">
-        <img [src]="venue.image">
+        <img [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
       </div>
 
       <div class="uploadVenue" [ngClass]="{ 'spaced': venue }">

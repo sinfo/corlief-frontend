@@ -1,4 +1,5 @@
 import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+
 import { HttpResponse, HttpEventType } from '@angular/common/http';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
@@ -16,15 +17,18 @@ export class UploadComponent implements OnInit {
 
   @Output() newVenue = new EventEmitter<Venue>();
 
+  venue: Venue;
+
   error: {
     type: String,
     message: String
   };
   closeResult: string;
-  venue: Venue;
   selectedFiles: FileList;
   currentFileUpload: File;
   progress: { percentage: number } = { percentage: 0 };
+
+  loadingSrc: String = 'assets/img/loading.gif';
 
   constructor(
     private uploadService: UploadService,
@@ -47,7 +51,7 @@ export class UploadComponent implements OnInit {
         if (event.type === HttpEventType.UploadProgress) {
           this.progress.percentage = Math.round(100 * event.loaded / event.total);
         } else if (event instanceof HttpResponse) {
-          const venue = <Venue>JSON.parse(<string>event.body);
+          const venue: Venue = <Venue>JSON.parse(<string>event.body);
           this.updateVenue(venue);
         }
       },
@@ -70,6 +74,7 @@ export class UploadComponent implements OnInit {
   }
 
   updateVenue(venue: Venue) {
+    venue.image = `${venue.image}?t=${new Date().getTime()}`;
     this.venue = venue;
     this.newVenue.emit(venue);
   }
