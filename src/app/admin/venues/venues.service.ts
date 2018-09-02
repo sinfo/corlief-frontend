@@ -44,4 +44,8 @@ export class VenuesService {
   uploadStand(stand: Stand): Observable<Venue> {
     return this.http.post<Venue>(`${this.corlief}/venue/stand`, stand, { headers: this.headers });
   }
+
+  deleteStand(id: number): Observable<Venue> {
+    return this.http.delete<Venue>(`${this.corlief}/venue/stand/${id}`, { headers: this.headers });
+  }
 }

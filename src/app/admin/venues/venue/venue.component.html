@@ -21,12 +21,38 @@
     <table class="table table-bordered">
       <thead>
         <tr>
-          <th scope="col">Stands</th>
+          <th scope="col">
+
+            <span class="row-content">
+              <span class="row-title">
+                Stands
+              </span>
+
+              <span class="row-icon" (click)="alternateLock()">
+                <fa-icon *ngIf="lockedStands; else unlocked" [icon]="['fas', 'lock']"></fa-icon>
+                <ng-template #unlocked>
+                  <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                </ng-template>
+              </span>
+            </span>
+
+          </th>
         </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let stand of venue.stands" class="stand" (mouseover)="selectStand(stand.id)" (mouseleave)="deselectStand(stand.id)">
-          <td>{{stand.id}}</td>
+        <tr *ngFor="let stand of venue.stands | sortStands" class="stand" (mouseover)="selectStand(stand.id)" (mouseleave)="deselectStand(stand.id)">
+          <td scope="col">
+            <span [ngClass]="{'row-content': !lockedStands}">
+
+              <span [ngClass]="{'row-title': !lockedStands}">{{stand.id}}</span>
+
+              <span class="row-icon" *ngIf="!lockedStands" (click)="deleteStand(stand.id)">
+                <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+              </span>
+
+            </span>
+
+          </td>
         </tr>
         <tr>
           <td id="addStand">
@@ -34,9 +60,18 @@
               <fa-icon [icon]="['fas', 'plus']"></fa-icon>
             </button>
 
-            <button class="btn btn-success" (click)="uploadStand()" *ngIf="confirmStand !== undefined" [disabled]="!confirmStand">
-              <fa-icon [icon]="['fas', 'check']"></fa-icon>
-            </button>
+            <span *ngIf="confirmStand !== undefined" class="confirm">
+
+              <button class="btn btn-success" (click)="uploadStand()" [disabled]="!confirmStand">
+                <fa-icon [icon]="['fas', 'check']"></fa-icon>
+              </button>
+
+              <button class="btn btn-danger" (click)="cancelStand()" [disabled]="!confirmStand">
+                <fa-icon [icon]="['fas', 'times']"></fa-icon>
+              </button>
+
+            </span>
+
           </td>
         </tr>
       </tbody>

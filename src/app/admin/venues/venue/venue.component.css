@@ -34,3 +34,31 @@
 .stand:hover {
     border: 3px solid #007bff;
 }
+
+.row-content {
+    display: flex;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.row-title {
+    flex: 0 1 auto;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.row-icon {
+    float: right;
+    cursor: pointer;
+}
+
+.confirm {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.confirm button {
+    width: 10%;
+}

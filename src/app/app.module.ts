@@ -14,6 +14,8 @@ import { AppRoutes } from './app.routes';
 
 import { AdminGuard } from './auth/admin.guard';
 
+import { SortStandsPipe } from './admin/venues/venue/sort-stands.pipe';
+
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
 import { HomeService } from 'src/app/admin/home/home.service';
@@ -48,7 +50,8 @@ library.add(fas);
     UploadComponent,
     VenueComponent,
     CanvasComponent,
-    VenueImageComponent
+    VenueImageComponent,
+    SortStandsPipe
   ],
   imports: [
     BrowserModule,

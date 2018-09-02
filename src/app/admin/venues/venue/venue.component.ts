@@ -23,8 +23,10 @@ export class VenueComponent implements OnInit {
   @Input() canBeEdited: boolean;
 
   loadingSrc: String = 'assets/img/loading.gif';
-  confirmStand: boolean;
   newStand: Stand;
+
+  confirmStand: boolean;
+  lockedStands: boolean;
 
   constructor(
     private venuesService: VenuesService,
@@ -32,6 +34,8 @@ export class VenueComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.lockedStands = true;
+
     this.newStandSubscription = this.canvasService.getNewStandSubject()
       .subscribe(stand => {
         if (stand) {
@@ -42,6 +46,17 @@ export class VenueComponent implements OnInit {
 
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => this.venue = venue);
+  }
+
+  alternateLock() {
+    this.lockedStands = !this.lockedStands;
+  }
+
+  deleteStand(id: number) {
+    this.lockedStands = true;
+    this.venuesService.deleteStand(id).subscribe(venue => {
+      this.venuesService.setVenue(venue);
+    });
   }
 
   selectStand(id: number) {
@@ -60,6 +75,12 @@ export class VenueComponent implements OnInit {
   newStandPreparations() {
     this.canvasService.on();
     this.confirmStand = false;
+  }
+
+  cancelStand() {
+    this.confirmStand = undefined;
+    this.canvasService.revert();
+    this.canvasService.off();
   }
 
   uploadStand() {

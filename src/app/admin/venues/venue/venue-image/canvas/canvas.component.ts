@@ -29,10 +29,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   venueSubscription: Subscription;
   commSubscription: Subscription;
-  newStandSubscription: Subscription;
 
   stands: [Stand];
-  newStand: Stand;
+  pendingStand: Stand;
   on = false;
 
   startingPoint: { x: number, y: number };
@@ -74,6 +73,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
           case CanvasState.REVERT:
             if (this.cx) {
               this.on = false;
+              this.pendingStand = undefined;
               this.clearCanvas();
               communication.selectedStand !== undefined
                 ? this.drawStands(communication.selectedStand)
@@ -97,7 +97,9 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   drawStands(selected?: number) {
-    const stands = this.stands.map(stand => {
+    let stands = this.pendingStand ? this.stands.concat([this.pendingStand]) : this.stands;
+
+    stands = stands.map(stand => {
       return <Stand>{
         id: stand.id,
         topLeft: this.convertPosToAbsolute(stand.topLeft),
@@ -167,6 +169,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
     const mouse: MouseEvent = <MouseEvent>event;
     const rect = canvasEl.getBoundingClientRect();
 
+    this.pendingStand = undefined;
+
     const pos = {
       x: mouse.clientX - rect.left,
       y: mouse.clientY - rect.top
@@ -189,6 +193,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
       pos2: this.convertPosToRelative(pos)
     });
 
+    console.log('Size', this.stands.length);
+    this.pendingStand = stand;
     this.canvasService.addNewStand(stand);
   }
 

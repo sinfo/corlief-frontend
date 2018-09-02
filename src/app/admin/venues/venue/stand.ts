@@ -19,4 +19,13 @@ export class Stand {
         this.topLeft = { x: x[0], y: y[1] };
         this.bottomRight = { x: x[1], y: y[0] };
     }
+
+    static compare(s1: Stand, s2: Stand) {
+        if (s1.id === undefined || s2.id === undefined) {
+            return 0;
+        }
+
+        if (s1.id > s2.id) { return 1; }
+        return s1.id === s2.id ? 0 : -1;
+    }
 }
