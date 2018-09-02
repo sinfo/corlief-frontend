@@ -48,3 +48,7 @@
 .stands table {
     width: 80%;
 }
+
+.stand:hover {
+    border: 3px solid #007bff;
+}

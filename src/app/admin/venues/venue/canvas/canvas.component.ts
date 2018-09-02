@@ -1,8 +1,18 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ElementRef, ViewChild, SimpleChanges, SimpleChange, Input } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy,
+  AfterViewInit, ElementRef, ViewChild, SimpleChanges,
+  SimpleChange, Input, Output, EventEmitter
+} from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { fromEvent } from 'rxjs';
 import { switchMap, takeUntil, pairwise, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/internal/Subscription';
+
+import { VenuesService } from 'src/app/admin/venues/venues.service';
+
+import { CanvasState, CanvasCommunication } from './canvasCommunication';
+import { Stand } from '../stand';
+import { Venue } from '../venue';
 
 @Component({
   selector: 'app-canvas',
@@ -11,66 +21,127 @@ import { Subscription } from 'rxjs/internal/Subscription';
 })
 export class CanvasComponent implements OnInit, OnDestroy {
 
-  constructor() { }
-
   @ViewChild('canvas') public canvas: ElementRef;
+  defaultColor = '#00386f';
+  selectedColor = '#007bff';
 
-  stateSubscription: Subscription;
-  @Input() state: Observable<boolean>;
+  venueSubscription: Subscription;
+  communicationSubscription: Subscription;
+
+  @Input() canvasCommunication: Observable<CanvasCommunication>;
+  @Output() newStand = new EventEmitter<Stand>();
+
+  stands: [Stand];
+  on = false;
+
+  startingPoint: { x: number, y: number };
 
   cx: CanvasRenderingContext2D;
   canvasEventsSubscription: Subscription;
 
+  constructor(private venuesService: VenuesService) { }
+
   ngOnInit(): void {
-    this.stateSubscription = this.state.subscribe((canBeEdited: boolean) => {
-      canBeEdited ? this.start() : this.stop();
+    this.venueSubscription = this.venuesService.getVenueSubject()
+      .subscribe(venue => this.stands = venue.stands);
+
+    this.communicationSubscription = this.canvasCommunication.subscribe((communication: CanvasCommunication) => {
+      switch (communication.state) {
+        case CanvasState.SETUP:
+          this.setup();
+          this.drawStands();
+          break;
+
+        case CanvasState.ON:
+          if (this.cx) {
+            this.on = true;
+            this.start();
+          }
+          break;
+
+        case CanvasState.OFF:
+          if (this.cx) {
+            this.on = false;
+            this.stop();
+          }
+          break;
+
+        case CanvasState.REVERT:
+          if (this.cx) {
+            this.on = false;
+            this.clearCanvas();
+            communication.selectedStand !== undefined
+              ? this.drawStands(communication.selectedStand)
+              : this.drawStands();
+          }
+          break;
+
+        case CanvasState.CLEAR:
+          if (this.cx) {
+            this.on = false;
+            this.clearCanvas();
+          }
+          break;
+      }
     });
   }
 
   ngOnDestroy() {
-    this.stateSubscription.unsubscribe();
+    this.communicationSubscription.unsubscribe();
   }
 
-  start() {
+  drawStands(selected?: number) {
+    const stands = this.stands.map(stand => {
+      return <Stand>{
+        id: stand.id,
+        topLeft: this.convertPosToAbsolute(stand.topLeft),
+        bottomRight: this.convertPosToAbsolute(stand.bottomRight)
+      };
+    });
+
+    for (const stand of stands) {
+      const pos1 = stand.topLeft;
+      const pos2 = stand.bottomRight;
+
+      if (selected !== undefined && selected === stand.id) {
+        this.cx.strokeStyle = this.selectedColor;
+      } else {
+        this.cx.strokeStyle = this.defaultColor;
+      }
+      this.drawRect(pos1, pos2);
+    }
+  }
+
+  setup() {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.cx = canvasEl.getContext('2d');
 
     canvasEl.width = this.canvas.nativeElement.offsetWidth;
     canvasEl.height = this.canvas.nativeElement.offsetHeight;
 
-    // set some default properties about the line
     this.cx.lineWidth = 3;
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = '#000';
-
-    // we'll implement this method to start capturing mouse events
-    this.captureEvents(canvasEl);
+    this.cx.strokeStyle = '#00386f';
   }
 
   stop() {
     this.canvasEventsSubscription.unsubscribe();
   }
 
-  private captureEvents(canvasEl: HTMLCanvasElement) {
-    let startPosition: { x: number, y: number };
+  start() {
+    const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.canvasEventsSubscription = fromEvent(canvasEl, 'mousedown')
       .pipe(
-      tap(start => {
-        const mouse: MouseEvent = <MouseEvent>start;
-        const rect = canvasEl.getBoundingClientRect();
-
-        const pos = {
-          x: mouse.clientX - rect.left,
-          y: mouse.clientY - rect.top
-        };
-
-        startPosition = pos;
-      }),
+      tap(start => this.captureFirstPoint(canvasEl, start)),
       switchMap(e => {
         return fromEvent(canvasEl, 'mousemove')
           .pipe(
-          takeUntil(fromEvent(canvasEl, 'mouseup')),
-          takeUntil(fromEvent(canvasEl, 'mouseleave'))
+          takeUntil(fromEvent(canvasEl, 'mouseup').pipe(
+            tap(end => this.captureLastPoint(canvasEl, end))
+          )),
+          takeUntil(fromEvent(canvasEl, 'mouseleave').pipe(
+            tap(end => this.captureLastPoint(canvasEl, end))
+          ))
           );
       })
       ).subscribe((mouse: MouseEvent) => {
@@ -82,19 +153,61 @@ export class CanvasComponent implements OnInit, OnDestroy {
           y: mouse.clientY - rect.top
         };
 
-        // this method we'll implement soon to do the actual drawing
-        this.drawRectOnCanvas(startPosition, currentPos);
+        this.drawNewRect(this.startingPoint, currentPos);
       });
   }
 
-  private drawRectOnCanvas(
+  captureFirstPoint(canvasEl: HTMLCanvasElement, event: Event) {
+    const mouse: MouseEvent = <MouseEvent>event;
+    const rect = canvasEl.getBoundingClientRect();
+
+    const pos = {
+      x: mouse.clientX - rect.left,
+      y: mouse.clientY - rect.top
+    };
+
+    this.startingPoint = pos;
+  }
+
+  captureLastPoint(canvasEl: HTMLCanvasElement, event: Event) {
+    const mouse: MouseEvent = <MouseEvent>event;
+    const rect = canvasEl.getBoundingClientRect();
+
+    const pos = {
+      x: mouse.clientX - rect.left,
+      y: mouse.clientY - rect.top
+    };
+
+    const stand: Stand = new Stand({
+      pos1: this.convertPosToRelative(this.startingPoint),
+      pos2: this.convertPosToRelative(pos)
+    });
+
+    this.newStand.emit(stand);
+  }
+
+  clearCanvas() {
+    this.cx.clearRect(
+      0, 0,
+      this.canvas.nativeElement.offsetWidth, this.canvas.nativeElement.offsetHeight
+    );
+  }
+
+  drawNewRect(
+    pos1: { x: number, y: number },
+    pos2: { x: number, y: number }
+  ) {
+    this.clearCanvas();
+    this.drawStands();
+    this.drawRect(pos1, pos2);
+  }
+
+  drawRect(
     pos1: { x: number, y: number },
     pos2: { x: number, y: number }
   ) {
     // incase the context is not set
     if (!this.cx) { return; }
-
-    this.cx.clearRect(0, 0, this.canvas.nativeElement.offsetWidth, this.canvas.nativeElement.offsetHeight);
 
     // start our drawing path
     this.cx.beginPath();
@@ -112,4 +225,17 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.cx.stroke();
   }
 
+  convertPosToRelative(pos: { x: number, y: number }) {
+    const w = this.canvas.nativeElement.offsetWidth;
+    const h = this.canvas.nativeElement.offsetHeight;
+
+    return { x: pos.x / w, y: pos.y / h };
+  }
+
+  convertPosToAbsolute(pos: { x: number, y: number }) {
+    const w = this.canvas.nativeElement.offsetWidth;
+    const h = this.canvas.nativeElement.offsetHeight;
+
+    return { x: pos.x * w, y: pos.y * h };
+  }
 }

@@ -11,8 +11,6 @@ import { Venue } from './venue/venue';
 })
 export class VenuesComponent implements OnInit {
 
-  current: Venue;
-  selected: Venue;
   canBeEdited: boolean;
 
   constructor(private venuesService: VenuesService) { }
@@ -24,13 +22,11 @@ export class VenuesComponent implements OnInit {
   getCurrent() {
     this.venuesService.getCurrentVenue().subscribe(
       venue => {
-        this.current = venue;
-        this.selected = venue;
         this.canBeEdited = true;
+        this.venuesService.setVenue(venue);
       },
       error => {
         if (error.status === 404) {
-          this.current = null;
           this.canBeEdited = false;
         } else {
           console.error(error);

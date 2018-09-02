@@ -15,9 +15,9 @@
 
   <div class="venue-image">
     <span class="image-wrapper">
-      <img (onLoad)="updateCanvasState()" [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
+      <img (onLoad)="canvasStateSetup()" [defaultImage]="loadingSrc" [lazyLoad]="venue.image">
       <span class="venue-canvas">
-        <app-canvas [state]="canvasOnSubject.asObservable()"></app-canvas>
+        <app-canvas [canvasCommunication]="canvasCommunicationSubject.asObservable()" (newStand)="onNewStand($event)"></app-canvas>
       </span>
     </span>
   </div>
@@ -30,17 +30,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
+        <tr *ngFor="let stand of venue.stands" class="stand" (mouseover)="selectStand(stand.id)" (mouseleave)="deselectStand(stand.id)">
+          <td>{{stand.id}}</td>
         </tr>
         <tr>
-          <td>2</td>
-        </tr>
-        <tr>
-          <td>3</td>
-        </tr>
-        <tr>
-          <td>4</td>
+          <td id="addStand">
+            <button class="btn btn-outline-primary" (click)="addStand()" *ngIf="confirmStand === undefined">
+              <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+            </button>
+
+            <button class="btn btn-success" (click)="uploadStand()" *ngIf="confirmStand !== undefined" [disabled]="!confirmStand">
+              <fa-icon [icon]="['fas', 'check']"></fa-icon>
+            </button>
+          </td>
         </tr>
       </tbody>
     </table>
