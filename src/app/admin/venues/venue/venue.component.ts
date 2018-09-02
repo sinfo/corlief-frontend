@@ -4,9 +4,10 @@ import { Subject } from 'rxjs';
 
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 
-import { CanvasState, CanvasCommunication } from './canvas/canvasCommunication';
+import { CanvasState, CanvasCommunication } from './venue-image/canvas/canvasCommunication';
 import { Venue } from './venue';
 import { Stand } from './stand';
+import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
 
 @Component({
   selector: 'app-venue',
@@ -16,6 +17,8 @@ import { Stand } from './stand';
 export class VenueComponent implements OnInit {
 
   venueSubscription: Subscription;
+  newStandSubscription: Subscription;
+
   venue: Venue;
   @Input() canBeEdited: boolean;
 
@@ -23,73 +26,53 @@ export class VenueComponent implements OnInit {
   confirmStand: boolean;
   newStand: Stand;
 
-  private canvasCommunicationSubject: Subject<CanvasCommunication> = new Subject<CanvasCommunication>();
-
-  constructor(private venuesService: VenuesService) { }
+  constructor(
+    private venuesService: VenuesService,
+    private canvasService: CanvasService
+  ) { }
 
   ngOnInit() {
+    this.newStandSubscription = this.canvasService.getNewStandSubject()
+      .subscribe(stand => {
+        if (stand) {
+          this.confirmStand = true;
+          this.newStand = stand;
+        }
+      });
+
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => this.venue = venue);
   }
 
-  canvasStateSetup() {
-    this.canvasCommunicationSubject.next(this.buildCanvasCommunication(CanvasState.SETUP));
-  }
-
-  canvasStateOn() {
-    this.canvasCommunicationSubject.next(this.buildCanvasCommunication(CanvasState.ON));
-  }
-
-  canvasStateOff() {
-    this.canvasCommunicationSubject.next(this.buildCanvasCommunication(CanvasState.OFF));
-  }
-
-  canvasStateRevert(selectedStand?: number) {
-    this.canvasCommunicationSubject.next(this.buildCanvasCommunication(CanvasState.REVERT, selectedStand));
-  }
-
-  canvasStateClear() {
-    this.canvasCommunicationSubject.next(this.buildCanvasCommunication(CanvasState.CLEAR));
-  }
-
-  buildCanvasCommunication(state: CanvasState, selectedStand?: number) {
-    return selectedStand !== undefined
-      ? new CanvasCommunication(state, selectedStand)
-      : new CanvasCommunication(state);
-  }
-
   selectStand(id: number) {
-    this.canvasStateRevert(id);
+    this.canvasService.revert(id);
   }
 
   deselectStand(id: number) {
-    this.canvasStateRevert();
+    this.canvasService.revert();
   }
 
   onUpdateVenue(venue: Venue) {
     this.venue = venue;
-    this.canvasStateClear();
+    this.canvasService.clear();
   }
 
-  addStand() {
-    this.canvasStateOn();
+  newStandPreparations() {
+    this.canvasService.on();
     this.confirmStand = false;
   }
 
-  onNewStand(stand: Stand) {
-    this.confirmStand = true;
-    this.newStand = stand;
-  }
-
   uploadStand() {
+    const stand = this.newStand;
     this.confirmStand = undefined;
-    this.canvasStateOff();
-    this.venuesService.uploadStand(this.newStand).subscribe(
+
+    this.canvasService.off();
+    this.venuesService.uploadStand(stand).subscribe(
       (venue: Venue) => {
         this.venuesService.setVenue(venue);
         this.venue = venue;
         this.confirmStand = undefined;
-        this.canvasStateRevert();
+        this.canvasService.revert();
       },
       error => {
         if (error.status === 422) {

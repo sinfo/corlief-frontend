@@ -20,6 +20,7 @@ import { HomeService } from 'src/app/admin/home/home.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { UploadService } from 'src/app/admin/venues/upload/upload.service';
+import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
@@ -30,7 +31,8 @@ import { LinksComponent } from './admin/links/links.component';
 import { VenuesComponent } from './admin/venues/venues.component';
 import { UploadComponent } from './admin/venues/upload/upload.component';
 import { VenueComponent } from './admin/venues/venue/venue.component';
-import { CanvasComponent } from './admin/venues/venue/canvas/canvas.component';
+import { CanvasComponent } from './admin/venues/venue/venue-image/canvas/canvas.component';
+import { VenueImageComponent } from './admin/venues/venue/venue-image/venue-image.component';
 
 library.add(fas);
 
@@ -45,7 +47,8 @@ library.add(fas);
     VenuesComponent,
     UploadComponent,
     VenueComponent,
-    CanvasComponent
+    CanvasComponent,
+    VenueImageComponent
   ],
   imports: [
     BrowserModule,
@@ -63,7 +66,8 @@ library.add(fas);
     HomeService,
     LinksService,
     VenuesService,
-    UploadService
+    UploadService,
+    CanvasService
   ],
   bootstrap: [AppComponent]
 })

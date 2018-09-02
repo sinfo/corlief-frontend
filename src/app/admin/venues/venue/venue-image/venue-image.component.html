@@ -1,0 +1,6 @@
+<span class="image-wrapper" *ngIf="venue">
+  <img (onLoad)="canvasStateSetup()" [defaultImage]="loadingSrc" [lazyLoad]="venue.image" [ngStyle]="{'max-width.vw': maxWidth }">
+  <span class="venue-canvas">
+    <app-canvas></app-canvas>
+  </span>
+</span>

@@ -3,16 +3,18 @@ import {
   AfterViewInit, ElementRef, ViewChild, SimpleChanges,
   SimpleChange, Input, Output, EventEmitter
 } from '@angular/core';
+
 import { Observable } from 'rxjs/internal/Observable';
 import { fromEvent } from 'rxjs';
 import { switchMap, takeUntil, pairwise, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/internal/Subscription';
 
-import { VenuesService } from 'src/app/admin/venues/venues.service';
+import { VenuesService } from '../../../venues.service';
+import { CanvasService } from './canvas.service';
 
 import { CanvasState, CanvasCommunication } from './canvasCommunication';
-import { Stand } from '../stand';
-import { Venue } from '../venue';
+import { Stand } from '../../stand';
+import { Venue } from '../../venue';
 
 @Component({
   selector: 'app-canvas',
@@ -26,12 +28,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
   selectedColor = '#007bff';
 
   venueSubscription: Subscription;
-  communicationSubscription: Subscription;
-
-  @Input() canvasCommunication: Observable<CanvasCommunication>;
-  @Output() newStand = new EventEmitter<Stand>();
+  commSubscription: Subscription;
+  newStandSubscription: Subscription;
 
   stands: [Stand];
+  newStand: Stand;
   on = false;
 
   startingPoint: { x: number, y: number };
@@ -39,55 +40,60 @@ export class CanvasComponent implements OnInit, OnDestroy {
   cx: CanvasRenderingContext2D;
   canvasEventsSubscription: Subscription;
 
-  constructor(private venuesService: VenuesService) { }
+  constructor(
+    private venuesService: VenuesService,
+    private canvasService: CanvasService
+  ) { }
 
   ngOnInit(): void {
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => this.stands = venue.stands);
 
-    this.communicationSubscription = this.canvasCommunication.subscribe((communication: CanvasCommunication) => {
-      switch (communication.state) {
-        case CanvasState.SETUP:
-          this.setup();
-          this.drawStands();
-          break;
+    this.commSubscription = this.canvasService.getCommunicationSubject()
+      .subscribe((communication: CanvasCommunication) => {
+        switch (communication.state) {
+          case CanvasState.SETUP:
+            this.setup();
+            this.drawStands();
+            break;
 
-        case CanvasState.ON:
-          if (this.cx) {
-            this.on = true;
-            this.start();
-          }
-          break;
+          case CanvasState.ON:
+            if (this.cx) {
+              this.on = true;
+              this.start();
+            }
+            break;
 
-        case CanvasState.OFF:
-          if (this.cx) {
-            this.on = false;
-            this.stop();
-          }
-          break;
+          case CanvasState.OFF:
+            if (this.cx) {
+              this.on = false;
+              this.stop();
+            }
+            break;
 
-        case CanvasState.REVERT:
-          if (this.cx) {
-            this.on = false;
-            this.clearCanvas();
-            communication.selectedStand !== undefined
-              ? this.drawStands(communication.selectedStand)
-              : this.drawStands();
-          }
-          break;
+          case CanvasState.REVERT:
+            if (this.cx) {
+              this.on = false;
+              this.clearCanvas();
+              communication.selectedStand !== undefined
+                ? this.drawStands(communication.selectedStand)
+                : this.drawStands();
+            }
+            break;
 
-        case CanvasState.CLEAR:
-          if (this.cx) {
-            this.on = false;
-            this.clearCanvas();
-          }
-          break;
-      }
-    });
+          case CanvasState.CLEAR:
+            if (this.cx) {
+              this.on = false;
+              this.clearCanvas();
+            }
+            break;
+        }
+      });
   }
 
   ngOnDestroy() {
-    this.communicationSubscription.unsubscribe();
+    this.venueSubscription.unsubscribe();
+    this.commSubscription.unsubscribe();
   }
 
   drawStands(selected?: number) {
@@ -183,7 +189,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       pos2: this.convertPosToRelative(pos)
     });
 
-    this.newStand.emit(stand);
+    this.canvasService.addNewStand(stand);
   }
 
   clearCanvas() {
