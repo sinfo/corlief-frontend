@@ -6,6 +6,7 @@
 .image-wrapper img {
     border: 5px solid #00386f;
     max-height: 75vh;
+    background-color: white;
 }
 
 .on img {
