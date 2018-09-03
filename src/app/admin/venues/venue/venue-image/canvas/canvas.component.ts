@@ -66,6 +66,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
           case CanvasState.ON:
             if (this.cx) {
+              this.cx.strokeStyle = this.defaultColor;
               this.start();
             }
             break;
@@ -144,7 +145,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     this.cx.lineWidth = 3;
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = '#00386f';
+    this.cx.strokeStyle = this.defaultColor;
   }
 
   stop() {

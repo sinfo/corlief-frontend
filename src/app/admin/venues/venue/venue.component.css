@@ -81,15 +81,15 @@
 }
 
 .stands .stands-list .stand button, .stands .stands-list .stand div {
-    width: 6vw;
-    height: 6vw;
+    width: 8vh;
+    height: 8vh;
 }
 
 .stands .stands-list .stand div {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3vw;
+    font-size: 3vh;
 }
 
 .stands .stands-list .stand div {
