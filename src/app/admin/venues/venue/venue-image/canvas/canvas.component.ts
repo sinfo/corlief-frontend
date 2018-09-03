@@ -193,7 +193,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
       pos2: this.convertPosToRelative(pos)
     });
 
-    console.log('Size', this.stands.length);
     this.pendingStand = stand;
     this.canvasService.addNewStand(stand);
   }

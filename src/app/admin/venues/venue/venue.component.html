@@ -4,7 +4,7 @@
     <h2>Edition: {{venue.edition}}</h2>
   </span>
 
-  <span class="upload" *ngIf="venue === null || canBeEdited">
+  <span class="upload" *ngIf="venue === undefined || canBeEdited">
     <app-upload (newVenue)="onUpdateVenue($event)"></app-upload>
   </span>
 
@@ -29,9 +29,13 @@
               </span>
 
               <span class="row-icon" (click)="alternateLock()">
-                <fa-icon *ngIf="lockedStands; else unlocked" [icon]="['fas', 'lock']"></fa-icon>
+                <span class="icon lock">
+                  <fa-icon *ngIf="lockedStands; else unlocked" [icon]="['fas', 'lock']"></fa-icon>
+                </span>
                 <ng-template #unlocked>
-                  <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                  <span class="icon lock">
+                    <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+                  </span>
                 </ng-template>
               </span>
             </span>
@@ -42,12 +46,14 @@
       <tbody>
         <tr *ngFor="let stand of venue.stands | sortStands" class="stand" (mouseover)="selectStand(stand.id)" (mouseleave)="deselectStand(stand.id)">
           <td scope="col">
-            <span [ngClass]="{'row-content': !lockedStands}">
+            <span [ngClass]="{'row-content': !lockedStands && confirmStand === undefined}">
 
-              <span [ngClass]="{'row-title': !lockedStands}">{{stand.id}}</span>
+              <span [ngClass]="{'row-title': !lockedStands && confirmStand === undefined}">{{stand.id}}</span>
 
-              <span class="row-icon" *ngIf="!lockedStands" (click)="deleteStand(stand.id)">
-                <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+              <span class="row-icon" *ngIf="!lockedStands && confirmStand === undefined">
+                <span class="icon delete" (click)="deleteStand(stand.id)">
+                  <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+                </span>
               </span>
 
             </span>
@@ -56,7 +62,7 @@
         </tr>
         <tr>
           <td id="addStand">
-            <button class="btn btn-outline-primary" (click)="newStandPreparations()" *ngIf="confirmStand === undefined">
+            <button class="btn btn-primary" (click)="newStandPreparations()" [disabled]="lockedStands" *ngIf="confirmStand === undefined">
               <fa-icon [icon]="['fas', 'plus']"></fa-icon>
             </button>
 

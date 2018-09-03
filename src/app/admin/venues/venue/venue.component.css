@@ -36,8 +36,6 @@
 }
 
 .row-content {
-    display: flex;
-    justify-content: flex-end;
     position: relative;
 }
 
@@ -49,8 +47,25 @@
 }
 
 .row-icon {
-    float: right;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.row-icon .icon {
     cursor: pointer;
+}
+
+.row-icon .icon.lock:hover {
+    color: #007bff;
+}
+
+.row-icon .icon.edit:hover {
+    color: #007bff;
+}
+
+.row-icon .icon.delete:hover {
+    color: #f71e1e;
 }
 
 .confirm {
