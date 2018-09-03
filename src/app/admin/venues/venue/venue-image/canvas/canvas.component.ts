@@ -25,14 +25,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas') public canvas: ElementRef;
   defaultColor = '#00386f';
-  selectedColor = '#007bff';
+  selectedColor = '#5ee0ff';
 
   venueSubscription: Subscription;
   commSubscription: Subscription;
 
   stands: [Stand];
   pendingStand: Stand;
-  on = false;
 
   startingPoint: { x: number, y: number };
 
@@ -46,7 +45,15 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.venueSubscription = this.venuesService.getVenueSubject()
-      .subscribe(venue => this.stands = venue.stands);
+      .subscribe(venue => {
+        this.stands = venue.stands;
+        this.pendingStand = undefined;
+
+        if (this.cx) {
+          this.clearCanvas();
+          this.drawStands();
+        }
+      });
 
     this.commSubscription = this.canvasService.getCommunicationSubject()
       .subscribe((communication: CanvasCommunication) => {
@@ -58,22 +65,22 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
           case CanvasState.ON:
             if (this.cx) {
-              this.on = true;
               this.start();
             }
             break;
 
           case CanvasState.OFF:
             if (this.cx) {
-              this.on = false;
               this.stop();
             }
             break;
 
           case CanvasState.REVERT:
+            console.log(`
+              REVERT
+              selected: ${communication.selectedStand}
+            `);
             if (this.cx) {
-              this.on = false;
-              this.pendingStand = undefined;
               this.clearCanvas();
               communication.selectedStand !== undefined
                 ? this.drawStands(communication.selectedStand)
@@ -83,7 +90,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
           case CanvasState.CLEAR:
             if (this.cx) {
-              this.on = false;
+              this.pendingStand = undefined;
               this.clearCanvas();
             }
             break;

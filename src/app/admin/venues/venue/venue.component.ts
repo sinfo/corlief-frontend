@@ -27,6 +27,7 @@ export class VenueComponent implements OnInit {
 
   confirmStand: boolean;
   lockedStands: boolean;
+  pendingDeletion = false;
 
   constructor(
     private venuesService: VenuesService,
@@ -49,11 +50,21 @@ export class VenueComponent implements OnInit {
   }
 
   alternateLock() {
+    this.pendingDeletion = false;
     this.lockedStands = !this.lockedStands;
+  }
+
+  alternatePendingDeletion() {
+    this.pendingDeletion = !this.pendingDeletion;
+  }
+
+  clickStand(id: number) {
+    if (this.pendingDeletion) { this.deleteStand(id); }
   }
 
   deleteStand(id: number) {
     this.lockedStands = true;
+    this.pendingDeletion = false;
     this.venuesService.deleteStand(id).subscribe(venue => {
       this.venuesService.setVenue(venue);
     });
@@ -79,6 +90,7 @@ export class VenueComponent implements OnInit {
 
   cancelStand() {
     this.confirmStand = undefined;
+    this.canvasService.clear();
     this.canvasService.revert();
     this.canvasService.off();
   }

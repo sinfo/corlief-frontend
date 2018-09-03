@@ -8,6 +8,14 @@
     max-height: 75vh;
 }
 
+.on img {
+    border: 5px solid #00bbc2 !important;
+}
+
+.on img, .on span {
+    cursor: pointer;
+}
+
 .venue-canvas {
     position: absolute;
     top: 0;

@@ -14,9 +14,64 @@
 <div class="wrapper" *ngIf="venue">
 
   <div class="venue-image">
-    <app-venue-image></app-venue-image>
+    <app-venue-image [maxWidth]="40"></app-venue-image>
   </div>
 
+  <div class="stands">
+
+    <div class="title">
+
+      <h3>Stands</h3>
+
+      <span class="title-icon">
+        <span class="icon lock" (click)="alternateLock()">
+          <fa-icon *ngIf="lockedStands" [icon]="['fas', 'lock']"></fa-icon>
+        </span>
+
+        <span *ngIf="!lockedStands">
+          <span class="icon lock" (click)="alternateLock()">
+            <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+          </span>
+
+          <span class="icon delete" [ngClass]="{'active': pendingDeletion}" (click)="alternatePendingDeletion()">
+            <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+          </span>
+        </span>
+      </span>
+
+    </div>
+
+    <div class="stands-list">
+
+      <div class="stand" *ngFor="let stand of venue.stands | sortStands" (mouseover)="selectStand(stand.id)" (mouseleave)="deselectStand(stand.id)">
+        <div class="stand border" [ngClass]="{'delete': pendingDeletion}" (click)="clickStand(stand.id)">
+          {{stand.id + 1}}
+        </div>
+      </div>
+
+      <div class="stand" *ngIf="confirmStand === undefined">
+        <button class="btn btn-primary" (click)="newStandPreparations()" [disabled]="lockedStands" *ngIf="confirmStand === undefined">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        </button>
+      </div>
+
+      <div class="stand" *ngIf="confirmStand !== undefined">
+        <button class="btn btn-success" (click)="uploadStand()" [disabled]="!confirmStand">
+          <fa-icon [icon]="['fas', 'check']"></fa-icon>
+        </button>
+      </div>
+
+      <div class="stand" *ngIf="confirmStand !== undefined">
+        <button class="btn btn-danger" (click)="cancelStand()">
+          <fa-icon [icon]="['fas', 'times']"></fa-icon>
+        </button>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!--
   <div class="stands">
     <table class="table table-bordered">
       <thead>
@@ -83,5 +138,5 @@
       </tbody>
     </table>
   </div>
-
+  -->
 </div>

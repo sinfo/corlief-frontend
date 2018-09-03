@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 
 import { Subscription } from 'rxjs/internal/Subscription';
 
@@ -14,9 +14,10 @@ import { CanvasState, CanvasCommunication } from './canvas/canvasCommunication';
   templateUrl: './venue-image.component.html',
   styleUrls: ['./venue-image.component.css']
 })
-export class VenueImageComponent implements OnInit {
+export class VenueImageComponent implements OnInit, OnDestroy {
 
   venueSubscription: Subscription;
+  canvasSubscription: Subscription;
   venue: Venue;
 
   @Input() canBeEdited = false;
@@ -25,6 +26,7 @@ export class VenueImageComponent implements OnInit {
   loadingSrc = 'assets/img/loading.gif';
   confirmStand: boolean;
   newStand: Stand;
+  canvasOn = false;
 
   constructor(
     private venuesService: VenuesService,
@@ -34,6 +36,28 @@ export class VenueImageComponent implements OnInit {
   ngOnInit() {
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => this.venue = venue);
+
+    this.canvasSubscription = this.canvasService.getCommunicationSubject()
+      .subscribe((comm: CanvasCommunication) => {
+        switch (comm.state) {
+          case CanvasState.ON:
+            this.canvasOn = true;
+            break;
+
+          case CanvasState.OFF:
+            this.canvasOn = false;
+            break;
+
+          case CanvasState.CLEAR:
+            this.canvasOn = false;
+            break;
+        }
+      });
+  }
+
+  ngOnDestroy() {
+    this.venueSubscription.unsubscribe();
+    this.canvasSubscription.unsubscribe();
   }
 
   canvasStateSetup() {
