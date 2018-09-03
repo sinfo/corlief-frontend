@@ -33,13 +33,23 @@ export class CanvasService {
     this.commSubject.next(comm);
   }
 
-  revert(selectedStand?: number) {
+  revert(selectedStand?: Stand) {
     const comm = this.buildCanvasCommunication(CanvasState.REVERT, selectedStand);
     this.commSubject.next(comm);
   }
 
   clear() {
     const comm = this.buildCanvasCommunication(CanvasState.CLEAR);
+    this.commSubject.next(comm);
+  }
+
+  select(selectedStand: Stand) {
+    const comm = this.buildCanvasCommunication(CanvasState.SELECT, selectedStand);
+    this.commSubject.next(comm);
+  }
+
+  selectToDelete(selectedStand: Stand) {
+    const comm = this.buildCanvasCommunication(CanvasState.SELECT_TO_DELETE, selectedStand);
     this.commSubject.next(comm);
   }
 
@@ -55,7 +65,7 @@ export class CanvasService {
     return this.newStandSubject.asObservable();
   }
 
-  private buildCanvasCommunication(state: CanvasState, selectedStand?: number) {
+  private buildCanvasCommunication(state: CanvasState, selectedStand?: Stand) {
     const comm = selectedStand !== undefined
       ? new CanvasCommunication(state, selectedStand)
       : new CanvasCommunication(state);

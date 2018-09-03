@@ -70,8 +70,13 @@ export class VenueComponent implements OnInit {
     });
   }
 
-  selectStand(id: number) {
-    this.canvasService.revert(id);
+  selectStand(stand: Stand) {
+    // this.canvasService.revert(stand);
+    if (this.pendingDeletion) {
+      this.canvasService.selectToDelete(stand);
+    } else {
+      this.canvasService.select(stand);
+    }
   }
 
   deselectStand(id: number) {

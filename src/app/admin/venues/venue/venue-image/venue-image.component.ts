@@ -20,7 +20,6 @@ export class VenueImageComponent implements OnInit, OnDestroy {
   canvasSubscription: Subscription;
   venue: Venue;
 
-  @Input() canBeEdited = false;
   @Input() maxWidth = 50;
 
   loadingSrc = 'assets/img/loading.gif';

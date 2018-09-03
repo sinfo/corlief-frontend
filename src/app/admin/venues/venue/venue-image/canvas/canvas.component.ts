@@ -26,6 +26,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
   @ViewChild('canvas') public canvas: ElementRef;
   defaultColor = '#00386f';
   selectedColor = '#5ee0ff';
+  deleteColor = '#dc2121';
 
   venueSubscription: Subscription;
   commSubscription: Subscription;
@@ -76,15 +77,25 @@ export class CanvasComponent implements OnInit, OnDestroy {
             break;
 
           case CanvasState.REVERT:
-            console.log(`
-              REVERT
-              selected: ${communication.selectedStand}
-            `);
             if (this.cx) {
               this.clearCanvas();
               communication.selectedStand !== undefined
                 ? this.drawStands(communication.selectedStand)
                 : this.drawStands();
+            }
+            break;
+
+          case CanvasState.SELECT:
+            if (this.cx) {
+              this.clearCanvas();
+              this.drawStand(communication.selectedStand, this.selectedColor);
+            }
+            break;
+
+          case CanvasState.SELECT_TO_DELETE:
+            if (this.cx) {
+              this.clearCanvas();
+              this.drawStand(communication.selectedStand, this.deleteColor);
             }
             break;
 
@@ -103,27 +114,24 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.commSubscription.unsubscribe();
   }
 
-  drawStands(selected?: number) {
-    let stands = this.pendingStand ? this.stands.concat([this.pendingStand]) : this.stands;
+  drawStand(stand: Stand, color: string) {
+    const pos1 = this.convertPosToAbsolute(stand.topLeft);
+    const pos2 = this.convertPosToAbsolute(stand.bottomRight);
 
-    stands = stands.map(stand => {
-      return <Stand>{
-        id: stand.id,
-        topLeft: this.convertPosToAbsolute(stand.topLeft),
-        bottomRight: this.convertPosToAbsolute(stand.bottomRight)
-      };
-    });
+    this.cx.strokeStyle = color;
+
+    this.drawRect(pos1, pos2);
+  }
+
+  drawStands(selected?: Stand) {
+    const stands = this.pendingStand ? this.stands.concat([this.pendingStand]) : this.stands;
 
     for (const stand of stands) {
-      const pos1 = stand.topLeft;
-      const pos2 = stand.bottomRight;
-
-      if (selected !== undefined && selected === stand.id) {
-        this.cx.strokeStyle = this.selectedColor;
+      if (selected !== undefined && selected.id === stand.id) {
+        this.drawStand(stand, this.selectedColor);
       } else {
-        this.cx.strokeStyle = this.defaultColor;
+        this.drawStand(stand, this.defaultColor);
       }
-      this.drawRect(pos1, pos2);
     }
   }
 
