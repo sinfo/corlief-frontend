@@ -1,0 +1,25 @@
+<div class="company" *ngIf="company">
+
+  <div class="img">
+    <img [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
+  </div>
+
+  <div class="content">
+
+    <div class="name">
+      <h3>{{company.name}}</h3>
+    </div>
+
+    <div class="status" *ngIf="company.currentParticipation">
+      <h5>Status:</h5>
+      <h6>{{ company.currentParticipation.status }}</h6>
+    </div>
+
+    <div class="member" *ngIf="company.currentParticipation">
+      <h5>Member:</h5>
+      <h6>{{ company.currentParticipation.member }}</h6>
+    </div>
+
+  </div>
+
+</div>

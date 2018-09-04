@@ -1,0 +1,33 @@
+.company {
+    display: flex;
+    flex-direction: row;
+
+    border: 3px solid black;
+    border-radius: 15px;
+
+    height: 100%;
+}
+
+.img {
+    display: flex;
+    align-items: center;
+    max-width: 30%;
+}
+
+.img img {
+    width: 80%;
+    margin: 10%;
+}
+
+.content {
+    width: 70%;
+    padding: 2%;
+}
+
+.content h5, .content h6 {
+    display: inline;
+}
+
+.content h6 {
+    margin-left: 2%;
+}

@@ -15,6 +15,7 @@ import { AppRoutes } from './app.routes';
 import { AdminGuard } from './auth/admin.guard';
 
 import { SortStandsPipe } from './admin/venues/venue/sort-stands.pipe';
+import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pipe';
 
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
@@ -35,6 +36,7 @@ import { UploadComponent } from './admin/venues/upload/upload.component';
 import { VenueComponent } from './admin/venues/venue/venue.component';
 import { CanvasComponent } from './admin/venues/venue/venue-image/canvas/canvas.component';
 import { VenueImageComponent } from './admin/venues/venue/venue-image/venue-image.component';
+import { LinkComponent } from './admin/links/link/link.component';
 
 library.add(fas);
 
@@ -51,7 +53,9 @@ library.add(fas);
     VenueComponent,
     CanvasComponent,
     VenueImageComponent,
-    SortStandsPipe
+    SortStandsPipe,
+    LinkComponent,
+    CompleteCompanyInfoPipe,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +64,7 @@ library.add(fas);
     AppRoutes,
     NgbModule.forRoot(),
     FontAwesomeModule,
-    LazyLoadImageModule
+    LazyLoadImageModule,
   ],
   providers: [
     StorageService,
@@ -70,7 +74,7 @@ library.add(fas);
     LinksService,
     VenuesService,
     UploadService,
-    CanvasService
+    CanvasService,
   ],
   bootstrap: [AppComponent]
 })

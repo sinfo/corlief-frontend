@@ -1,0 +1,10 @@
+.companies {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.company {
+    width: 30%;
+    margin: 1%;
+}

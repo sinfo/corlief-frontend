@@ -1,3 +1,13 @@
-<p>
-  links works!
-</p>
+<div class="without-link" *ngIf="companies && companiesWithoutLink">
+
+  <div class="title">
+    <h3>Companies without link</h3>
+  </div>
+
+  <div class="companies">
+    <span class="company" *ngFor="let company of companiesWithoutLink | completeCompanyInfo : companies : edition">
+      <app-link [company]="company" [edition]="edition"></app-link>
+    </span>
+  </div>
+
+</div>

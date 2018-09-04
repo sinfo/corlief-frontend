@@ -16,7 +16,9 @@ export class VenuesComponent implements OnInit {
   constructor(private venuesService: VenuesService) { }
 
   ngOnInit() {
-    this.getCurrent();
+    if (this.venuesService.getVenue() === undefined) {
+      this.getCurrent();
+    }
   }
 
   getCurrent() {

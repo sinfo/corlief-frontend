@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, Input } from '@angular/core';
+import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 import { Subject } from 'rxjs';
 
@@ -14,7 +14,7 @@ import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/can
   templateUrl: './venue.component.html',
   styleUrls: ['./venue.component.css']
 })
-export class VenueComponent implements OnInit {
+export class VenueComponent implements OnInit, OnDestroy {
 
   venueSubscription: Subscription;
   newStandSubscription: Subscription;
@@ -47,6 +47,11 @@ export class VenueComponent implements OnInit {
 
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => this.venue = venue);
+  }
+
+  ngOnDestroy() {
+    this.newStandSubscription.unsubscribe();
+    this.venueSubscription.unsubscribe();
   }
 
   alternateLock() {
