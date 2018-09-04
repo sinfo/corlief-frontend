@@ -21,6 +21,17 @@
     color: white;
 }
 
-.logo img {
+.right-side {
+    display: flex;
+    justify-content: flex-end;
+    width: 8%;
+}
+
+.right-side .edition {
+    margin-right: 10%;
+    color: white;
+}
+
+.right-side img {
     max-height: 40px;
 }

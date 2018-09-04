@@ -7,18 +7,30 @@
   <div class="content">
 
     <div class="name">
-      <h3>{{company.name}}</h3>
+      <h4>{{company.name}}</h4>
     </div>
 
-    <div class="status" *ngIf="company.currentParticipation">
-      <h5>Status:</h5>
-      <h6>{{ company.currentParticipation.status }}</h6>
-    </div>
+    <span *ngIf="company.currentParticipation">
+      <div class="status" *ngIf="company.currentParticipation.status">
+        <b>Status:</b>
+        {{ company.currentParticipation.status }}
+      </div>
 
-    <div class="member" *ngIf="company.currentParticipation">
-      <h5>Member:</h5>
-      <h6>{{ company.currentParticipation.member }}</h6>
-    </div>
+      <div class="status" *ngIf="company.currentParticipation.kind">
+        <b>Kind:</b>
+        {{ company.currentParticipation.kind }}
+      </div>
+
+      <div class="status" *ngIf="company.currentParticipation.advertisementLvl">
+        <b>Advertisement:</b>
+        {{ company.currentParticipation.advertisementLvl }}
+      </div>
+
+      <div class="member" *ngIf="company.currentParticipation.member">
+        <b>Member:</b>
+        {{ company.currentParticipation.member }}
+      </div>
+    </span>
 
   </div>
 

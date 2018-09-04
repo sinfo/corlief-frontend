@@ -17,10 +17,11 @@ export class LinksComponent implements OnInit, OnDestroy {
 
   edition: String;
   links: [Link];
-  companies: [Company];
-
-  companiesWithoutLink: [Company];
-  companiesWithLink: [Company];
+  companies: {
+    all: [Company],
+    withLink: [Company],
+    withoutLink: [Company]
+  };
 
   venueSubscription: Subscription;
   companiesSubscription: Subscription;
@@ -28,8 +29,14 @@ export class LinksComponent implements OnInit, OnDestroy {
   constructor(private venuesService: VenuesService, private linksService: LinksService) { }
 
   ngOnInit() {
+    this.companies = {
+      all: <[Company]>[],
+      withLink: <[Company]>[],
+      withoutLink: <[Company]>[]
+    };
+
     this.linksService.getCompaniesWithMissingLinks()
-      .subscribe(companies => this.companiesWithoutLink = companies);
+      .subscribe(companies => this.companies.withoutLink = companies);
 
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => {
@@ -40,7 +47,11 @@ export class LinksComponent implements OnInit, OnDestroy {
       });
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
-      .subscribe(companies => this.companies = companies);
+      .subscribe(companies => {
+        if (companies) {
+          this.companies.all = companies;
+        }
+      });
 
     if (this.venuesService.getVenue() === undefined) {
       this.getCurrent();

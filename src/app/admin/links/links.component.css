@@ -10,8 +10,14 @@
     margin: 1%;
 }
 
-.title h5 {
-    color: black;
+.title h6 {
+    color: white;
+    margin: 0;
+}
+
+.accordion /deep/ .card {
+    background-color: #00254a;
+    border-color: #143c69;
 }
 
 .accordion /deep/ button:hover, .accordion /deep/ button {

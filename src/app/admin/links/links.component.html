@@ -1,36 +1,35 @@
-<div *ngIf="companies && companiesWithoutLink">
-  <ngb-accordion #acc="ngbAccordion" activeIds="ngb-panel-0">
+<ngb-accordion #acc="ngbAccordion" *ngIf="companies">
 
-    <ngb-panel>
-      <ng-template ngbPanelTitle>
-        <div class="title">
-          <h5>Missing ({{ companiesWithoutLink.length }})</h5>
-        </div>
-      </ng-template>
+  <ngb-panel>
+    <ng-template ngbPanelTitle>
+      <div class="title">
+        <h6 *ngIf="!companies.all.length || !companies.withoutLink.length">Missing</h6>
+        <h6 *ngIf="companies.all.length && companies.withoutLink.length">Missing ({{ companies.withoutLink ? companies.withoutLink.length : '' }})</h6>
+      </div>
+    </ng-template>
 
-      <ng-template ngbPanelContent>
+    <ng-template ngbPanelContent>
 
-        <div class="companies">
-          <span class="company" *ngFor="let company of companiesWithoutLink | completeCompanyInfo : companies : edition">
-            <app-link [company]="company" [edition]="edition"></app-link>
-          </span>
-        </div>
+      <div class="companies" *ngIf="companies.withoutLink">
+        <span class="company" *ngFor="let company of companies.withoutLink | completeCompanyInfo : companies.all : edition">
+          <app-link [company]="company" [edition]="edition"></app-link>
+        </span>
+      </div>
 
-      </ng-template>
-    </ngb-panel>
+    </ng-template>
+  </ngb-panel>
 
-    <ngb-panel>
-      <ng-template ngbPanelTitle>
-        <div class="title">
-          <h5>Links ()</h5>
-        </div>
-      </ng-template>
+  <ngb-panel>
+    <ng-template ngbPanelTitle>
+      <div class="title">
+        <h6>Links ()</h6>
+      </div>
+    </ng-template>
 
-      <ng-template ngbPanelContent>
+    <ng-template ngbPanelContent>
 
 
-      </ng-template>
-    </ngb-panel>
+    </ng-template>
+  </ngb-panel>
 
-  </ngb-accordion>
-</div>
+</ngb-accordion>

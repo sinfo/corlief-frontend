@@ -12,7 +12,12 @@
 
   </span>
 
-  <span class="logo">
+
+  <span class="right-side">
+    <span class="navbar-text edition" *ngIf="event">
+      {{event.name}}
+    </span>
+
     <img src="https://sinfo.ams3.digitaloceanspaces.com/static/25-sinfo/powerOn.png" alt="SINFO">
   </span>
 </nav>
