@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
 import { StorageService } from '../../storage.service';
 import { Credentials } from '../login/credentials';
 
-import { Link } from './link/link';
+import { Link, LinkForm } from './link/link';
 import { Company } from './link/company';
 
 @Injectable({
@@ -17,13 +17,14 @@ import { Company } from './link/company';
 })
 export class LinksService {
 
-  corlief = `${environment.corlief}/link`;
-  deck = `${environment.deck}/api`;
-  credentials: Credentials;
+  private corlief = `${environment.corlief}/link`;
+  private deck = `${environment.deck}/api`;
+  private credentials: Credentials;
 
-  companiesSubject: BehaviorSubject<[Company]> = new BehaviorSubject<[Company]>(undefined);
+  private companiesSubject: BehaviorSubject<[Company]> = new BehaviorSubject<[Company]>(undefined);
+  private linksSubject: BehaviorSubject<[Link]> = new BehaviorSubject<[Link]>(undefined);
 
-  headers: HttpHeaders;
+  private headers: HttpHeaders;
 
   constructor(
     private http: HttpClient,
@@ -33,12 +34,17 @@ export class LinksService {
     this.credentials = credentials;
 
     this.headers = new HttpHeaders({
-      Authorization: `${credentials.user} ${credentials.token}`
+      'Authorization': `${credentials.user} ${credentials.token}`,
+      'Content-Type': 'application/json'
     });
   }
 
   getCompaniesSubscription(): Observable<[Company]> {
     return this.companiesSubject.asObservable();
+  }
+
+  getLinksSubscription(): Observable<[Link]> {
+    return this.linksSubject.asObservable();
   }
 
   updateCompanies(edition: String) {
@@ -55,6 +61,18 @@ export class LinksService {
           this.companiesSubject.next(companies);
         });
       });
+  }
+
+  updateLinks(edition: string) {
+    if (edition === undefined) { return; }
+
+    this.getLinks({ edition: edition }).subscribe(links => {
+      this.linksSubject.next(links as [Link]);
+    });
+  }
+
+  uploadLink(form: LinkForm): Observable<Link> {
+    return this.http.post<Link>(`${this.corlief}`, form, { headers: this.headers });
   }
 
   getLinks(filter?: {

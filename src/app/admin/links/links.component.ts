@@ -28,6 +28,7 @@ export class LinksComponent implements OnInit, OnDestroy {
   eventSubscription: Subscription;
   venueSubscription: Subscription;
   companiesSubscription: Subscription;
+  linksSubscription: Subscription;
 
   constructor(
     private eventService: EventService,
@@ -42,8 +43,7 @@ export class LinksComponent implements OnInit, OnDestroy {
       withoutLink: <[Company]>[]
     };
 
-    this.linksService.getCompaniesWithMissingLinks()
-      .subscribe(companies => this.companies.withoutLink = companies);
+    this.updateCompanies();
 
     this.eventSubscription = this.eventService.getEventSubject()
       .subscribe(event => {
@@ -63,6 +63,15 @@ export class LinksComponent implements OnInit, OnDestroy {
       .subscribe(companies => {
         if (companies) {
           this.companies.all = companies;
+          this.updateCompanies();
+        }
+      });
+
+    this.linksSubscription = this.linksService.getLinksSubscription()
+      .subscribe(links => {
+        if (links) {
+          this.links = links;
+          this.updateCompanies();
         }
       });
 
@@ -75,6 +84,7 @@ export class LinksComponent implements OnInit, OnDestroy {
     this.venueSubscription.unsubscribe();
     this.companiesSubscription.unsubscribe();
     this.eventSubscription.unsubscribe();
+    this.linksSubscription.unsubscribe();
   }
 
   getCurrent() {
@@ -91,8 +101,21 @@ export class LinksComponent implements OnInit, OnDestroy {
   getLinks(edition: String) {
     this.linksService.getLinks({ edition: <string>edition })
       .subscribe(links => {
-        links = links instanceof Link ? [links] : links;
+        this.links = links instanceof Link ? [links] : links;
+
+        if (this.companies && this.companies.all && this.links) {
+          this.companies.withLink = Company.fillLinks(this.companies.all, this.links);
+        }
       });
+  }
+
+  updateCompanies() {
+    this.linksService.getCompaniesWithMissingLinks()
+      .subscribe(companies => this.companies.withoutLink = companies);
+
+    if (this.event) {
+      this.getLinks(this.event.id);
+    }
   }
 
 }

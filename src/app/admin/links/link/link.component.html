@@ -34,13 +34,13 @@
 
   </div>
 
-  <div class="addLink addLink-animation" (click)="alternateLinkFormVisibility()" *ngIf="event && company.link === undefined && linkForm === undefined">
+  <div class="addLink addLink-animation" (click)="alternateLinkFormVisibility()" *ngIf="event && company.links === undefined && linkForm === undefined">
     <div class="link">
       <fa-icon [icon]="['fas', 'link']"></fa-icon>
     </div>
   </div>
 
-  <div class="addLink" *ngIf="event && company.link === undefined && linkForm">
+  <div class="addLink" *ngIf="event && company.links === undefined && linkForm">
     <form [formGroup]="linkForm" class="form">
 
       <div>

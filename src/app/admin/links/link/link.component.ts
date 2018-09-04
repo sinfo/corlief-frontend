@@ -1,9 +1,10 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule, FormGroup } from '@angular/forms';
 
-import { Link } from './link';
+import { Link, LinkForm } from './link';
 import { Company } from './company';
 import { Event } from '../../event/event';
+import { LinksService } from '../links.service';
 
 @Component({
   selector: 'app-link',
@@ -21,7 +22,7 @@ export class LinkComponent implements OnInit {
 
   linkForm: FormGroup;
 
-  constructor() { }
+  constructor(private linksService: LinksService) { }
 
   ngOnInit() { }
 
@@ -32,7 +33,11 @@ export class LinkComponent implements OnInit {
   }
 
   submitLink() {
-    console.log('FormValue', this.linkForm.value);
+    this.linksService.uploadLink(<LinkForm>this.linkForm.value)
+      .subscribe(link => {
+        this.alternateLinkFormVisibility();
+        this.linksService.updateLinks(this.event.id as string);
+      });
   }
 
 }

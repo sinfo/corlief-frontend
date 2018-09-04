@@ -22,12 +22,18 @@
   <ngb-panel>
     <ng-template ngbPanelTitle>
       <div class="title">
-        <h6>Links ()</h6>
+        <h6 *ngIf="!companies.all.length || !companies.withLink.length">Links</h6>
+        <h6 *ngIf="companies.all.length && companies.withLink.length">Links ({{ companies.withLink ? companies.withLink.length : '' }})</h6>
       </div>
     </ng-template>
 
     <ng-template ngbPanelContent>
 
+      <div class="companies" *ngIf="companies.withLink">
+        <span class="company" *ngFor="let company of companies.withLink">
+          <app-link [company]="company" [event]="event"></app-link>
+        </span>
+      </div>
 
     </ng-template>
   </ngb-panel>

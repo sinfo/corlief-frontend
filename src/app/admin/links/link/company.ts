@@ -9,8 +9,12 @@ export class Participation {
     advertisementLvl: String;
 
     static getFromEvent(participations: [Participation], event: Event): Participation {
+        return Participation.getFromEdition(participations, event.id);
+    }
+
+    static getFromEdition(participations: [Participation], edition: String): Participation {
         for (const p of participations) {
-            if (p.event === event.id) { return p; }
+            if (p.event === edition) { return p; }
         } return null;
     }
 }
@@ -23,5 +27,32 @@ export class Company {
     participations?: [Participation];
 
     currentParticipation: Participation;
-    link?: Link;
+    links?: [Link];
+
+    static fillLinks(companies: [Company], links: [Link]): [Company] {
+        const newCompanies = [] as [Company];
+
+        for (const company of companies) {
+            const filtered = <[Link]>links.filter(link => link.companyId === company.id);
+
+            if (!filtered.length) {
+                continue;
+            }
+
+            const newCompany = new Company();
+
+            newCompany.id = company.id;
+            newCompany.img = company.img;
+            newCompany.name = company.name;
+            newCompany.currentParticipation =
+                company.currentParticipation
+                    ? company.currentParticipation
+                    : Participation.getFromEdition(company.participations, filtered[0].edition);
+            newCompany.links = filtered;
+
+            newCompanies.push(newCompany);
+        }
+
+        return newCompanies;
+    }
 }

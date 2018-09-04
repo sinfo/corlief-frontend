@@ -49,5 +49,17 @@ export class Link {
             return expiration > now ? null : { 'expirationDate': { value: control.value } };
         };
     }
+}
 
+export class Activity {
+    kind: String;
+    date: Date;
+}
+
+export class LinkForm {
+    companyId: String;
+    participationDays: number;
+    advertisementKind: String;
+    activities: [Activity];
+    expirationDate: Date;
 }
