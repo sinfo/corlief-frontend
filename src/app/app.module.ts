@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -16,6 +16,7 @@ import { AdminGuard } from './auth/admin.guard';
 
 import { SortStandsPipe } from './admin/venues/venue/sort-stands.pipe';
 import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pipe';
+import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of-participation-days.pipe';
 
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
@@ -57,10 +58,12 @@ library.add(fas);
     SortStandsPipe,
     LinkComponent,
     CompleteCompanyInfoPipe,
+    GetArrayOfParticipationDaysPipe,
   ],
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AppRoutes,
     NgbModule.forRoot(),

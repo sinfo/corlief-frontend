@@ -11,8 +11,8 @@
     <ng-template ngbPanelContent>
 
       <div class="companies" *ngIf="companies.withoutLink">
-        <span class="company" *ngFor="let company of companies.withoutLink | completeCompanyInfo : companies.all : edition">
-          <app-link [company]="company" [edition]="edition"></app-link>
+        <span class="company" *ngFor="let company of companies.withoutLink | completeCompanyInfo : companies.all : event">
+          <app-link [company]="company" [event]="event"></app-link>
         </span>
       </div>
 

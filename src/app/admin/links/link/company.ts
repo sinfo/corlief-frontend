@@ -1,4 +1,5 @@
 import { Link } from './link';
+import { Event } from '../../event/event';
 
 export class Participation {
     event: String;
@@ -7,9 +8,9 @@ export class Participation {
     kind: String;
     advertisementLvl: String;
 
-    static getFromEdition(participations: [Participation], edition: String): Participation {
+    static getFromEvent(participations: [Participation], event: Event): Participation {
         for (const p of participations) {
-            if (p.event === edition) { return p; }
+            if (p.event === event.id) { return p; }
         } return null;
     }
 }

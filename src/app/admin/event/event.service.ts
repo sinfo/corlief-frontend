@@ -36,7 +36,8 @@ export class EventService {
     this.credentials = credentials;
 
     this.headers = new HttpHeaders({
-      Authorization: `${credentials.user} ${credentials.token}`
+      'Content-Type': 'application/json',
+      'Authorization': `${credentials.user} ${credentials.token}`
     });
 
     this.venueSubscription = this.venues.getVenueSubject()
@@ -62,7 +63,12 @@ export class EventService {
           .subscribe(events => {
             const filtered = events.filter(e => e.id === edition);
             if (filtered.length > 0) {
-              this.eventSubject.next(filtered[0]);
+              const event = filtered[0];
+
+              event.date = new Date(event.date);
+              event.duration = new Date(event.duration);
+
+              this.eventSubject.next(event);
             }
           });
       });
