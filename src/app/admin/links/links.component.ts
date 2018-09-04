@@ -18,7 +18,9 @@ export class LinksComponent implements OnInit, OnDestroy {
   edition: String;
   links: [Link];
   companies: [Company];
+
   companiesWithoutLink: [Company];
+  companiesWithLink: [Company];
 
   venueSubscription: Subscription;
   companiesSubscription: Subscription;

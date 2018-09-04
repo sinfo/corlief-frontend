@@ -2,9 +2,18 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    justify-content: center;
 }
 
 .company {
     width: 30%;
     margin: 1%;
+}
+
+.title h5 {
+    color: black;
+}
+
+.accordion /deep/ button:hover, .accordion /deep/ button {
+    text-decoration: none !important;
 }
