@@ -15,7 +15,7 @@ export class Link {
     advertisementKind: Advertisement;
     participationDays: number;
 
-    static generateForm(company: Company, event: Event): FormGroup {
+    static linkForm(company: Company, event: Event): FormGroup {
         const duration = event.duration.getDate();
         const participation = company.currentParticipation;
         const advertisementKind = participation && participation.kind
@@ -35,6 +35,17 @@ export class Link {
                 Validators.minLength(0)
             ]),
             activities: new FormControl([]),
+            expirationDate: new FormControl(new Date(), [
+                Validators.required,
+                this.expirationDateValidator()
+            ])
+        });
+    }
+
+    static extendLinkForm(event: Event): FormGroup {
+        const duration = event.duration.getDate();
+
+        return new FormGroup({
             expirationDate: new FormControl(new Date(), [
                 Validators.required,
                 this.expirationDateValidator()

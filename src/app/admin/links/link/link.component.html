@@ -4,7 +4,7 @@
     <img [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
   </div>
 
-  <div class="content" [ngClass]="{'content-with-link': company.validLink}">
+  <div class="content" [ngClass]="{'content-with-link': company.link && company.link.valid}">
 
     <div class="name">
       <h4>{{company.name}}</h4>
@@ -34,17 +34,17 @@
         </div>
       </span>
 
-      <hr class="divider" *ngIf="company.validLink" />
+      <hr class="divider" *ngIf="company.link" />
 
     </div>
 
-    <div class="link" *ngIf="company.validLink">
+    <div class="link" *ngIf="company.link">
 
-      <div class="token">
+      <div class="token" *ngIf="company.link.valid">
         <b>Link:</b>
 
         <span class="token-copy">
-          <fa-icon [icon]="['fas', 'clipboard']" #t1="ngbTooltip" [ngbTooltip]="tipContent" triggers="click:blur" (click)="copyToClipboard(t1, company.validLink.token)"></fa-icon>
+          <fa-icon [icon]="['fas', 'clipboard']" #t1="ngbTooltip" [ngbTooltip]="tipContent" triggers="click:blur" (click)="copyToClipboard(t1, company.link.token)"></fa-icon>
           <ng-template #tipContent>Copied!</ng-template>
         </span>
 
@@ -52,26 +52,45 @@
 
       <div class="created">
         <b>Created:</b>
-        {{ company.validLink.created | date:'dd/MM/yyyy HH:mm'}}
+        {{ company.link.created | date:'dd/MM/yyyy HH:mm'}}
       </div>
 
       <div class="participationDays">
         <b>Participation days:</b>
-        {{ company.validLink.participationDays }}
+        {{ company.link.participationDays }}
       </div>
 
-      <hr class="divider" *ngIf="company.validLink" />
+      <hr class="divider" />
 
       <div class="actions">
-        <button class="btn btn-primary">Extend</button>
-        <button class="btn btn-danger" (click)="revoke(company.validLink)">Revoke</button>
+
+        <div class="extendLink" *ngIf="extendLinkForm">
+          <form [formGroup]="extendLinkForm" class="form-inline">
+            <label>
+              <b>Expiration:</b>
+            </label>
+            <input class="form-control" type="date" formControlName="expirationDate">
+          </form>
+        </div>
+
+        <span class="actions-buttons" *ngIf="extendLinkForm === undefined">
+          <button class="btn btn-primary" (click)="alternateExtendLinkFormVisibility()">Extend</button>
+          <button class="btn btn-success" (click)="check()" *ngIf="company.link.valid">Check</button>
+          <button class="btn btn-danger" (click)="revoke()" *ngIf="company.link.valid">Revoke</button>
+        </span>
+
+        <span class="actions-buttons" *ngIf="extendLinkForm">
+          <button class="btn btn-danger" (click)="alternateExtendLinkFormVisibility()">Cancel</button>
+          <button class="btn btn-primary" [disabled]="!extendLinkForm.valid" (click)="extend()">Extend</button>
+        </span>
+
       </div>
 
     </div>
 
   </div>
 
-  <div class="addLink addLink-animation" (click)="alternateLinkFormVisibility()" *ngIf="event && linkForm === undefined && company.validLink === undefined">
+  <div class="addLink addLink-animation" (click)="alternateLinkFormVisibility()" *ngIf="event && linkForm === undefined && company.link === undefined">
     <div class="addLinkIcon">
       <fa-icon [icon]="['fas', 'link']"></fa-icon>
     </div>

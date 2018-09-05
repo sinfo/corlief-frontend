@@ -142,9 +142,25 @@
     color: #2c5285;
 }
 
-.actions {
+.actions-buttons {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
+}
+
+.extendLink {
+    margin-bottom: 5%;
+}
+
+.extendLink form {
+    display: flex;
+    justify-content: space-between;
+
+    width: 100%;
+    background-color: transparent;
+}
+
+.extendLink form input {
+    width: 65%;
 }

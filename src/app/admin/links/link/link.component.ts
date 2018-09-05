@@ -20,12 +20,12 @@ export class LinkComponent implements OnInit {
 
   @Input() company: Company;
   @Input() event: Event;
-  @Input() link: Link;
 
   errorSrc = 'assets/img/hacky.png';
   loadingSrc = 'assets/img/loading.gif';
 
   linkForm: FormGroup;
+  extendLinkForm: FormGroup;
 
   constructor(
     private linksService: LinksService,
@@ -47,7 +47,13 @@ export class LinkComponent implements OnInit {
 
   alternateLinkFormVisibility() {
     this.linkForm = this.linkForm === undefined
-      ? Link.generateForm(this.company, this.event)
+      ? Link.linkForm(this.company, this.event)
+      : undefined;
+  }
+
+  alternateExtendLinkFormVisibility() {
+    this.extendLinkForm = this.extendLinkForm === undefined
+      ? Link.extendLinkForm(this.event)
       : undefined;
   }
 
@@ -59,8 +65,29 @@ export class LinkComponent implements OnInit {
       });
   }
 
-  revoke(link: Link) {
-    this.linksService.revokeLink(link.companyId, link.edition);
+  revoke() {
+    const link = this.company.link;
+    this.linksService.revoke(link.companyId, link.edition);
+  }
+
+  check() {
+    const link = this.company.link;
+    console.log('Todo: checking', link);
+  }
+
+  extend() {
+    const link = this.company.link;
+    const expirationDate = this.extendLinkForm.value;
+    this.linksService.extend(link.companyId, link.edition, expirationDate)
+      .subscribe(newLink => {
+        this.alternateExtendLinkFormVisibility();
+
+        if (!this.company.link.valid) {
+          this.linksService.updateLinks(newLink.edition as string);
+        } else {
+          this.company.link = newLink;
+        }
+      });
   }
 
 }

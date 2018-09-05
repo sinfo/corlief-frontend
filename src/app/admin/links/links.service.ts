@@ -116,7 +116,14 @@ export class LinksService {
     return this.http.get<[Company]>(`${this.corlief}/missing`, { headers: this.headers });
   }
 
-  revokeLink(companyId: String, edition: String): void {
+  extend(companyId: String, edition: String, form: { expirationDate: Date }): Observable<Link> {
+    return this.http.put<Link>(
+      `${this.corlief}/company/${companyId}/edition/${edition}/extend`,
+      form,
+      { headers: this.headers });
+  }
+
+  revoke(companyId: String, edition: String): void {
     this.http.get<Link>(
       `${this.corlief}/company/${companyId}/edition/${edition}/revoke`,
       { headers: this.headers }
