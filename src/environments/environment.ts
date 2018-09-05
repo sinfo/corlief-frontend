@@ -5,7 +5,8 @@
 export const environment = {
   production: false,
   corlief: 'http://localhost:8888',
-  deck: 'http://localhost:8080'
+  deck: 'http://localhost:8080',
+  frontend: 'http://localhost:4200'
 };
 
 /*

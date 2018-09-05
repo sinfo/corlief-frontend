@@ -9,6 +9,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
+import { ClipboardModule } from 'ngx-clipboard';
 
 import { AppRoutes } from './app.routes';
 
@@ -69,6 +70,7 @@ library.add(fas);
     NgbModule.forRoot(),
     FontAwesomeModule,
     LazyLoadImageModule,
+    ClipboardModule
   ],
   providers: [
     StorageService,

@@ -4,43 +4,80 @@
     <img [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
   </div>
 
-  <div class="content">
+  <div class="content" [ngClass]="{'content-with-link': company.validLink}">
 
     <div class="name">
       <h4>{{company.name}}</h4>
     </div>
 
-    <span *ngIf="company.currentParticipation">
-      <div class="status" *ngIf="company.currentParticipation.status">
-        <b>Status:</b>
-        {{ company.currentParticipation.status }}
+    <div class="info">
+
+      <span *ngIf="company.currentParticipation">
+        <div class="status" *ngIf="company.currentParticipation.status">
+          <b>Status:</b>
+          {{ company.currentParticipation.status }}
+        </div>
+
+        <div class="status" *ngIf="company.currentParticipation.kind">
+          <b>Kind:</b>
+          {{ company.currentParticipation.kind }}
+        </div>
+
+        <div class="status" *ngIf="company.currentParticipation.advertisementLvl">
+          <b>Advertisement:</b>
+          {{ company.currentParticipation.advertisementLvl }}
+        </div>
+
+        <div class="member" *ngIf="company.currentParticipation.member">
+          <b>Member:</b>
+          {{ company.currentParticipation.member }}
+        </div>
+      </span>
+
+      <hr class="divider" *ngIf="company.validLink" />
+
+    </div>
+
+    <div class="link" *ngIf="company.validLink">
+
+      <div class="token">
+        <b>Link:</b>
+
+        <span class="token-copy">
+          <fa-icon [icon]="['fas', 'clipboard']" #t1="ngbTooltip" [ngbTooltip]="tipContent" triggers="click:blur" (click)="copyToClipboard(t1, company.validLink.token)"></fa-icon>
+          <ng-template #tipContent>Copied!</ng-template>
+        </span>
+
       </div>
 
-      <div class="status" *ngIf="company.currentParticipation.kind">
-        <b>Kind:</b>
-        {{ company.currentParticipation.kind }}
+      <div class="created">
+        <b>Created:</b>
+        {{ company.validLink.created | date:'dd/MM/yyyy HH:mm'}}
       </div>
 
-      <div class="status" *ngIf="company.currentParticipation.advertisementLvl">
-        <b>Advertisement:</b>
-        {{ company.currentParticipation.advertisementLvl }}
+      <div class="participationDays">
+        <b>Participation days:</b>
+        {{ company.validLink.participationDays }}
       </div>
 
-      <div class="member" *ngIf="company.currentParticipation.member">
-        <b>Member:</b>
-        {{ company.currentParticipation.member }}
+      <hr class="divider" *ngIf="company.validLink" />
+
+      <div class="actions">
+        <button class="btn btn-primary">Extend</button>
+        <button class="btn btn-danger" (click)="revoke(company.validLink)">Revoke</button>
       </div>
-    </span>
+
+    </div>
 
   </div>
 
-  <div class="addLink addLink-animation" (click)="alternateLinkFormVisibility()" *ngIf="event && company.links === undefined && linkForm === undefined">
-    <div class="link">
+  <div class="addLink addLink-animation" (click)="alternateLinkFormVisibility()" *ngIf="event && linkForm === undefined && company.validLink === undefined">
+    <div class="addLinkIcon">
       <fa-icon [icon]="['fas', 'link']"></fa-icon>
     </div>
   </div>
 
-  <div class="addLink" *ngIf="event && company.links === undefined && linkForm">
+  <div class="addLink" *ngIf="event && linkForm">
     <form [formGroup]="linkForm" class="form">
 
       <div>

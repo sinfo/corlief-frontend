@@ -6,7 +6,6 @@ import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { environment } from '../../../environments/environment';
 
 import { StorageService } from '../../storage.service';
-import { LinksService } from 'src/app/admin/links/links.service';
 
 import { Credentials } from '../login/credentials';
 import { Venue } from './venue/venue';
@@ -29,8 +28,7 @@ export class VenuesService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService,
-    private linksService: LinksService
+    private storage: StorageService
   ) {
     const credentials = <Credentials>this.storage.getItem('credentials');
     this.credentials = credentials;
@@ -46,7 +44,6 @@ export class VenuesService {
   setVenue(venue: Venue) {
     this.venue = venue;
     this.venueSubject.next(venue);
-    this.linksService.updateCompanies(venue.edition);
   }
 
   getVenueSubject(): Observable<Venue> {

@@ -23,8 +23,16 @@
 }
 
 .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+
     width: 70%;
     padding: 2%;
+}
+
+.content-with-link {
+    justify-content: space-between !important;
 }
 
 .addLink-animation {
@@ -58,10 +66,11 @@
     justify-content: center;
     align-items: center;
 
+    border-radius: 15px;
     background-color: #ffffffb3;
 }
 
-.link {
+.addLinkIcon {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -116,4 +125,26 @@
     position: absolute;
     right: 2%;
     bottom: 5%;
+}
+
+.divider {
+    margin-top: 0.6rem;
+    margin-bottom: 0.6rem;
+    height: 0.1rem;
+}
+
+.token-copy {
+    margin-left: 2%;
+}
+
+.token-copy:hover {
+    cursor: pointer;
+    color: #2c5285;
+}
+
+.actions {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
 }

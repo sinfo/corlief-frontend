@@ -1,10 +1,15 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormsModule, FormGroup } from '@angular/forms';
 
+import { environment } from '../../../../environments/environment';
+
+import { LinksService } from '../links.service';
+import { ClipboardService } from 'ngx-clipboard';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+
 import { Link, LinkForm } from './link';
 import { Company } from './company';
 import { Event } from '../../event/event';
-import { LinksService } from '../links.service';
 
 @Component({
   selector: 'app-link',
@@ -22,9 +27,23 @@ export class LinkComponent implements OnInit {
 
   linkForm: FormGroup;
 
-  constructor(private linksService: LinksService) { }
+  constructor(
+    private linksService: LinksService,
+    private clipboardService: ClipboardService
+  ) { }
 
   ngOnInit() { }
+
+  copyToClipboard(tooltip: NgbTooltip, token: String) {
+    setTimeout(() => {
+      if (tooltip.isOpen()) {
+        tooltip.close();
+      }
+    }, 1000);
+
+    const url = `${environment.frontend}/token/${token}`;
+    this.clipboardService.copyFromContent(url);
+  }
 
   alternateLinkFormVisibility() {
     this.linkForm = this.linkForm === undefined
@@ -38,6 +57,10 @@ export class LinkComponent implements OnInit {
         this.alternateLinkFormVisibility();
         this.linksService.updateLinks(this.event.id as string);
       });
+  }
+
+  revoke(link: Link) {
+    this.linksService.revokeLink(link.companyId, link.edition);
   }
 
 }

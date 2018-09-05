@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { EventService } from 'src/app/admin/event/event.service';
 import { LinksService } from 'src/app/admin/links/links.service';
-import { VenuesService } from 'src/app/admin/venues/venues.service';
 
 import { Link } from './link/link';
 import { Company } from './link/company';
@@ -21,41 +20,36 @@ export class LinksComponent implements OnInit, OnDestroy {
   links: [Link];
   companies: {
     all: [Company],
-    withLink: [Company],
+    withLink: {
+      valid: [Company],
+      invalid: [Company]
+    },
     withoutLink: [Company]
   };
 
   eventSubscription: Subscription;
-  venueSubscription: Subscription;
   companiesSubscription: Subscription;
   linksSubscription: Subscription;
 
   constructor(
     private eventService: EventService,
-    private venuesService: VenuesService,
     private linksService: LinksService
   ) { }
 
   ngOnInit() {
     this.companies = {
       all: <[Company]>[],
-      withLink: <[Company]>[],
+      withLink: {
+        valid: <[Company]>[],
+        invalid: <[Company]>[]
+      },
       withoutLink: <[Company]>[]
     };
-
-    this.updateCompanies();
 
     this.eventSubscription = this.eventService.getEventSubject()
       .subscribe(event => {
         if (event) {
           this.event = event;
-        }
-      });
-
-    this.venueSubscription = this.venuesService.getVenueSubject()
-      .subscribe(venue => {
-        if (venue) {
-          this.getLinks(venue.edition);
         }
       });
 
@@ -74,28 +68,12 @@ export class LinksComponent implements OnInit, OnDestroy {
           this.updateCompanies();
         }
       });
-
-    if (this.venuesService.getVenue() === undefined) {
-      this.getCurrent();
-    }
   }
 
   ngOnDestroy() {
-    this.venueSubscription.unsubscribe();
     this.companiesSubscription.unsubscribe();
     this.eventSubscription.unsubscribe();
     this.linksSubscription.unsubscribe();
-  }
-
-  getCurrent() {
-    this.venuesService.getCurrentVenue().subscribe(
-      venue => {
-        this.venuesService.setVenue(venue);
-      },
-      error => {
-        console.error(error);
-      }
-    );
   }
 
   getLinks(edition: String) {

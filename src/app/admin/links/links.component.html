@@ -22,15 +22,34 @@
   <ngb-panel>
     <ng-template ngbPanelTitle>
       <div class="title">
-        <h6 *ngIf="!companies.all.length || !companies.withLink.length">Links</h6>
-        <h6 *ngIf="companies.all.length && companies.withLink.length">Links ({{ companies.withLink ? companies.withLink.length : '' }})</h6>
+        <h6 *ngIf="!companies.all.length">Valid</h6>
+        <h6 *ngIf="companies.all.length">Valid ({{ companies.withLink.valid ? companies.withLink.valid.length : '' }})</h6>
+      </div>
+    </ng-template>
+
+    <ng-template ngbPanelContent>
+
+      <div class="companies" *ngIf="companies.withLink.valid">
+        <span class="company" *ngFor="let company of companies.withLink.valid">
+          <app-link [company]="company" [event]="event"></app-link>
+        </span>
+      </div>
+
+    </ng-template>
+  </ngb-panel>
+
+  <ngb-panel>
+    <ng-template ngbPanelTitle>
+      <div class="title">
+        <h6 *ngIf="!companies.all.length">Invalid</h6>
+        <h6 *ngIf="companies.all.length">Invalid ({{ companies.withLink.invalid ? companies.withLink.invalid.length : '' }})</h6>
       </div>
     </ng-template>
 
     <ng-template ngbPanelContent>
 
       <div class="companies" *ngIf="companies.withLink">
-        <span class="company" *ngFor="let company of companies.withLink">
+        <span class="company" *ngFor="let company of companies.withLink.invalid">
           <app-link [company]="company" [event]="event"></app-link>
         </span>
       </div>

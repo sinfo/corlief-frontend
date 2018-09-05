@@ -28,9 +28,16 @@ export class Company {
 
     currentParticipation: Participation;
     links?: [Link];
+    validLink?: Link;
 
-    static fillLinks(companies: [Company], links: [Link]): [Company] {
-        const newCompanies = [] as [Company];
+    static fillLinks(companies: [Company], links: [Link]): {
+        valid: [Company],
+        invalid: [Company]
+    } {
+        const result = {
+            valid: [] as [Company],
+            invalid: [] as [Company]
+        };
 
         for (const company of companies) {
             const filtered = <[Link]>links.filter(link => link.companyId === company.id);
@@ -38,6 +45,8 @@ export class Company {
             if (!filtered.length) {
                 continue;
             }
+
+            const valid = filtered.filter(link => link.valid);
 
             const newCompany = new Company();
 
@@ -50,9 +59,14 @@ export class Company {
                     : Participation.getFromEdition(company.participations, filtered[0].edition);
             newCompany.links = filtered;
 
-            newCompanies.push(newCompany);
+            if (valid.length) {
+                newCompany.validLink = valid[0];
+                result.valid.push(newCompany);
+            } else {
+                result.invalid.push(newCompany);
+            }
         }
 
-        return newCompanies;
+        return result;
     }
 }
