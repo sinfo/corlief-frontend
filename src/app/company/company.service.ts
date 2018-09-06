@@ -25,11 +25,17 @@ export class CompanyService {
     return this.http.get<Credentials>(`${this.corlief}/auth`, { headers: headers });
   }
 
-  saveCredentials(credentials: Credentials) {
-    this.storage.setItem('company_credentials', credentials);
+  clearCredentialsAndToken() {
+    this.storage.removeItem('token');
+    this.storage.removeItem('company_credentials');
   }
 
-  isValid(): boolean {
-    return this.storage.getItem('company_credentials') !== null;
+  getToken(): String | null {
+    return <String | null>this.storage.getItem('token');
+  }
+
+  saveCredentials(token: String, credentials: Credentials) {
+    this.storage.setItem('token', token);
+    this.storage.setItem('company_credentials', credentials);
   }
 }

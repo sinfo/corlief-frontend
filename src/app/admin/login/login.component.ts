@@ -32,7 +32,7 @@ export class LoginComponent implements OnInit {
         this.changeLoading();
         this.error = undefined;
         this.loginService.saveCredentials(credentials);
-        this.router.navigate(['/']);
+        this.router.navigate(['admin']);
       },
       error => {
         this.changeLoading();

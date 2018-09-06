@@ -43,6 +43,7 @@ import { CanvasComponent } from './admin/venues/venue/venue-image/canvas/canvas.
 import { VenueImageComponent } from './admin/venues/venue/venue-image/venue-image.component';
 import { LinkComponent } from './admin/links/link/link.component';
 import { CompanyComponent } from './company/company.component';
+import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 
 library.add(fas);
 
@@ -65,6 +66,7 @@ library.add(fas);
     GetArrayOfParticipationDaysPipe,
     CompanyBatchPipe,
     CompanyComponent,
+    UnauthorizedComponent,
   ],
   imports: [
     BrowserModule,

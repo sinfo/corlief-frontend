@@ -11,6 +11,7 @@ import { AdminComponent } from 'src/app/admin/admin.component';
 import { LinksComponent } from 'src/app/admin/links/links.component';
 import { VenuesComponent } from 'src/app/admin/venues/venues.component';
 import { CompanyComponent } from 'src/app/company/company.component';
+import { UnauthorizedComponent } from 'src/app/unauthorized/unauthorized.component';
 
 const appRoutes: Routes = [
   {
@@ -50,6 +51,10 @@ const appRoutes: Routes = [
   {
     path: 'login',
     component: LoginComponent
+  },
+  {
+    path: 'unauthorized',
+    component: UnauthorizedComponent
   },
   {
     path: '**',
