@@ -29,19 +29,55 @@ export class Company {
     currentParticipation: Participation;
     link?: Link;
 
-    static fillLinks(companies: [Company], links: [Link]): {
-        valid: [Company],
-        invalid: [Company]
-    } {
-        const result = {
+    static filter(company: Company, edition: String) {
+        if (company.participations === undefined || !company.participations.length) {
+            return false;
+        }
+
+        if (company.currentParticipation === undefined) {
+            company.currentParticipation = Participation.getFromEdition(company.participations, edition);
+        }
+
+        if (company.currentParticipation === null || company.currentParticipation.kind === 'Partnership') {
+            return false;
+        }
+
+        return ['in-conversations', 'closed-deal', 'announced']
+            .includes(company.currentParticipation.status as string);
+    }
+}
+
+export class Companies {
+    all: [Company];
+    withLink: {
+        valid: [Company];
+        invalid: [Company];
+    };
+    withoutLink: [Company];
+
+    constructor() {
+        this.all = [] as [Company];
+        this.withLink = {
             valid: [] as [Company],
             invalid: [] as [Company]
+        };
+        this.withoutLink = [] as [Company];
+    }
+
+    private fillLinks(companies: [Company], links: [Link]): {
+        withLink: { valid: [Company], invalid: [Company] },
+        withoutLink: [Company]
+    } {
+        const result = {
+            withLink: { valid: <[Company]>[], invalid: <[Company]>[] },
+            withoutLink: <[Company]>[]
         };
 
         for (const company of companies) {
             const filtered = <[Link]>links.filter(l => l.companyId === company.id);
 
             if (!filtered.length) {
+                result.withoutLink.push(company);
                 continue;
             }
 
@@ -58,12 +94,29 @@ export class Company {
             newCompany.link = link;
 
             if (link.valid) {
-                result.valid.push(newCompany);
+                result.withLink.valid.push(newCompany);
             } else {
-                result.invalid.push(newCompany);
+                result.withLink.invalid.push(newCompany);
             }
         }
 
         return result;
+    }
+
+    update(companies: [Company], links: [Link]) {
+        if (!links.length) { return; }
+        this.updateCompanies(companies, links[0].edition);
+        this.updateLinks(links);
+    }
+
+    updateCompanies(companies: [Company], edition: String) {
+        const filtered = <[Company]>companies.filter(c => Company.filter(c, edition));
+        this.all = filtered;
+    }
+
+    updateLinks(links: [Link]) {
+        const result = this.fillLinks(this.all, links);
+        this.withLink = result.withLink;
+        this.withoutLink = result.withoutLink;
     }
 }

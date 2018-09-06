@@ -12,8 +12,5 @@ export class HomeComponent implements OnInit {
   constructor(private venuesService: VenuesService) { }
 
   ngOnInit() {
-    this.venuesService.getCurrentVenue()
-      .subscribe(venue => this.venuesService.setVenue(venue));
   }
-
 }

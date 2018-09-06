@@ -21,7 +21,6 @@ import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of
 
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
-import { HomeService } from 'src/app/admin/home/home.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { UploadService } from 'src/app/admin/venues/upload/upload.service';
@@ -76,7 +75,6 @@ library.add(fas);
     StorageService,
     LoginService,
     AdminGuard,
-    HomeService,
     LinksService,
     VenuesService,
     UploadService,

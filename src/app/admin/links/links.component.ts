@@ -6,7 +6,7 @@ import { EventService } from 'src/app/admin/event/event.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 
 import { Link } from './link/link';
-import { Company } from './link/company';
+import { Company, Companies } from './link/company';
 import { Event } from '../event/event';
 
 @Component({
@@ -17,15 +17,7 @@ import { Event } from '../event/event';
 export class LinksComponent implements OnInit, OnDestroy {
 
   event: Event;
-  links: [Link];
-  companies: {
-    all: [Company],
-    withLink: {
-      valid: [Company],
-      invalid: [Company]
-    },
-    withoutLink: [Company]
-  };
+  companies: Companies;
 
   eventSubscription: Subscription;
   companiesSubscription: Subscription;
@@ -37,14 +29,7 @@ export class LinksComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.companies = {
-      all: <[Company]>[],
-      withLink: {
-        valid: <[Company]>[],
-        invalid: <[Company]>[]
-      },
-      withoutLink: <[Company]>[]
-    };
+    this.companies = new Companies();
 
     this.eventSubscription = this.eventService.getEventSubject()
       .subscribe(event => {
@@ -55,17 +40,16 @@ export class LinksComponent implements OnInit, OnDestroy {
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => {
-        if (companies) {
-          this.companies.all = companies;
-          this.updateCompanies();
+        if (companies && this.event) {
+          this.companies.updateCompanies(companies, this.event.id);
+          this.getLinks(this.event.id);
         }
       });
 
     this.linksSubscription = this.linksService.getLinksSubscription()
       .subscribe(links => {
         if (links) {
-          this.links = links;
-          this.updateCompanies();
+          this.companies.updateLinks(links);
         }
       });
   }
@@ -79,21 +63,9 @@ export class LinksComponent implements OnInit, OnDestroy {
   getLinks(edition: String) {
     this.linksService.getLinks({ edition: <string>edition })
       .subscribe(links => {
-        this.links = links instanceof Link ? [links] : links;
-
-        if (this.companies && this.companies.all && this.links) {
-          this.companies.withLink = Company.fillLinks(this.companies.all, this.links);
-        }
+        const l = links instanceof Link ? [links] as [Link] : links as [Link];
+        this.companies.updateLinks(l);
       });
-  }
-
-  updateCompanies() {
-    this.linksService.getCompaniesWithMissingLinks()
-      .subscribe(companies => this.companies.withoutLink = companies);
-
-    if (this.event) {
-      this.getLinks(this.event.id);
-    }
   }
 
 }
