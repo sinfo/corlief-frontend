@@ -14,6 +14,7 @@ import { ClipboardModule } from 'ngx-clipboard';
 import { AppRoutes } from './app.routes';
 
 import { AdminGuard } from './auth/admin.guard';
+import { CompanyGuard } from './auth/company.guard';
 
 import { SortStandsPipe } from './admin/venues/venue/sort-stands.pipe';
 import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pipe';
@@ -27,6 +28,7 @@ import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { UploadService } from 'src/app/admin/venues/upload/upload.service';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
 import { EventService } from 'src/app/admin/event/event.service';
+import { CompanyService } from 'src/app/company/company.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
@@ -40,6 +42,7 @@ import { VenueComponent } from './admin/venues/venue/venue.component';
 import { CanvasComponent } from './admin/venues/venue/venue-image/canvas/canvas.component';
 import { VenueImageComponent } from './admin/venues/venue/venue-image/venue-image.component';
 import { LinkComponent } from './admin/links/link/link.component';
+import { CompanyComponent } from './company/company.component';
 
 library.add(fas);
 
@@ -61,6 +64,7 @@ library.add(fas);
     CompleteCompanyInfoPipe,
     GetArrayOfParticipationDaysPipe,
     CompanyBatchPipe,
+    CompanyComponent,
   ],
   imports: [
     BrowserModule,
@@ -77,11 +81,13 @@ library.add(fas);
     StorageService,
     LoginService,
     AdminGuard,
+    CompanyGuard,
     LinksService,
     VenuesService,
     UploadService,
     CanvasService,
-    EventService
+    EventService,
+    CompanyService
   ],
   bootstrap: [AppComponent]
 })

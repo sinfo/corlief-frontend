@@ -1,7 +1,8 @@
 import { ModuleWithProviders } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
-import { AdminGuard } from 'src/app/auth/admin.guard';
+import { AdminGuard } from './auth/admin.guard';
+import { CompanyGuard } from './auth/company.guard';
 
 import { HomeComponent } from 'src/app/admin/home/home.component';
 import { LoginComponent } from 'src/app/admin/login/login.component';
@@ -9,10 +10,11 @@ import { NotfoundComponent } from 'src/app/notfound/notfound.component';
 import { AdminComponent } from 'src/app/admin/admin.component';
 import { LinksComponent } from 'src/app/admin/links/links.component';
 import { VenuesComponent } from 'src/app/admin/venues/venues.component';
+import { CompanyComponent } from 'src/app/company/company.component';
 
 const appRoutes: Routes = [
   {
-    path: '',
+    path: 'admin',
     component: AdminComponent,
     canActivate: [AdminGuard],
     children: [
@@ -33,6 +35,17 @@ const appRoutes: Routes = [
         canActivate: [AdminGuard]
       }
     ]
+  },
+  {
+    path: 'token/:token',
+    component: CompanyComponent,
+    canActivate: [CompanyGuard]
+  },
+  {
+    path: '',
+    pathMatch: 'full',
+    component: CompanyComponent,
+    canActivate: [CompanyGuard]
   },
   {
     path: 'login',

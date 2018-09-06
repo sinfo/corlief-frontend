@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class LoginService {
 
-  corlief: String = environment.corlief;
+  private corlief: String = environment.corlief;
 
   constructor(
     private http: HttpClient,
