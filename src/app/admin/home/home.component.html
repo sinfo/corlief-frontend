@@ -7,7 +7,7 @@
     </div>
 
     <div class="content">
-      <app-venue-image [maxWidth]="30"></app-venue-image>
+      <app-venue-image [maxWidth]="25"></app-venue-image>
     </div>
 
   </div>
@@ -17,6 +17,72 @@
     <div class="title">
       <h3>Links</h3>
     </div>
+
+    <div class="content">
+
+      <span class="valid-link">
+
+        <div class="title">
+          <h5>Valid ({{companies.withLink.valid.length}})</h5>
+        </div>
+
+        <div class="links-content">
+
+          <div class="links-batch" *ngFor="let companies of companies.withLink.valid | companyBatch : 6">
+
+            <span class="company-img-wrapper" *ngFor="let company of companies">
+              <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
+            </span>
+
+          </div>
+
+        </div>
+
+      </span>
+
+
+      <span class="without-link">
+
+        <div class="title">
+          <h5>Missing ({{companies.withoutLink.length}})</h5>
+        </div>
+
+        <div class="links-content">
+
+          <div class="links-batch" *ngFor="let companies of companies.withoutLink | companyBatch : 6">
+
+            <span class="company-img-wrapper" *ngFor="let company of companies">
+              <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
+            </span>
+
+          </div>
+
+        </div>
+
+      </span>
+
+      <span class="invalid-link">
+
+        <div class="title">
+          <h5>Invalid ({{companies.withLink.invalid.length}})</h5>
+        </div>
+
+        <div class="links-content">
+
+          <div class="links-batch" *ngFor="let companies of companies.withLink.invalid | companyBatch : 6">
+
+            <span class="company-img-wrapper" *ngFor="let company of companies">
+              <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
+            </span>
+
+          </div>
+
+        </div>
+
+      </span>
+
+    </div>
+
 
   </div>
 

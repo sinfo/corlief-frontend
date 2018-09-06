@@ -10,10 +10,11 @@ import { environment } from '../../../environments/environment';
 import { StorageService } from '../../storage.service';
 import { Credentials } from '../login/credentials';
 
-import { VenuesService } from '../venues/venues.service';
+import { EventService } from '../event/event.service';
 
 import { Link, LinkForm } from './link/link';
-import { Company } from './link/company';
+import { Company, Companies } from './link/company';
+import { Event } from '../event/event';
 
 @Injectable({
   providedIn: 'root'
@@ -24,20 +25,22 @@ export class LinksService {
   private deck = `${environment.deck}/api`;
   private credentials: Credentials;
 
-  venueSubscription: Subscription;
+  companies: Companies;
 
-  private companiesSubject: BehaviorSubject<[Company]> = new BehaviorSubject<[Company]>(undefined);
-  private linksSubject: BehaviorSubject<[Link]> = new BehaviorSubject<[Link]>(undefined);
+  event: Event;
+  eventSubscription: Subscription;
 
-  private companies: [Company];
+  private companiesSubject: BehaviorSubject<Companies> = new BehaviorSubject<Companies>(undefined);
 
   private headers: HttpHeaders;
 
   constructor(
     private http: HttpClient,
     private storage: StorageService,
-    private venuesService: VenuesService
+    private eventService: EventService
   ) {
+    this.companies = new Companies();
+
     const credentials = <Credentials>this.storage.getItem('credentials');
     this.credentials = credentials;
 
@@ -46,9 +49,10 @@ export class LinksService {
       'Content-Type': 'application/json'
     });
 
-    this.venueSubscription = this.venuesService.getVenueSubject().subscribe(venue => {
-      if (venue) {
-        this.updateCompanies(venue.edition, true);
+    this.eventSubscription = this.eventService.getEventSubject().subscribe(event => {
+      if (event) {
+        this.event = event;
+        this.updateCompanies(event.id, true);
       }
     });
   }
@@ -59,41 +63,40 @@ export class LinksService {
   }
 
   private getCompanies(edition: String, force?: boolean): Observable<[Company]> {
-    return force || this.companies === undefined
+    return force || !this.companies.all.length
       ? this.http.get<[Company]>(
         `${this.deck}/companies?event=${edition}&&participations=true`,
         { withCredentials: true }
       )
-      : of(this.companies);
+      : of(this.companies.all);
   }
 
-  getCompaniesSubscription(): Observable<[Company]> {
+  getCompaniesSubscription(): Observable<Companies> {
     return this.companiesSubject.asObservable();
-  }
-
-  getLinksSubscription(): Observable<[Link]> {
-    return this.linksSubject.asObservable();
   }
 
   updateCompanies(edition: String, force?: boolean) {
     if (edition === undefined) { return; }
 
-    if (force === false && this.companies) {
+    if (force === false && this.companies.all.length > 0) {
       return this.companiesSubject.next(this.companies);
     }
 
     this.deckAuth().subscribe(() => {
       this.getCompanies(edition, true).subscribe(companies => {
-        this.companiesSubject.next(companies);
+        this.companies.updateCompanies(companies, edition);
+        this.updateLinks(edition);
       });
     });
   }
 
-  updateLinks(edition: string) {
+  updateLinks(edition: String) {
     if (edition === undefined) { return; }
 
-    this.getLinks({ edition: edition }).subscribe(links => {
-      this.linksSubject.next(links as [Link]);
+    this.getLinks({ edition: edition as string }).subscribe(links => {
+      const l = links instanceof Link ? [links] as [Link] : links as [Link];
+      this.companies.updateLinks(l);
+      this.companiesSubject.next(this.companies);
     });
   }
 

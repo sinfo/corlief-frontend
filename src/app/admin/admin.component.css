@@ -24,11 +24,11 @@
 .right-side {
     display: flex;
     justify-content: flex-end;
-    width: 8%;
+    flex-grow: 1;
 }
 
 .right-side .edition {
-    margin-right: 10%;
+    margin-right: 2%;
     color: white;
 }
 

@@ -5,7 +5,6 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { EventService } from 'src/app/admin/event/event.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 
-import { Link } from './link/link';
 import { Company, Companies } from './link/company';
 import { Event } from '../event/event';
 
@@ -21,7 +20,6 @@ export class LinksComponent implements OnInit, OnDestroy {
 
   eventSubscription: Subscription;
   companiesSubscription: Subscription;
-  linksSubscription: Subscription;
 
   constructor(
     private eventService: EventService,
@@ -40,16 +38,8 @@ export class LinksComponent implements OnInit, OnDestroy {
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => {
-        if (companies && this.event) {
-          this.companies.updateCompanies(companies, this.event.id);
-          this.getLinks(this.event.id);
-        }
-      });
-
-    this.linksSubscription = this.linksService.getLinksSubscription()
-      .subscribe(links => {
-        if (links) {
-          this.companies.updateLinks(links);
+        if (companies) {
+          this.companies = companies;
         }
       });
   }
@@ -57,15 +47,6 @@ export class LinksComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.companiesSubscription.unsubscribe();
     this.eventSubscription.unsubscribe();
-    this.linksSubscription.unsubscribe();
-  }
-
-  getLinks(edition: String) {
-    this.linksService.getLinks({ edition: <string>edition })
-      .subscribe(links => {
-        const l = links instanceof Link ? [links] as [Link] : links as [Link];
-        this.companies.updateLinks(l);
-      });
   }
 
 }

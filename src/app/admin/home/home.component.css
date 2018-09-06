@@ -1,7 +1,11 @@
 .wrapper {
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    justify-content: space-around;
+    align-items: center;
+
+    height: 85vh;
 }
 
 .info-card {
@@ -14,7 +18,10 @@
 
     margin: 1%;
     height: fit-content;
-    width: fit-content
+    width: 30%;
+
+    max-height: 100%;
+    overflow: scroll;
 }
 
 .title {
@@ -25,4 +32,43 @@
     padding-bottom: 5%;
     padding-left: 5%;
     padding-right: 5%;
+
+    width: 100%
+}
+
+.links .content .title {
+    width: 100%;
+}
+
+.links-content {
+    display: flex;
+    flex-direction: row;
+    overflow: scroll;
+}
+
+.links-batch {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+
+    min-width: 100%;
+}
+
+.company-img-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    height: 7vw;
+    width: 7vw;
+
+    border: 3px solid black;
+    border-radius: 100%;
+}
+
+.company-img {
+    max-width: 6vw;
+    height: auto;
+    padding: 15%;
 }
