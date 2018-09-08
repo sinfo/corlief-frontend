@@ -22,7 +22,6 @@ export class VenueComponent implements OnInit, OnDestroy {
   private venue: Venue;
   @Input() canBeEdited: boolean;
 
-  private loadingSrc: String = 'assets/img/loading.gif';
   private newStand: Stand;
 
   private confirmStand: boolean;

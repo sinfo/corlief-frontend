@@ -44,6 +44,8 @@ import { VenueImageComponent } from './admin/venues/venue/venue-image/venue-imag
 import { LinkComponent } from './admin/links/link/link.component';
 import { CompanyComponent } from './company/company.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
+import { ReservationsComponent } from './admin/reservations/reservations.component';
+import { ReservationComponent } from './admin/reservations/reservation/reservation.component';
 
 library.add(fas);
 
@@ -67,6 +69,8 @@ library.add(fas);
     CompanyBatchPipe,
     CompanyComponent,
     UnauthorizedComponent,
+    ReservationsComponent,
+    ReservationComponent,
   ],
   imports: [
     BrowserModule,

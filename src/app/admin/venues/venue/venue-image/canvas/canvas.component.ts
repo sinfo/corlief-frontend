@@ -25,11 +25,19 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas') public canvas: ElementRef;
   private colors = {
-    default: '#00386f',
-    selected: '#5ee0ff',
+    default: {
+      default: '#00386f',
+      selected: '#5ee0ff'
+    },
     delete: '#dc2121',
-    occupied: '#dc2121',
-    free: '#34ca34'
+    occupied: {
+      default: '#dc2121',
+      selected: '#dc2121'
+    },
+    free: {
+      default: '#018e01',
+      selected: '#34ca34'
+    }
   };
 
   private venueSubscription: Subscription;
@@ -85,7 +93,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
           case CanvasState.ON:
             if (this.cx) {
-              this.cx.strokeStyle = this.colors.default;
+              this.cx.strokeStyle = this.colors.default.default;
               this.start();
             }
             break;
@@ -117,7 +125,20 @@ export class CanvasComponent implements OnInit, OnDestroy {
           case CanvasState.SELECT:
             if (this.cx) {
               this.clearCanvas();
-              this.drawStand(communication.selected.stand, this.colors.selected);
+
+              if (this.availability && this.availability.selectedDay && this.availability.value) {
+
+                const free = this.availability.value.isFree(
+                  this.availability.selectedDay, communication.selected.stand.id
+                );
+
+                const color = free ? this.colors.free.selected : this.colors.occupied.selected;
+
+                this.drawStand(communication.selected.stand, color);
+
+              } else {
+                this.drawStand(communication.selected.stand, this.colors.default.selected);
+              }
             }
             break;
 
@@ -160,18 +181,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
     for (const stand of stands) {
 
       if (selectedStand && selectedStand.id === stand.id) {
-        this.drawStand(stand, this.colors.selected);
+        this.drawStand(stand, this.colors.default.selected);
       } else if (this.availability && this.availability.selectedDay && this.availability.value) {
-        const day = this.availability.value.availability.filter(
-          d => this.availability.selectedDay
-        )[0];
+        const free = this.availability.value.isFree(this.availability.selectedDay, stand.id);
 
-        const free = day.stands.filter(s => s.id === stand.id);
-
-        free ? this.drawStand(stand, this.colors.free)
-          : this.drawStand(stand, this.colors.occupied);
+        free ? this.drawStand(stand, this.colors.free.default)
+          : this.drawStand(stand, this.colors.occupied.default);
       } else {
-        this.drawStand(stand, this.colors.default);
+        this.drawStand(stand, this.colors.default.default);
       }
 
     }
@@ -186,7 +203,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     this.cx.lineWidth = 3;
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = this.colors.default;
+    this.cx.strokeStyle = this.colors.default.default;
   }
 
   private stop() {

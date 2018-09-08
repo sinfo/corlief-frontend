@@ -1,1 +1,61 @@
-<app-venue-image></app-venue-image>
+<span *ngIf="event">
+
+    <div class="content">
+
+        <div class="canvas">
+
+            <ngb-pagination [collectionSize]="event.duration.getDate()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)"
+                aria-label="Default pagination" size="lg"></ngb-pagination>
+
+            <app-venue-image></app-venue-image>
+
+        </div>
+
+        <div class="stands-wrapper">
+
+            <div class="stands">
+
+                <div class="title">
+                    <h3>Stands</h3>
+                </div>
+
+                <div class="stands-list">
+                    <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)">
+                        <div class="stand border" (click)="clickStand(day, stand.id)" [ngClass]="{'free': availability.isFree(day, stand.id), 'pending': isPendingBook(day, stand.id)}">
+                            {{stand.id + 1}}
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="reservation-wrapper">
+                <div class="reservations">
+                    <div class="title">
+                        <h3>My reservations</h3>
+                    </div>
+                </div>
+
+                <div class="pending">
+
+                    <div class="title">
+                        <h3>Pending</h3>
+                    </div>
+
+                    <div class="pending-list">
+                        <div class="reservation border" *ngFor="let reservation of pendingReservations">
+                            <div class="reservation-day">
+                                <b>Day: </b>{{reservation.day}}</div>
+                            <div class="reservation-stand">
+                                <b>Stand: </b>{{reservation.standId}}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+</span>

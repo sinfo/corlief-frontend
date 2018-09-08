@@ -19,13 +19,13 @@ import { Venue } from '../venues/venue/venue';
 })
 export class EventService {
 
-  deck = `${environment.deck}/api`;
-  credentials: Credentials;
+  private deck = `${environment.deck}/api`;
+  private credentials: Credentials;
 
-  eventSubject: BehaviorSubject<Event> = new BehaviorSubject<Event>(undefined);
-  venueSubscription: Subscription;
+  private eventSubject: BehaviorSubject<Event> = new BehaviorSubject<Event>(undefined);
+  private venueSubscription: Subscription;
 
-  headers: HttpHeaders;
+  private headers: HttpHeaders;
 
   constructor(
     private http: HttpClient,
