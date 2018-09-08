@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
 import { StorageService } from '../../storage.service';
 
 import { Credentials } from '../login/credentials';
-import { Venue } from './venue/venue';
+import { Venue, Availability } from './venue/venue';
 import { Stand } from './venue/stand';
 import { Company } from '../links/link/company';
 
@@ -18,13 +18,17 @@ import { Company } from '../links/link/company';
 
 export class VenuesService {
 
-  url: String = `${environment.corlief}/venue`;
-  headers: HttpHeaders;
+  private url: String = `${environment.corlief}/venue`;
+  private headers: HttpHeaders;
 
-  credentials: Credentials;
-  venue: Venue;
+  private credentials: Credentials;
+  private venue: Venue;
 
-  venueSubject: BehaviorSubject<Venue> = new BehaviorSubject<Venue>(undefined);
+  private venueSubject: BehaviorSubject<Venue>
+    = new BehaviorSubject<Venue>(undefined);
+
+  private availabilitySubject: BehaviorSubject<Availability>
+    = new BehaviorSubject<Availability>(undefined);
 
   constructor(
     private http: HttpClient,
@@ -36,6 +40,8 @@ export class VenuesService {
       Authorization: `${credentials.user} ${credentials.token}`,
     });
   }
+
+  // ------------ Venue ------------
 
   getVenue(): Venue {
     return this.venue;
@@ -49,6 +55,18 @@ export class VenuesService {
   getVenueSubject(): Observable<Venue> {
     return this.venueSubject.asObservable();
   }
+
+  // ------------ Availability ------------
+
+  setAvailability(availability: Availability) {
+    this.availabilitySubject.next(availability);
+  }
+
+  getAvailabilitySubject(): Observable<Availability> {
+    return this.availabilitySubject.asObservable();
+  }
+
+  // ------------ HTTP requests ------------
 
   getCurrentVenue(): Observable<Venue> {
     return this.http.get<Venue>(`${this.url}/current`, { headers: this.headers });

@@ -16,16 +16,16 @@ import { CanvasState, CanvasCommunication } from './canvas/canvasCommunication';
 })
 export class VenueImageComponent implements OnInit, OnDestroy {
 
-  venueSubscription: Subscription;
-  canvasSubscription: Subscription;
-  venue: Venue;
+  private venueSubscription: Subscription;
+  private canvasSubscription: Subscription;
+  private venue: Venue;
 
   @Input() maxWidth = 50;
 
-  loadingSrc = 'assets/img/loading.gif';
-  confirmStand: boolean;
-  newStand: Stand;
-  canvasOn = false;
+  private loadingSrc = 'assets/img/loading.gif';
+  private confirmStand: boolean;
+  private newStand: Stand;
+  private canvasOn = false;
 
   constructor(
     private venuesService: VenuesService,
@@ -59,7 +59,7 @@ export class VenueImageComponent implements OnInit, OnDestroy {
     this.canvasSubscription.unsubscribe();
   }
 
-  canvasStateSetup() {
+  private canvasStateSetup() {
     this.canvasService.setup();
   }
 }

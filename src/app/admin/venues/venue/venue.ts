@@ -10,3 +10,14 @@ export class Venue {
         this.image = image;
     }
 }
+
+export class Availability {
+    venue?: Venue;
+    availability: [{
+        day: number;
+        stands: [{
+            id: number;
+            free: boolean;
+        }]
+    }];
+}

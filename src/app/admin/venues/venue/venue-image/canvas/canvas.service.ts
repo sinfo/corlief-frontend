@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
-import { CanvasCommunication, CanvasState } from './canvasCommunication';
+import { CanvasCommunication, CanvasState, Selected } from './canvasCommunication';
 import { Stand } from '../../stand';
 
 @Injectable({
@@ -11,10 +11,10 @@ import { Stand } from '../../stand';
 })
 export class CanvasService {
 
-  commSubject = new BehaviorSubject<CanvasCommunication>(
+  private commSubject = new BehaviorSubject<CanvasCommunication>(
     new CanvasCommunication(CanvasState.OFF)
   );
-  newStandSubject = new BehaviorSubject<Stand>(undefined);
+  private newStandSubject = new BehaviorSubject<Stand>(undefined);
 
   constructor() { }
 
@@ -34,7 +34,7 @@ export class CanvasService {
   }
 
   revert(selectedStand?: Stand) {
-    const comm = this.buildCanvasCommunication(CanvasState.REVERT, selectedStand);
+    const comm = this.buildCanvasCommunication(CanvasState.REVERT, { stand: selectedStand });
     this.commSubject.next(comm);
   }
 
@@ -43,13 +43,18 @@ export class CanvasService {
     this.commSubject.next(comm);
   }
 
+  selectDay(day: number) {
+    const comm = this.buildCanvasCommunication(CanvasState.SELECT_DAY, { day: day });
+    this.commSubject.next(comm);
+  }
+
   select(selectedStand: Stand) {
-    const comm = this.buildCanvasCommunication(CanvasState.SELECT, selectedStand);
+    const comm = this.buildCanvasCommunication(CanvasState.SELECT, { stand: selectedStand });
     this.commSubject.next(comm);
   }
 
   selectToDelete(selectedStand: Stand) {
-    const comm = this.buildCanvasCommunication(CanvasState.SELECT_TO_DELETE, selectedStand);
+    const comm = this.buildCanvasCommunication(CanvasState.SELECT_TO_DELETE, { stand: selectedStand });
     this.commSubject.next(comm);
   }
 
@@ -61,13 +66,17 @@ export class CanvasService {
     this.newStandSubject.next(stand);
   }
 
+  cancelNewStand() {
+    this.newStandSubject.next(undefined);
+  }
+
   getNewStandSubject(): Observable<Stand> {
     return this.newStandSubject.asObservable();
   }
 
-  private buildCanvasCommunication(state: CanvasState, selectedStand?: Stand) {
-    const comm = selectedStand !== undefined
-      ? new CanvasCommunication(state, selectedStand)
+  private buildCanvasCommunication(state: CanvasState, selected?: Selected) {
+    const comm = selected
+      ? new CanvasCommunication(state, selected)
       : new CanvasCommunication(state);
 
     return comm;

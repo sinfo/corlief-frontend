@@ -12,9 +12,9 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { VenuesService } from '../../../venues.service';
 import { CanvasService } from './canvas.service';
 
-import { CanvasState, CanvasCommunication } from './canvasCommunication';
+import { CanvasState, CanvasCommunication, Selected } from './canvasCommunication';
 import { Stand } from '../../stand';
-import { Venue } from '../../venue';
+import { Venue, Availability } from '../../venue';
 
 @Component({
   selector: 'app-canvas',
@@ -24,27 +24,39 @@ import { Venue } from '../../venue';
 export class CanvasComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas') public canvas: ElementRef;
-  defaultColor = '#00386f';
-  selectedColor = '#5ee0ff';
-  deleteColor = '#dc2121';
+  private colors = {
+    default: '#00386f',
+    selected: '#5ee0ff',
+    delete: '#dc2121',
+    occupied: '#dc2121',
+    free: '#34ca34'
+  };
 
-  venueSubscription: Subscription;
-  commSubscription: Subscription;
+  private venueSubscription: Subscription;
+  private availabilitySubscription: Subscription;
+  private commSubscription: Subscription;
 
-  stands: [Stand];
-  pendingStand: Stand;
+  private availability: {
+    value: Availability,
+    selectedDay: number
+  };
 
-  startingPoint: { x: number, y: number };
+  private stands: [Stand];
+  private pendingStand: Stand;
 
-  cx: CanvasRenderingContext2D;
-  canvasEventsSubscription: Subscription;
+  private startingPoint: { x: number, y: number };
+
+  private cx: CanvasRenderingContext2D;
+  private canvasEventsSubscription: Subscription;
 
   constructor(
     private venuesService: VenuesService,
     private canvasService: CanvasService
   ) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    this.availability = { value: undefined, selectedDay: undefined };
+
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => {
         this.stands = venue.stands;
@@ -53,6 +65,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
         if (this.cx) {
           this.clearCanvas();
           this.drawStands();
+        }
+      });
+
+    this.availabilitySubscription = this.venuesService.getAvailabilitySubject()
+      .subscribe(availability => {
+        if (availability) {
+          this.availability.value = availability;
         }
       });
 
@@ -66,7 +85,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
           case CanvasState.ON:
             if (this.cx) {
-              this.cx.strokeStyle = this.defaultColor;
+              this.cx.strokeStyle = this.colors.default;
               this.start();
             }
             break;
@@ -80,29 +99,39 @@ export class CanvasComponent implements OnInit, OnDestroy {
           case CanvasState.REVERT:
             if (this.cx) {
               this.clearCanvas();
-              communication.selectedStand !== undefined
-                ? this.drawStands(communication.selectedStand)
+              communication.selected && communication.selected.stand
+                ? this.drawStands(communication.selected.stand)
                 : this.drawStands();
+            }
+            break;
+
+          case CanvasState.SELECT_DAY:
+            this.availability.selectedDay = communication.selected.day;
+
+            if (this.cx) {
+              this.clearCanvas();
+              this.drawStands();
             }
             break;
 
           case CanvasState.SELECT:
             if (this.cx) {
               this.clearCanvas();
-              this.drawStand(communication.selectedStand, this.selectedColor);
+              this.drawStand(communication.selected.stand, this.colors.selected);
             }
             break;
 
           case CanvasState.SELECT_TO_DELETE:
             if (this.cx) {
               this.clearCanvas();
-              this.drawStand(communication.selectedStand, this.deleteColor);
+              this.drawStand(communication.selected.stand, this.colors.delete);
             }
             break;
 
           case CanvasState.CLEAR:
             if (this.cx) {
               this.pendingStand = undefined;
+              this.availability = undefined;
               this.clearCanvas();
             }
             break;
@@ -111,11 +140,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.canvasService.cancelNewStand();
     this.venueSubscription.unsubscribe();
     this.commSubscription.unsubscribe();
   }
 
-  drawStand(stand: Stand, color: string) {
+  private drawStand(stand: Stand, color: string) {
     const pos1 = this.convertPosToAbsolute(stand.topLeft);
     const pos2 = this.convertPosToAbsolute(stand.bottomRight);
 
@@ -124,19 +154,30 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.drawRect(pos1, pos2);
   }
 
-  drawStands(selected?: Stand) {
+  private drawStands(selectedStand?: Stand) {
     const stands = this.pendingStand ? this.stands.concat([this.pendingStand]) : this.stands;
 
     for (const stand of stands) {
-      if (selected !== undefined && selected.id === stand.id) {
-        this.drawStand(stand, this.selectedColor);
+
+      if (selectedStand && selectedStand.id === stand.id) {
+        this.drawStand(stand, this.colors.selected);
+      } else if (this.availability && this.availability.selectedDay && this.availability.value) {
+        const day = this.availability.value.availability.filter(
+          d => this.availability.selectedDay
+        )[0];
+
+        const free = day.stands.filter(s => s.id === stand.id);
+
+        free ? this.drawStand(stand, this.colors.free)
+          : this.drawStand(stand, this.colors.occupied);
       } else {
-        this.drawStand(stand, this.defaultColor);
+        this.drawStand(stand, this.colors.default);
       }
+
     }
   }
 
-  setup() {
+  private setup() {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.cx = canvasEl.getContext('2d');
 
@@ -145,14 +186,16 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     this.cx.lineWidth = 3;
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = this.defaultColor;
+    this.cx.strokeStyle = this.colors.default;
   }
 
-  stop() {
-    this.canvasEventsSubscription.unsubscribe();
+  private stop() {
+    if (this.canvasEventsSubscription) {
+      this.canvasEventsSubscription.unsubscribe();
+    }
   }
 
-  start() {
+  private start() {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.canvasEventsSubscription = fromEvent(canvasEl, 'mousedown')
       .pipe(
@@ -181,7 +224,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       });
   }
 
-  captureFirstPoint(canvasEl: HTMLCanvasElement, event: Event) {
+  private captureFirstPoint(canvasEl: HTMLCanvasElement, event: Event) {
     const mouse: MouseEvent = <MouseEvent>event;
     const rect = canvasEl.getBoundingClientRect();
 
@@ -195,7 +238,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.startingPoint = pos;
   }
 
-  captureLastPoint(canvasEl: HTMLCanvasElement, event: Event) {
+  private captureLastPoint(canvasEl: HTMLCanvasElement, event: Event) {
     const mouse: MouseEvent = <MouseEvent>event;
     const rect = canvasEl.getBoundingClientRect();
 
@@ -213,14 +256,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.canvasService.addNewStand(stand);
   }
 
-  clearCanvas() {
+  private clearCanvas() {
     this.cx.clearRect(
       0, 0,
       this.canvas.nativeElement.offsetWidth, this.canvas.nativeElement.offsetHeight
     );
   }
 
-  drawNewRect(
+  private drawNewRect(
     pos1: { x: number, y: number },
     pos2: { x: number, y: number }
   ) {
@@ -229,7 +272,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.drawRect(pos1, pos2);
   }
 
-  drawRect(
+  private drawRect(
     pos1: { x: number, y: number },
     pos2: { x: number, y: number }
   ) {
@@ -252,14 +295,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.cx.stroke();
   }
 
-  convertPosToRelative(pos: { x: number, y: number }) {
+  private convertPosToRelative(pos: { x: number, y: number }) {
     const w = this.canvas.nativeElement.offsetWidth;
     const h = this.canvas.nativeElement.offsetHeight;
 
     return { x: pos.x / w, y: pos.y / h };
   }
 
-  convertPosToAbsolute(pos: { x: number, y: number }) {
+  private convertPosToAbsolute(pos: { x: number, y: number }) {
     const w = this.canvas.nativeElement.offsetWidth;
     const h = this.canvas.nativeElement.offsetHeight;
 

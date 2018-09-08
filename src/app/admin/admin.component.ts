@@ -15,8 +15,8 @@ import { Event } from './event/event';
 })
 export class AdminComponent implements OnInit, OnDestroy {
 
-  eventSubscription: Subscription;
-  event: Event;
+  private eventSubscription: Subscription;
+  private event: Event;
 
   constructor(
     private eventService: EventService,

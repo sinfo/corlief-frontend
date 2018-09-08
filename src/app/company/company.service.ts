@@ -7,6 +7,7 @@ import { StorageService } from '../storage.service';
 
 import { environment } from '../../environments/environment';
 import { Credentials } from './credentials';
+import { Availability } from '../admin/venues/venue/venue';
 
 @Injectable({
   providedIn: 'root'
@@ -30,6 +31,13 @@ export class CompanyService {
     this.storage.removeItem('company_credentials');
   }
 
+  private getHeaders(): { headers: HttpHeaders } {
+    const token = this.getToken();
+    return token === null
+      ? { headers: null }
+      : { headers: new HttpHeaders({ Authorization: `bearer ${token}` }) };
+  }
+
   getToken(): String | null {
     return <String | null>this.storage.getItem('token');
   }
@@ -37,5 +45,9 @@ export class CompanyService {
   saveCredentials(token: String, credentials: Credentials) {
     this.storage.setItem('token', token);
     this.storage.setItem('company_credentials', credentials);
+  }
+
+  getVenueAvailability(): Observable<Availability> {
+    return this.http.get<Availability>(`${this.corlief}/venue`, this.getHeaders());
   }
 }

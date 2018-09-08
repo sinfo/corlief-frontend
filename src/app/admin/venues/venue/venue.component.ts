@@ -16,18 +16,18 @@ import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/can
 })
 export class VenueComponent implements OnInit, OnDestroy {
 
-  venueSubscription: Subscription;
-  newStandSubscription: Subscription;
+  private venueSubscription: Subscription;
+  private newStandSubscription: Subscription;
 
-  venue: Venue;
+  private venue: Venue;
   @Input() canBeEdited: boolean;
 
-  loadingSrc: String = 'assets/img/loading.gif';
-  newStand: Stand;
+  private loadingSrc: String = 'assets/img/loading.gif';
+  private newStand: Stand;
 
-  confirmStand: boolean;
-  lockedStands: boolean;
-  pendingDeletion = false;
+  private confirmStand: boolean;
+  private lockedStands: boolean;
+  private pendingDeletion = false;
 
   constructor(
     private venuesService: VenuesService,
@@ -36,6 +36,7 @@ export class VenueComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.lockedStands = true;
+    this.confirmStand = undefined;
 
     this.newStandSubscription = this.canvasService.getNewStandSubject()
       .subscribe(stand => {
@@ -52,6 +53,8 @@ export class VenueComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.newStandSubscription.unsubscribe();
     this.venueSubscription.unsubscribe();
+    this.canvasService.clear();
+    this.canvasService.off();
   }
 
   alternateLock() {
@@ -76,7 +79,6 @@ export class VenueComponent implements OnInit, OnDestroy {
   }
 
   selectStand(stand: Stand) {
-    // this.canvasService.revert(stand);
     if (this.pendingDeletion) {
       this.canvasService.selectToDelete(stand);
     } else {
@@ -107,7 +109,6 @@ export class VenueComponent implements OnInit, OnDestroy {
 
   uploadStand() {
     const stand = this.newStand;
-    this.confirmStand = undefined;
 
     this.canvasService.off();
     this.venuesService.uploadStand(stand).subscribe(
