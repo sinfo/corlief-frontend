@@ -11,10 +11,12 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { VenuesService } from '../../../venues.service';
 import { CanvasService } from './canvas.service';
+import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
 import { CanvasState, CanvasCommunication, Selected } from './canvasCommunication';
 import { Stand } from '../../stand';
 import { Venue, Availability } from '../../venue';
+import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
 
 @Component({
   selector: 'app-canvas',
@@ -37,17 +39,25 @@ export class CanvasComponent implements OnInit, OnDestroy {
     free: {
       default: '#018e01',
       selected: '#34ca34'
+    },
+    reservation: {
+      pending: '#e8e850',
+      cancelled: '#ff0000',
+      confirmed: '#5ee0ff'
     }
   };
 
   private venueSubscription: Subscription;
   private availabilitySubscription: Subscription;
   private commSubscription: Subscription;
+  private reservationSubscription: Subscription;
 
   private availability: {
     value: Availability,
     selectedDay: number
   };
+
+  private reservation: Reservation;
 
   private stands: [Stand];
   private pendingStand: Stand;
@@ -59,7 +69,8 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
   constructor(
     private venuesService: VenuesService,
-    private canvasService: CanvasService
+    private canvasService: CanvasService,
+    private reservationsService: ReservationsService
   ) { }
 
   ngOnInit() {
@@ -73,6 +84,18 @@ export class CanvasComponent implements OnInit, OnDestroy {
         if (this.cx) {
           this.clearCanvas();
           this.drawStands();
+        }
+      });
+
+    this.reservationSubscription = this.reservationsService.getReservationSubject()
+      .subscribe(reservation => {
+        if (reservation) {
+          this.reservation = reservation;
+
+          if (this.cx) {
+            this.clearCanvas();
+            this.drawStands();
+          }
         }
       });
 
@@ -123,23 +146,14 @@ export class CanvasComponent implements OnInit, OnDestroy {
             break;
 
           case CanvasState.SELECT:
+            const stand = communication.selected.stand;
+
             if (this.cx) {
               this.clearCanvas();
-
-              if (this.availability && this.availability.selectedDay && this.availability.value) {
-
-                const free = this.availability.value.isFree(
-                  this.availability.selectedDay, communication.selected.stand.id
-                );
-
-                const color = free ? this.colors.free.selected : this.colors.occupied.selected;
-
-                this.drawStand(communication.selected.stand, color);
-
-              } else {
-                this.drawStand(communication.selected.stand, this.colors.default.selected);
-              }
+              const color = this.color(stand, true);
+              this.drawStand(stand, color);
             }
+
             break;
 
           case CanvasState.SELECT_TO_DELETE:
@@ -153,6 +167,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
             if (this.cx) {
               this.pendingStand = undefined;
               this.availability = undefined;
+              this.reservation = undefined;
               this.clearCanvas();
             }
             break;
@@ -164,6 +179,44 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.canvasService.cancelNewStand();
     this.venueSubscription.unsubscribe();
     this.commSubscription.unsubscribe();
+    this.reservationSubscription.unsubscribe();
+  }
+
+  private colorFromReservation(selected?: boolean): string {
+    if (this.reservation.feedback) {
+      if (this.reservation.feedback.status === 'CANCELLED') {
+        return this.colors.reservation.cancelled;
+      }
+
+      if (this.reservation.feedback.status === 'CONFIRMED') {
+        return this.colors.reservation.confirmed;
+      }
+
+      return this.colors.reservation.pending;
+    } else {
+      return this.colors.reservation.pending;
+    }
+  }
+
+  private color(stand: Stand, selected?: boolean): string {
+    if (this.availability && this.availability.selectedDay) {
+      if (this.reservation && this.reservation.hasStand(
+        { day: this.availability.selectedDay, standId: stand.id }
+      )) {
+        return this.colorFromReservation();
+      }
+
+      if (this.availability.value) {
+
+        const free = this.availability.value.isFree(
+          this.availability.selectedDay, stand.id
+        );
+
+        return free ? this.colors.free.selected : this.colors.occupied.selected;
+      }
+    }
+
+    return selected ? this.colors.default.selected : this.colors.default.default;
   }
 
   private drawStand(stand: Stand, color: string) {
@@ -179,18 +232,10 @@ export class CanvasComponent implements OnInit, OnDestroy {
     const stands = this.pendingStand ? this.stands.concat([this.pendingStand]) : this.stands;
 
     for (const stand of stands) {
+      const selected = selectedStand && selectedStand.id === stand.id;
 
-      if (selectedStand && selectedStand.id === stand.id) {
-        this.drawStand(stand, this.colors.default.selected);
-      } else if (this.availability && this.availability.selectedDay && this.availability.value) {
-        const free = this.availability.value.isFree(this.availability.selectedDay, stand.id);
-
-        free ? this.drawStand(stand, this.colors.free.default)
-          : this.drawStand(stand, this.colors.occupied.default);
-      } else {
-        this.drawStand(stand, this.colors.default.default);
-      }
-
+      const color = this.color(stand, selected);
+      this.drawStand(stand, color);
     }
   }
 

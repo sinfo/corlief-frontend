@@ -15,6 +15,7 @@ import { Availability } from '../admin/venues/venue/venue';
 export class CompanyService {
 
   private corlief: String = `${environment.corlief}/company`;
+  private credentials: Credentials;
 
   constructor(
     private http: HttpClient,
@@ -26,7 +27,7 @@ export class CompanyService {
     return this.http.get<Credentials>(`${this.corlief}/auth`, { headers: headers });
   }
 
-  clearCredentialsAndToken() {
+  clearToken() {
     this.storage.removeItem('token');
     this.storage.removeItem('company_credentials');
   }
@@ -42,9 +43,16 @@ export class CompanyService {
     return <String | null>this.storage.getItem('token');
   }
 
-  saveCredentials(token: String, credentials: Credentials) {
+  saveToken(token: String) {
     this.storage.setItem('token', token);
-    this.storage.setItem('company_credentials', credentials);
+  }
+
+  getCredentials(): Credentials {
+    return this.credentials;
+  }
+
+  updateCredentials(credentials: Credentials) {
+    this.credentials = credentials;
   }
 
   getVenueAvailability(): Observable<Availability> {

@@ -29,6 +29,7 @@ import { UploadService } from 'src/app/admin/venues/upload/upload.service';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
 import { EventService } from 'src/app/admin/event/event.service';
 import { CompanyService } from 'src/app/company/company.service';
+import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
@@ -93,7 +94,8 @@ library.add(fas);
     UploadService,
     CanvasService,
     EventService,
-    CompanyService
+    CompanyService,
+    ReservationsService
   ],
   bootstrap: [AppComponent]
 })

@@ -1,4 +1,5 @@
 import { Stand } from '../../stand';
+import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
 
 export enum CanvasState {
     SETUP, ON, OFF, REVERT, CLEAR, SELECT, SELECT_TO_DELETE, SELECT_DAY

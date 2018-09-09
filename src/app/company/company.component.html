@@ -1,4 +1,4 @@
-<span *ngIf="event">
+<span *ngIf="event && availability.venue">
 
     <div class="content">
 
@@ -43,11 +43,11 @@
                     </div>
 
                     <div class="pending-list">
-                        <div class="reservation border" *ngFor="let reservation of pendingReservations">
+                        <div class="reservation border" *ngFor="let reservation of reservations.pending.stands">
                             <div class="reservation-day">
                                 <b>Day: </b>{{reservation.day}}</div>
                             <div class="reservation-stand">
-                                <b>Stand: </b>{{reservation.standId}}</div>
+                                <b>Stand: </b>{{reservation.standId + 1}}</div>
                         </div>
                     </div>
 

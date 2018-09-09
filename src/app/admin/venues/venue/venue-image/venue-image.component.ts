@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { VenuesService } from '../../venues.service';
 import { CanvasService } from './canvas/canvas.service';
+import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
 import { Venue } from '../venue';
 import { Stand } from 'src/app/admin/venues/venue/stand';
@@ -18,6 +19,8 @@ export class VenueImageComponent implements OnInit, OnDestroy {
 
   private venueSubscription: Subscription;
   private canvasSubscription: Subscription;
+  private reservationsSubscription: Subscription;
+
   private venue: Venue;
 
   @Input() maxWidth = 50;
@@ -29,7 +32,8 @@ export class VenueImageComponent implements OnInit, OnDestroy {
 
   constructor(
     private venuesService: VenuesService,
-    private canvasService: CanvasService
+    private canvasService: CanvasService,
+    private reservationsService: ReservationsService
   ) { }
 
   ngOnInit() {

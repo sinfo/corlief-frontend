@@ -3,4 +3,5 @@ export class Credentials {
     company: String;
     edition: String;
     iat: number;
+    participationDays: number;
 }

@@ -7,12 +7,14 @@ import { CompanyService } from './company.service';
 import { VenuesService } from '../admin/venues/venues.service';
 import { EventService } from '../admin/event/event.service';
 import { CanvasService } from '../admin/venues/venue/venue-image/canvas/canvas.service';
+import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
+import { Credentials } from './credentials';
 import { Availability } from '../admin/venues/venue/venue';
 import { Event } from '../admin/event/event';
 import { Venue } from '../admin/venues/venue/venue';
 import { Stand } from '../admin/venues/venue/stand';
-import { Stand as ReservationStand, Reservation } from '../admin/reservations/reservation/reservation';
+import { Reservation, Stand as ReservationStand } from '../admin/reservations/reservation/reservation';
 
 @Component({
   selector: 'app-company',
@@ -25,19 +27,30 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   private event: Event;
   private availability: Availability;
+  private credentials: Credentials;
 
   private day = 1;
-  private pendingReservations = [] as [ReservationStand];
+  private reservations: {
+    pending: Reservation,
+    done: Reservation
+  };
 
   constructor(
     private companyService: CompanyService,
     private eventService: EventService,
     private venuesService: VenuesService,
     private canvasService: CanvasService,
-    private pagination: NgbPaginationConfig
+    private pagination: NgbPaginationConfig,
+    private reservationService: ReservationsService
   ) { }
 
   ngOnInit() {
+    this.credentials = this.companyService.getCredentials();
+    this.reservations = {
+      pending: new Reservation(),
+      done: undefined
+    };
+
     this.eventSubscription = this.eventService.getEventSubject().subscribe(event => {
       if (event) {
         this.event = event;
@@ -72,22 +85,14 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   private clickStand(day: number, standId: number) {
-    const isPending = this.isPendingBook(day, standId);
-
-    if (isPending) {
-      this.pendingReservations = ReservationStand.removeStand(
-        this.pendingReservations, day, standId
-      );
-    } else {
-      const stand = new ReservationStand(day, standId);
-      this.pendingReservations.push(stand);
-    }
-
-    console.log('pending', this.pendingReservations);
+    const stand = new ReservationStand(day, standId);
+    this.reservations.pending.update(this.credentials.participationDays, stand);
+    this.reservationService.setReservation(this.reservations.pending);
   }
 
   private isPendingBook(day: number, standId: number) {
-    return ReservationStand.hasStand(this.pendingReservations, day, standId);
+    const stand = new ReservationStand(day, standId);
+    return this.reservations.pending.hasStand(stand);
   }
 
 }

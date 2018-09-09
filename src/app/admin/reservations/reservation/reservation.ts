@@ -11,10 +11,23 @@ export class Stand {
         this.day = day;
         this.standId = standId;
     }
+}
 
-    static hasStand(stands: [Stand], day: number, standId: number): boolean {
-        for (const stand of stands) {
-            if (stand.day === day && stand.standId === standId) {
+export class Reservation {
+    id?: number;
+    companyId?: String;
+    edition?: String;
+    issued?: Date;
+    stands: [Stand];
+    feedback?: Feedback;
+
+    constructor() {
+        this.stands = [] as [Stand];
+    }
+
+    hasStand(stand: Stand): boolean {
+        for (const _stand of this.stands) {
+            if (_stand.day === stand.day && _stand.standId === stand.standId) {
                 return true;
             }
         }
@@ -22,16 +35,40 @@ export class Stand {
         return false;
     }
 
-    static removeStand(stands: [Stand], day: number, standId: number): [Stand] {
-        return stands.filter(stand => stand.day !== day || stand.standId !== standId) as [Stand];
+    private getStandIndexByDay(day: number): number {
+        return this.stands.findIndex(stand => stand.day === day);
     }
-}
 
-export class Reservation {
-    id: number;
-    companyId: String;
-    edition: String;
-    issued: Date;
-    stands: [Stand];
-    feedback: Feedback;
+    private addStand(stand: Stand) {
+        this.stands.push(stand);
+    }
+
+    private removeStand(stand: Stand) {
+        this.stands = this.stands.filter(
+            _stand => _stand.day !== stand.day || _stand.standId !== stand.standId
+        ) as [Stand];
+    }
+
+    update(participationDays: number, stand: Stand) {
+        const isPending = this.hasStand(stand);
+
+        if (isPending) {
+            this.removeStand(stand);
+            return;
+        }
+
+        const standIndexByDay = this.getStandIndexByDay(stand.day);
+
+        if (standIndexByDay !== -1) {
+            this.stands.splice(standIndexByDay, 1);
+            this.addStand(stand);
+            return;
+        }
+
+        if (this.stands.length === participationDays) {
+            return;
+        }
+
+        this.addStand(stand);
+    }
 }
