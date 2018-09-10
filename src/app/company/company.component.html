@@ -29,29 +29,111 @@
 
             </div>
 
-            <div class="reservation-wrapper">
-                <div class="reservations">
+            <div class="reservation-content-wrapper" *ngIf="reservations">
+                <div class="reservation-content">
                     <div class="title">
                         <h3>My reservations</h3>
                     </div>
-                </div>
 
-                <div class="pending">
+                    <div class="reservations">
 
-                    <div class="title">
-                        <h3>Pending</h3>
-                    </div>
+                        <div class="reservation" *ngIf="pendingReservation && pendingReservation.stands.length" [ngClass]="{'confirmed': pendingReservation.isConfirmed(), 'cancelled': pendingReservation.isCancelled(), 'pending': pendingReservation.isPending()}">
 
-                    <div class="pending-list">
-                        <div class="reservation border" *ngFor="let reservation of reservations.pending.stands">
-                            <div class="reservation-day">
-                                <b>Day: </b>{{reservation.day}}</div>
-                            <div class="reservation-stand">
-                                <b>Stand: </b>{{reservation.standId + 1}}</div>
+                            <div class="status">
+                                <span *ngIf="pendingReservation.isPending()">
+                                    <h5>Pending</h5>
+                                </span>
+                                <span *ngIf="pendingReservation.isConfirmed()">
+                                    <h5>Confirmed</h5>
+                                </span>
+                                <span *ngIf="pendingReservation.isCancelled()">
+                                    <h5>Cancelled</h5>
+                                </span>
+                            </div>
+
+                            <div class="reservation-stands-wrapper" *ngIf="pendingReservation">
+                                <b>Stands ({{pendingReservation.stands.length}}/{{credentials.participationDays}}):</b>
+                                <span class="reservation-stands-list">
+
+                                    <div class="reservation-stands border" *ngFor="let stand of pendingReservation.stands">
+                                        <div class="reservation-day">
+                                            <b>Day: </b>
+                                            {{stand.day}}
+                                        </div>
+                                        <div class="reservation-stand">
+                                            <b>Stand: </b>
+                                            {{stand.standId + 1}}
+                                        </div>
+                                    </div>
+
+                                </span>
+                            </div>
+
+                            <div class="bottom" [ngClass]="{'bottom-right': pendingReservation.issued === undefined}">
+                                <div class="issued" *ngIf="pendingReservation.issued">
+                                    <b>Issued: </b>{{pendingReservation.issued | date:'dd/MM/yyyy HH\'h\'mm'}}
+                                </div>
+
+                                <div class="actions">
+                                    <button class="btn btn-danger" (click)="cancelReservation()" *ngIf="pendingReservation.feedback">Cancel</button>
+                                    <button class="btn btn-primary" (click)="makeReservation()" *ngIf="pendingReservation.feedback === undefined" [disabled]="pendingReservation.stands.length !== credentials.participationDays">Submit</button>
+                                </div>
+                            </div>
+
+
                         </div>
+
+                        <span *ngIf="reservations">
+                            <div class="reservation" *ngFor="let reservation of reservations" [ngClass]="{'confirmed': reservation.isConfirmed(), 'cancelled': reservation.isCancelled(), 'pending': reservation.isPending()}">
+
+                                <div class="status">
+                                    <span *ngIf="reservation.isPending()">
+                                        <h5>Pending</h5>
+                                    </span>
+                                    <span *ngIf="reservation.isConfirmed()">
+                                        <h5>Confirmed</h5>
+                                    </span>
+                                    <span *ngIf="reservation.isCancelled()">
+                                        <h5>Cancelled</h5>
+                                    </span>
+                                </div>
+
+                                <div class="reservation-stands-wrapper">
+                                    <b>Stands:</b>
+                                    <span class="reservation-stands-list">
+
+                                        <div class="reservation-stands border" *ngFor="let stand of reservation.stands">
+                                            <div class="reservation-day">
+                                                <b>Day: </b>
+                                                {{stand.day}}
+                                            </div>
+                                            <div class="reservation-stand">
+                                                <b>Stand: </b>
+                                                {{stand.standId + 1}}
+                                            </div>
+                                        </div>
+
+                                    </span>
+                                </div>
+
+                                <div class="bottom">
+                                    <div class="issued">
+                                        <b>Issued: </b>{{reservation.issued | date:'dd/MM/yyyy HH\'h\'mm'}}
+                                    </div>
+
+                                    <div class="actions">
+                                        <button class="btn btn-danger" (click)="cancelReservation()" *ngIf="reservation.feedback.status !== 'CANCELLED'">Cancel</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </span>
                     </div>
 
+
                 </div>
+
             </div>
 
         </div>

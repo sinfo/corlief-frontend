@@ -21,8 +21,41 @@ export class Reservation {
     stands: [Stand];
     feedback?: Feedback;
 
-    constructor() {
-        this.stands = [] as [Stand];
+    constructor(reservation?: Reservation) {
+        if (reservation) {
+            this.id = reservation.id;
+            this.companyId = reservation.companyId;
+            this.edition = reservation.edition;
+            this.issued = reservation.issued;
+            this.stands = reservation.stands;
+            this.feedback = reservation.feedback;
+        } else {
+            this.stands = [] as [Stand];
+        }
+    }
+
+    static fromArray(_reservations: [Reservation]): [Reservation] {
+        if (_reservations === undefined) { return [] as [Reservation]; }
+
+        const reservations = [] as [Reservation];
+
+        for (const reservation of _reservations) {
+            reservations.push(new Reservation(reservation));
+        }
+
+        return reservations;
+    }
+
+    isPending(): boolean {
+        return this.feedback === undefined || this.feedback.status === 'PENDING';
+    }
+
+    isConfirmed(): boolean {
+        return this.feedback && this.feedback.status === 'CONFIRMED';
+    }
+
+    isCancelled(): boolean {
+        return this.feedback && this.feedback.status === 'CANCELLED';
     }
 
     hasStand(stand: Stand): boolean {

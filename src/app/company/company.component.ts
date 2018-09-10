@@ -30,10 +30,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
   private credentials: Credentials;
 
   private day = 1;
-  private reservations: {
-    pending: Reservation,
-    done: Reservation
-  };
+  private reservations: [Reservation];
+  private pendingReservation: Reservation;
 
   constructor(
     private companyService: CompanyService,
@@ -46,15 +44,11 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.credentials = this.companyService.getCredentials();
-    this.reservations = {
-      pending: new Reservation(),
-      done: undefined
-    };
+
+    this.updateReservations();
 
     this.eventSubscription = this.eventService.getEventSubject().subscribe(event => {
-      if (event) {
-        this.event = event;
-      }
+      this.event = event;
     });
 
     this.companyService.getVenueAvailability().subscribe(_availability => {
@@ -72,6 +66,24 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.eventSubscription.unsubscribe();
   }
 
+  private updateReservations() {
+    this.companyService.getReservations(false).subscribe(reservations => {
+      this.reservations = Reservation.fromArray(reservations);
+    });
+
+    this.companyService.getReservations(true).subscribe(reservations => {
+      if (!reservations.length || reservations[0].feedback.status === 'CANCELLED') {
+        this.pendingReservation = new Reservation();
+      } else if (reservations[0].feedback.status !== 'CANCELLED') {
+        this.pendingReservation = new Reservation(reservations[0]);
+        this.reservations = this.reservations.filter(
+          reservation => reservation.id !== reservations[0].id
+        ) as [Reservation];
+        this.reservationService.setReservation(reservations[0]);
+      }
+    });
+  }
+
   private changeDay(day: number) {
     this.canvasService.selectDay(day);
   }
@@ -85,14 +97,32 @@ export class CompanyComponent implements OnInit, OnDestroy {
   }
 
   private clickStand(day: number, standId: number) {
-    const stand = new ReservationStand(day, standId);
-    this.reservations.pending.update(this.credentials.participationDays, stand);
-    this.reservationService.setReservation(this.reservations.pending);
+    if (this.pendingReservation) {
+      const stand = new ReservationStand(day, standId);
+      this.pendingReservation.update(this.credentials.participationDays, stand);
+      this.reservationService.setReservation(this.pendingReservation);
+    }
   }
 
   private isPendingBook(day: number, standId: number) {
     const stand = new ReservationStand(day, standId);
-    return this.reservations.pending.hasStand(stand);
+    return this.pendingReservation ? this.pendingReservation.hasStand(stand) : false;
   }
 
+  private makeReservation() {
+    this.companyService.makeReservation(this.pendingReservation)
+      .subscribe(_reservation => {
+        const reservation = new Reservation(_reservation);
+        this.updateReservations();
+        this.reservationService.setReservation(reservation);
+      });
+  }
+
+  private cancelReservation() {
+    this.companyService.cancelReservation()
+      .subscribe(_reservation => {
+        this.updateReservations();
+        this.reservationService.setReservation(undefined);
+      });
+  }
 }

@@ -8,6 +8,7 @@ import { StorageService } from '../storage.service';
 import { environment } from '../../environments/environment';
 import { Credentials } from './credentials';
 import { Availability } from '../admin/venues/venue/venue';
+import { Reservation } from '../admin/reservations/reservation/reservation';
 
 @Injectable({
   providedIn: 'root'
@@ -57,5 +58,21 @@ export class CompanyService {
 
   getVenueAvailability(): Observable<Availability> {
     return this.http.get<Availability>(`${this.corlief}/venue`, this.getHeaders());
+  }
+
+  getReservations(latest: boolean): Observable<[Reservation]> {
+    return this.http.get<[Reservation]>(
+      `${this.corlief}/reservation?latest=${latest}`, this.getHeaders()
+    );
+  }
+
+  makeReservation(reservation: Reservation): Observable<Reservation> {
+    return this.http.post<Reservation>(
+      `${this.corlief}/reservation`, reservation.stands, this.getHeaders()
+    );
+  }
+
+  cancelReservation(): Observable<Reservation> {
+    return this.http.delete<Reservation>(`${this.corlief}/reservation`, this.getHeaders());
   }
 }

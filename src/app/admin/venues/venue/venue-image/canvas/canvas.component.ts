@@ -89,13 +89,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     this.reservationSubscription = this.reservationsService.getReservationSubject()
       .subscribe(reservation => {
-        if (reservation) {
-          this.reservation = reservation;
+        this.reservation = new Reservation(reservation);
 
-          if (this.cx) {
-            this.clearCanvas();
-            this.drawStands();
-          }
+        if (this.cx) {
+          this.clearCanvas();
+          this.drawStands();
         }
       });
 
