@@ -96,8 +96,12 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.canvasService.revert();
   }
 
+  private clickableStand() {
+    return this.pendingReservation && this.pendingReservation.issued === undefined;
+  }
+
   private clickStand(day: number, standId: number) {
-    if (this.pendingReservation) {
+    if (this.pendingReservation && this.pendingReservation.issued === undefined) {
       const stand = new ReservationStand(day, standId);
       this.pendingReservation.update(this.credentials.participationDays, stand);
       this.reservationService.setReservation(this.pendingReservation);

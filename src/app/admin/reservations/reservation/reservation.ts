@@ -43,7 +43,26 @@ export class Reservation {
             reservations.push(new Reservation(reservation));
         }
 
-        return reservations;
+        return reservations.sort(Reservation.compareDates);
+    }
+
+    static compareDates(r1: Reservation, r2: Reservation): number {
+        if (r1.issued === undefined && r2.issued !== undefined) {
+            return 1;
+        }
+
+        if (r1.issued !== undefined && r2.issued === undefined) {
+            return -1;
+        }
+
+        if (r1.issued === undefined && r2.issued === undefined) {
+            return 0;
+        }
+
+        const t1 = new Date(r1.issued).getTime();
+        const t2 = new Date(r2.issued).getTime();
+
+        return t2 - t1;
     }
 
     isPending(): boolean {
