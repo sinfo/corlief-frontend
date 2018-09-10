@@ -32,6 +32,7 @@ export class CompanyComponent implements OnInit, OnDestroy {
   private day = 1;
   private reservations: [Reservation];
   private pendingReservation: Reservation;
+  private latestReservation: Reservation;
 
   constructor(
     private companyService: CompanyService,
@@ -75,7 +76,10 @@ export class CompanyComponent implements OnInit, OnDestroy {
       if (!reservations.length || reservations[0].feedback.status === 'CANCELLED') {
         this.pendingReservation = new Reservation();
       } else if (reservations[0].feedback.status !== 'CANCELLED') {
+
         this.pendingReservation = new Reservation(reservations[0]);
+        this.latestReservation = new Reservation(reservations[0]);
+
         this.reservations = this.reservations.filter(
           reservation => reservation.id !== reservations[0].id
         ) as [Reservation];
@@ -96,21 +100,45 @@ export class CompanyComponent implements OnInit, OnDestroy {
     this.canvasService.revert();
   }
 
-  private clickableStand() {
-    return this.pendingReservation && this.pendingReservation.issued === undefined;
+  private clickableStand(day, standId) {
+    return this.pendingReservation && this.pendingReservation.issued === undefined
+      && !this.isOccupiedStand(day, standId);
   }
 
   private clickStand(day: number, standId: number) {
-    if (this.pendingReservation && this.pendingReservation.issued === undefined) {
+    if (this.pendingReservation
+      && this.pendingReservation.issued === undefined
+      && !this.isOccupiedStand(day, standId)
+    ) {
       const stand = new ReservationStand(day, standId);
       this.pendingReservation.update(this.credentials.participationDays, stand);
       this.reservationService.setReservation(this.pendingReservation);
     }
   }
 
+  private isFreeStand(day: number, standId: number): boolean {
+    return !this.isConfirmedBook(day, standId)
+      && !this.isPendingBook(day, standId)
+      && this.availability.isFree(day, standId);
+  }
+
+  private isOccupiedStand(day: number, standId: number): boolean {
+    return !this.isConfirmedBook(day, standId)
+      && !this.isPendingBook(day, standId)
+      && !this.availability.isFree(day, standId);
+  }
+
   private isPendingBook(day: number, standId: number) {
     const stand = new ReservationStand(day, standId);
-    return this.pendingReservation ? this.pendingReservation.hasStand(stand) : false;
+    return !this.isConfirmedBook(day, standId) && this.pendingReservation
+      ? this.pendingReservation.hasStand(stand) : false;
+  }
+
+  private isConfirmedBook(day: number, standId: number) {
+    const stand = new ReservationStand(day, standId);
+    return this.latestReservation
+      ? this.latestReservation.hasStand(stand) && this.latestReservation.isConfirmed()
+      : false;
   }
 
   private makeReservation() {

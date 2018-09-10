@@ -36,9 +36,9 @@ export class VenuesService {
   ) {
     const credentials = <Credentials>this.storage.getItem('credentials');
     this.credentials = credentials;
-    this.headers = new HttpHeaders({
+    this.headers = credentials ? new HttpHeaders({
       Authorization: `${credentials.user} ${credentials.token}`,
-    });
+    }) : new HttpHeaders();
   }
 
   // ------------ Venue ------------

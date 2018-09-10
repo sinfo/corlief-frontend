@@ -21,7 +21,7 @@
 
                 <div class="stands-list">
                     <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)">
-                        <div class="stand border" (click)="clickStand(day, stand.id)" [ngClass]="{'free': availability.isFree(day, stand.id), 'clickable': clickableStand(), 'pending': isPendingBook(day, stand.id)}">
+                        <div class="stand border" (click)="clickStand(day, stand.id)" [ngClass]="{'free': isFreeStand(day, stand.id), 'occupied': isOccupiedStand(day, stand.id), 'clickable': clickableStand(day, stand.id), 'pending': isPendingBook(day, stand.id), 'confirmed': isConfirmedBook(day, stand.id)}">
                             {{stand.id + 1}}
                         </div>
                     </div>

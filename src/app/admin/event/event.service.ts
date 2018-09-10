@@ -35,10 +35,10 @@ export class EventService {
     const credentials = <Credentials>this.storage.getItem('credentials');
     this.credentials = credentials;
 
-    this.headers = new HttpHeaders({
+    this.headers = credentials ? new HttpHeaders({
       'Content-Type': 'application/json',
       'Authorization': `${credentials.user} ${credentials.token}`
-    });
+    }) : undefined;
 
     this.venueSubscription = this.venues.getVenueSubject()
       .subscribe(venue => {
@@ -55,22 +55,38 @@ export class EventService {
   updateEvent(edition: String) {
     if (edition === undefined) { return; }
 
-    const { user, token } = this.credentials;
+    const { user, token } = this.credentials ? this.credentials : { user: null, token: null };
 
-    this.http.get(`${this.deck}/auth/login/${user}/${token}`)
-      .subscribe(() => {
-        this.http.get<[Event]>(`${this.deck}/events`, { withCredentials: true })
-          .subscribe(events => {
-            const filtered = events.filter(e => e.id === edition);
-            if (filtered.length > 0) {
-              const event = filtered[0];
+    if (user && token) {
+      this.http.get(`${this.deck}/auth/login/${user}/${token}`)
+        .subscribe(() => {
+          this.http.get<[Event]>(`${this.deck}/events`, { withCredentials: true })
+            .subscribe(events => {
+              const filtered = events.filter(e => e.id === edition);
+              if (filtered.length > 0) {
+                const event = filtered[0];
 
-              event.date = new Date(event.date);
-              event.duration = new Date(event.duration);
+                event.date = new Date(event.date);
+                event.duration = new Date(event.duration);
 
-              this.eventSubject.next(event);
-            }
-          });
-      });
+                this.eventSubject.next(event);
+              }
+            });
+        });
+    } else {
+      this.http.get<[Event]>(`${this.deck}/events`)
+        .subscribe(events => {
+          const filtered = events.filter(e => e.id === edition);
+          if (filtered.length > 0) {
+            const event = filtered[0];
+
+            event.date = new Date(event.date);
+            event.duration = new Date(event.duration);
+
+            this.eventSubject.next(event);
+          }
+        });
+    }
+
   }
 }

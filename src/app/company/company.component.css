@@ -8,8 +8,19 @@
 .canvas {
     display: flex;
     flex-direction: column;
-    width: fit-content;
     align-items: center;
+    justify-content: center;
+    
+    height: 100%;
+    width: fit-content;
+}
+
+.stands-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    height: 100%;
+    width: 45%;
 }
 
 .stands {
@@ -18,17 +29,9 @@
     justify-content: center;
     
     text-align: center;
-    height: 55%;
+    height: 50%;
 
     margin-bottom: 1%;
-}
-
-.stands-wrapper {
-    display: flex;
-    flex-direction: column;
-
-    height: 85%;
-    width: 45%;
 }
 
 .stands .title, .reservations-content .title {
@@ -93,6 +96,14 @@
     border-color: #34ca34 !important;
 }
 
+.stands .stands-list .stand div.occupied {
+    border: 2px solid red !important;
+}
+
+.stands .stands-list .stand div.occupied:hover {
+    border-color: red !important;
+}
+
 .stands .stands-list .stand div.pending {
     border: 2px solid #d8d80c !important;
 }
@@ -148,7 +159,8 @@
 }
 
 .confirmed {
-    border-color: #018e01;
+    border-color: #00386f;
+    background-color: #00386f29;
 }
 
 .pending {
