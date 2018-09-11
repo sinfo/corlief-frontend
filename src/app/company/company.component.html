@@ -1,5 +1,18 @@
-<span *ngIf="event && availability.venue">
+<nav class="navbar navbar-dark bg-dark justify-content-between">
+    <span class="navbar-brand">Corlief</span>
 
+    <a class="nav-link" href="https://sinfo.org" target="_blank">Our website</a>
+
+    <span class="right-side">
+        <span class="navbar-text edition" *ngIf="event">
+            {{event.name}}
+        </span>
+
+        <img src="https://sinfo.ams3.digitaloceanspaces.com/static/25-sinfo/powerOn.png" alt="SINFO">
+    </span>
+</nav>
+
+<span *ngIf="event && availability.venue">
     <div class="content">
 
         <div class="canvas-stands">

@@ -1,14 +1,35 @@
+.bg-dark {
+    background-color: #00254a !important;
+}
+
+.nav-link {
+    color: #8c9aa9;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.right-side {
+    display: flex;
+    justify-content: flex-end;
+    flex-grow: 1;
+}
+
+.right-side .edition {
+    margin-right: 2%;
+    color: white;
+}
+
+.right-side img {
+    max-height: 40px;
+}
+
 .content {
     display: flex;
     align-items: center;
 
-    height: 100vh;
-
-    background-image: url("https://sinfo.ams3.digitaloceanspaces.com/static/26-sinfo/webapp/sinfo-tent.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
-    
-    color: white;
+    height: 94vh;
 }
 
 .canvas-stands {
@@ -43,7 +64,7 @@
 }
 
 .stands-wrapper .stands, .stands-wrapper .reservations-content-wrapper {
-    background-color: #012b5dcc;
+    background-color: #ffffff36;
     border: 2px solid black;
     border-radius: 15px;
     padding: 2%;
