@@ -80,10 +80,12 @@ export class CompanyComponent implements OnInit, OnDestroy {
         this.pendingReservation = new Reservation(reservations[0]);
         this.latestReservation = new Reservation(reservations[0]);
 
-        this.reservations = this.reservations.filter(
-          reservation => reservation.id !== reservations[0].id
-        ) as [Reservation];
-        this.reservationService.setReservation(reservations[0]);
+        if (this.reservations) {
+          this.reservations = this.reservations.filter(
+            reservation => reservation.id !== reservations[0].id
+          ) as [Reservation];
+          this.reservationService.setReservation(reservations[0]);
+        }
       }
     });
   }

@@ -2,35 +2,39 @@
 
     <div class="content">
 
-        <div class="canvas">
+        <div class="canvas-stands">
 
-            <ngb-pagination [collectionSize]="event.duration.getDate()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)"
-                aria-label="Default pagination" size="lg"></ngb-pagination>
+            <div class="canvas-wrapper">
+                <div class="canvas">
 
-            <app-venue-image></app-venue-image>
+                    <ngb-pagination [collectionSize]="event.duration.getDate()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)"
+                        aria-label="Default pagination" size="lg"></ngb-pagination>
 
-        </div>
+                    <app-venue-image [maxWidth]="30"></app-venue-image>
 
-        <div class="stands-wrapper">
-
-            <div class="stands">
-
-                <div class="title">
-                    <h3>Stands</h3>
                 </div>
-
-                <div class="stands-list">
-                    <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)">
-                        <div class="stand border" (click)="clickStand(day, stand.id)" [ngClass]="{'free': isFreeStand(day, stand.id), 'occupied': isOccupiedStand(day, stand.id), 'clickable': clickableStand(day, stand.id), 'pending': isPendingBook(day, stand.id), 'confirmed': isConfirmedBook(day, stand.id)}">
-                            {{stand.id + 1}}
-                        </div>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="reservations-content-wrapper" *ngIf="reservations">
-                <div class="reservations-content">
+
+            <div class="stands-wrapper">
+
+                <div class="stands">
+
+                    <div class="title">
+                        <h3>Stands</h3>
+                    </div>
+
+                    <div class="stands-list">
+                        <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)">
+                            <div class="stand border" (click)="clickStand(day, stand.id)" [ngClass]="{'free': isFreeStand(day, stand.id), 'occupied': isOccupiedStand(day, stand.id), 'clickable': clickableStand(day, stand.id), 'pending': isPendingBook(day, stand.id), 'confirmed': isConfirmedBook(day, stand.id)}">
+                                {{stand.id + 1}}
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="reservations-content-wrapper" *ngIf="reservations">
                     <div class="title">
                         <h3>My reservations</h3>
                     </div>
@@ -38,10 +42,16 @@
                     <div class="reservations">
 
                         <div class="reservation" *ngIf="pendingReservation && pendingReservation.stands.length" [ngClass]="{'confirmed': pendingReservation.isConfirmed(), 'cancelled': pendingReservation.isCancelled(), 'pending': pendingReservation.isPending()}">
+                            <span class="stands-counter">
+                                {{pendingReservation.stands.length}}/{{credentials.participationDays}}
+                            </span>
                             <div class="reservation-content">
 
                                 <div class="status">
-                                    <span *ngIf="pendingReservation.isPending()">
+                                    <span class="submit" *ngIf="pendingReservation.id === undefined">
+                                        <button class="btn btn-primary" (click)="makeReservation()" *ngIf="pendingReservation.feedback === undefined" [disabled]="pendingReservation.stands.length !== credentials.participationDays">Submit</button>
+                                    </span>
+                                    <span *ngIf="pendingReservation.isPending() && pendingReservation.id !== undefined">
                                         <h5>Pending</h5>
                                     </span>
                                     <span *ngIf="pendingReservation.isConfirmed()">
@@ -53,7 +63,6 @@
                                 </div>
 
                                 <div class="reservation-stands-wrapper" *ngIf="pendingReservation">
-                                    <b>Stands ({{pendingReservation.stands.length}}/{{credentials.participationDays}}):</b>
                                     <span class="reservation-stands-list">
 
                                         <div class="reservation-stands border" *ngFor="let stand of pendingReservation.stands">
@@ -76,14 +85,14 @@
 
                                 <div class="actions">
                                     <button class="btn btn-danger" (click)="cancelReservation()" *ngIf="pendingReservation.feedback">Cancel</button>
-                                    <button class="btn btn-primary" (click)="makeReservation()" *ngIf="pendingReservation.feedback === undefined" [disabled]="pendingReservation.stands.length !== credentials.participationDays">Submit</button>
+
                                 </div>
                             </div>
 
 
                         </div>
 
-                        <span *ngIf="reservations">
+                        <ng-container *ngIf="reservations">
                             <div class="reservation" *ngFor="let reservation of reservations" [ngClass]="{'confirmed': reservation.isConfirmed(), 'cancelled': reservation.isCancelled(), 'pending': reservation.isPending()}">
                                 <div class="reservation-content">
                                     <div class="status">
@@ -99,7 +108,6 @@
                                     </div>
 
                                     <div class="reservation-stands-wrapper">
-                                        <b>Stands:</b>
                                         <span class="reservation-stands-list">
 
                                             <div class="reservation-stands border" *ngFor="let stand of reservation.stands">
@@ -127,8 +135,9 @@
 
 
                             </div>
-                        </span>
+                        </ng-container>
                     </div>
+
 
 
                 </div>
@@ -136,6 +145,7 @@
             </div>
 
         </div>
+
 
     </div>
 
