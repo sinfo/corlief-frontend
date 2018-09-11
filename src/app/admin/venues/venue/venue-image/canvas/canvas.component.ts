@@ -33,11 +33,13 @@ export class CanvasComponent implements OnInit, OnDestroy {
     },
     delete: '#dc2121',
     occupied: {
-      default: '#dc2121',
+      // default: '#dc2121',
+      default: '#ffffff00',
       selected: '#dc2121'
     },
     free: {
-      default: '#018e01',
+      // default: '#018e01',
+      default: '#ffffff00',
       selected: '#34ca34'
     },
     reservation: {
@@ -136,11 +138,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
           case CanvasState.SELECT_DAY:
             this.availability.selectedDay = communication.selected.day;
-
-            if (this.cx) {
-              this.clearCanvas();
-              this.drawStands();
-            }
             break;
 
           case CanvasState.SELECT:
@@ -210,7 +207,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
           this.availability.selectedDay, stand.id
         );
 
-        return free ? this.colors.free.selected : this.colors.occupied.selected;
+        if (selected) {
+          return free ? this.colors.free.selected : this.colors.occupied.selected;
+        } else {
+          return free ? this.colors.free.default : this.colors.occupied.default;
+        }
       }
     }
 
