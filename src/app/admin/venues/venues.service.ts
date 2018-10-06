@@ -24,6 +24,7 @@ export class VenuesService {
 
   private credentials: Credentials;
   private venue: Venue;
+  private availability: Availability;
 
   private venueSubject: BehaviorSubject<Venue>
     = new BehaviorSubject<Venue>(undefined);
@@ -64,11 +65,16 @@ export class VenuesService {
   // ------------ Availability ------------
 
   setAvailability(availability: Availability) {
+    this.availability = availability;
     this.availabilitySubject.next(availability);
   }
 
   getAvailabilitySubject(): Observable<Availability> {
     return this.availabilitySubject.asObservable();
+  }
+
+  getAvailability() {
+    return this.availability;
   }
 
   // ------------ HTTP requests ------------

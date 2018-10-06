@@ -28,6 +28,7 @@ export class ReservationsComponent implements OnInit {
   private eventSubscription: Subscription;
   private companiesSubscription: Subscription;
   private venuesSubscription: Subscription;
+  private availabilitySubscription: Subscription;
 
   constructor(
     private eventService: EventService,
@@ -45,6 +46,7 @@ export class ReservationsComponent implements OnInit {
 
           if (this.availability === undefined && this.event && this.venue && this.reservations && this.companies) {
             this.availability = Availability.generate(this.event, this.venue, this.reservations, this.companies);
+            this.venuesService.setAvailability(this.availability);
           }
         }
       });
@@ -56,6 +58,7 @@ export class ReservationsComponent implements OnInit {
 
           if (this.availability === undefined && this.event && this.venue && this.reservations && this.companies) {
             this.availability = Availability.generate(this.event, this.venue, this.reservations, this.companies);
+            this.venuesService.setAvailability(this.availability);
           }
         }
       });
@@ -69,6 +72,8 @@ export class ReservationsComponent implements OnInit {
       this.reservations = Reservation.fromArray(reservations);
     });
 
+    this.availability = this.venuesService.getAvailability();
+
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => {
         if (companies && companies.all.length > 0) {
@@ -76,6 +81,7 @@ export class ReservationsComponent implements OnInit {
 
           if (this.availability === undefined && this.event && this.venue && this.reservations && this.companies) {
             this.availability = Availability.generate(this.event, this.venue, this.reservations, this.companies);
+            this.venuesService.setAvailability(this.availability);
           }
         }
       });
