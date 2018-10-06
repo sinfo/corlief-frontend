@@ -11,6 +11,7 @@ import { Credentials } from '../login/credentials';
 import { Venue, Availability } from './venue/venue';
 import { Stand } from './venue/stand';
 import { Company } from '../links/link/company';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -43,8 +44,12 @@ export class VenuesService {
 
   // ------------ Venue ------------
 
-  getVenue(): Venue {
-    return this.venue;
+  getVenue(): Observable<Venue> {
+    if (this.venue) {
+      return of(this.venue);
+    }
+
+    return this.getCurrentVenue();
   }
 
   setVenue(venue: Venue) {

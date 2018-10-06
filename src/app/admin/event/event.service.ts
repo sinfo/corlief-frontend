@@ -64,11 +64,7 @@ export class EventService {
             .subscribe(events => {
               const filtered = events.filter(e => e.id === edition);
               if (filtered.length > 0) {
-                const event = filtered[0];
-
-                event.date = new Date(event.date);
-                event.duration = new Date(event.duration);
-
+                const event = new Event(filtered[0]);
                 this.eventSubject.next(event);
               }
             });

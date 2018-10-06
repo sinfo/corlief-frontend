@@ -104,7 +104,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
   private clickableStand(day, standId) {
     return this.pendingReservation && this.pendingReservation.issued === undefined
-      && !this.isOccupiedStand(day, standId);
+      && !this.isOccupiedStand(day, standId)
+      && this.pendingReservation.stands.length < this.credentials.participationDays;
   }
 
   private clickStand(day: number, standId: number) {

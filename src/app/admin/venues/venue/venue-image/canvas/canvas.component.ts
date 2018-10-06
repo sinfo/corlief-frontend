@@ -138,6 +138,12 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
           case CanvasState.SELECT_DAY:
             this.availability.selectedDay = communication.selected.day;
+
+            if (this.cx) {
+              this.clearCanvas();
+              this.drawStands();
+            }
+
             break;
 
           case CanvasState.SELECT:

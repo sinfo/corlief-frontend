@@ -59,7 +59,8 @@ export class LinksService {
 
   private deckAuth(): Observable<object> {
     const { user, token } = this.credentials;
-    return this.http.get(`${this.deck}/auth/login/${user}/${token}`);
+    return this.http.get(`${this.deck}/auth/login/${user}/${token}`,
+      { withCredentials: true });
   }
 
   private getCompanies(edition: String, force?: boolean): Observable<[Company]> {

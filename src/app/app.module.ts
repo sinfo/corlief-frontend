@@ -47,6 +47,7 @@ import { CompanyComponent } from './company/company.component';
 import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 import { ReservationsComponent } from './admin/reservations/reservations.component';
 import { ReservationComponent } from './admin/reservations/reservation/reservation.component';
+import { BuildTablePipe } from './admin/reservations/build-table.pipe';
 
 library.add(fas);
 
@@ -72,6 +73,7 @@ library.add(fas);
     UnauthorizedComponent,
     ReservationsComponent,
     ReservationComponent,
+    BuildTablePipe,
   ],
   imports: [
     BrowserModule,

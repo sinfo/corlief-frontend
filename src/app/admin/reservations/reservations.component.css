@@ -1,0 +1,7 @@
+#reservations-table {
+    width: 40%;
+}
+
+table td, th {
+    text-align: center;
+}

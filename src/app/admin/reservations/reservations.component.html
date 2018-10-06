@@ -1,3 +1,16 @@
-<p>
-  reservations works!
-</p>
+<div id="reservations-table" *ngIf="availability">
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th scope="col">Stand</th>
+                <th *ngFor="let day of availability.availability" scope="col">Day {{day.day}}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let stand of availability | buildTable">
+                <th scope="row">{{stand.standId + 1}}</th>
+                <td *ngFor="let day of stand.days">{{day.company ? day.company.name : ''}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
