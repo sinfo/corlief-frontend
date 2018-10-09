@@ -11,22 +11,11 @@ import { Venue } from './venue/venue';
 })
 export class VenuesComponent implements OnInit {
 
-  canBeEdited: boolean;
-
   constructor(private venuesService: VenuesService) { }
 
   ngOnInit() {
     this.venuesService.getVenue().subscribe(venue => {
-      this.canBeEdited = true;
       this.venuesService.setVenue(venue);
-    },
-      error => {
-        if (error.status === 404) {
-          this.canBeEdited = false;
-        } else {
-          console.error(error);
-        }
-      }
-    );
+    });
   }
 }

@@ -13,7 +13,10 @@ import { VenuesService } from '../../../venues.service';
 import { CanvasService } from './canvas.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
-import { CanvasState, CanvasCommunication, Selected } from './canvasCommunication';
+import {
+  CanvasState, CanvasAction, CanvasActionCommunication, Selected, CanvasData
+} from './canvasCommunication';
+
 import { Stand } from '../../stand';
 import { Venue, Availability } from '../../venue';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
@@ -26,48 +29,19 @@ import { Reservation } from 'src/app/admin/reservations/reservation/reservation'
 export class CanvasComponent implements OnInit, OnDestroy {
 
   @ViewChild('canvas') public canvas: ElementRef;
-  private colors = {
-    default: {
-      default: '#00386f',
-      selected: '#5ee0ff'
-    },
-    delete: '#dc2121',
-    occupied: {
-      // default: '#dc2121',
-      default: '#ffffff00',
-      selected: '#dc2121'
-    },
-    free: {
-      // default: '#018e01',
-      default: '#ffffff00',
-      selected: '#34ca34'
-    },
-    reservation: {
-      pending: '#e8e850',
-      cancelled: '#ff0000',
-      confirmed: '#5ee0ff'
-    }
-  };
+  @Input() state: CanvasState;
 
   private venueSubscription: Subscription;
   private availabilitySubscription: Subscription;
   private commSubscription: Subscription;
   private reservationSubscription: Subscription;
+  private canvasEventsSubscription: Subscription;
 
-  private availability: {
-    value: Availability,
-    selectedDay: number
-  };
-
-  private reservation: Reservation;
-
-  private stands: [Stand];
-  private pendingStand: Stand;
+  private data: CanvasData;
 
   private startingPoint: { x: number, y: number };
 
   private cx: CanvasRenderingContext2D;
-  private canvasEventsSubscription: Subscription;
 
   constructor(
     private venuesService: VenuesService,
@@ -76,22 +50,24 @@ export class CanvasComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    this.availability = { value: undefined, selectedDay: undefined };
+    this.data = new CanvasData(this.state);
 
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => {
-        this.stands = venue.stands;
-        this.pendingStand = undefined;
+        if (venue) {
+          this.data.updateStands(venue);
 
-        if (this.cx) {
-          this.clearCanvas();
-          this.drawStands();
+          if (this.cx) {
+            this.clearCanvas();
+            this.drawStands();
+          }
         }
+
       });
 
     this.reservationSubscription = this.reservationsService.getReservationSubject()
       .subscribe(reservation => {
-        this.reservation = new Reservation(reservation);
+        this.data.reservation = new Reservation(reservation);
 
         if (this.cx) {
           this.clearCanvas();
@@ -102,78 +78,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.availabilitySubscription = this.venuesService.getAvailabilitySubject()
       .subscribe(availability => {
         if (availability) {
-          this.availability.value = availability;
+          this.data.availability.value = availability;
         }
       });
 
-    this.commSubscription = this.canvasService.getCommunicationSubject()
-      .subscribe((communication: CanvasCommunication) => {
-        switch (communication.state) {
-          case CanvasState.SETUP:
-            this.setup();
-            this.drawStands();
-            break;
-
-          case CanvasState.ON:
-            if (this.cx) {
-              this.cx.strokeStyle = this.colors.default.default;
-              this.start();
-            }
-            break;
-
-          case CanvasState.OFF:
-            if (this.cx) {
-              this.stop();
-            }
-            break;
-
-          case CanvasState.REVERT:
-            if (this.cx) {
-              this.clearCanvas();
-              communication.selected && communication.selected.stand
-                ? this.drawStands(communication.selected.stand)
-                : this.drawStands();
-            }
-            break;
-
-          case CanvasState.SELECT_DAY:
-            this.availability.selectedDay = communication.selected.day;
-
-            if (this.cx) {
-              this.clearCanvas();
-              this.drawStands();
-            }
-
-            break;
-
-          case CanvasState.SELECT:
-            const stand = communication.selected.stand;
-
-            if (this.cx) {
-              this.clearCanvas();
-              const color = this.color(stand, true);
-              this.drawStand(stand, color);
-            }
-
-            break;
-
-          case CanvasState.SELECT_TO_DELETE:
-            if (this.cx) {
-              this.clearCanvas();
-              this.drawStand(communication.selected.stand, this.colors.delete);
-            }
-            break;
-
-          case CanvasState.CLEAR:
-            if (this.cx) {
-              this.pendingStand = undefined;
-              this.availability = undefined;
-              this.reservation = undefined;
-              this.clearCanvas();
-            }
-            break;
-        }
-      });
+    this.initCommunicationHandler();
   }
 
   ngOnDestroy() {
@@ -183,45 +92,72 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.reservationSubscription.unsubscribe();
   }
 
-  private colorFromReservation(selected?: boolean): string {
-    if (this.reservation.feedback) {
-      if (this.reservation.feedback.status === 'CANCELLED') {
-        return this.colors.reservation.cancelled;
-      }
+  private initCommunicationHandler() {
+    this.commSubscription = this.canvasService.getCommunicationSubject()
+      .subscribe((communication: CanvasActionCommunication) => {
+        switch (communication.action) {
+          case CanvasAction.SETUP:
+            this.setup();
+            this.drawStands();
+            break;
 
-      if (this.reservation.feedback.status === 'CONFIRMED') {
-        return this.colors.reservation.confirmed;
-      }
+          case CanvasAction.ON:
+            if (this.cx) {
+              this.start();
+            }
+            break;
 
-      return this.colors.reservation.pending;
-    } else {
-      return this.colors.reservation.pending;
-    }
-  }
+          case CanvasAction.OFF:
+            if (this.cx) {
+              this.stop();
+            }
+            break;
 
-  private color(stand: Stand, selected?: boolean): string {
-    if (this.availability && this.availability.selectedDay) {
-      if (this.reservation && this.reservation.hasStand(
-        { day: this.availability.selectedDay, standId: stand.id }
-      )) {
-        return this.colorFromReservation();
-      }
+          case CanvasAction.REVERT:
+            if (this.cx) {
+              this.clearCanvas();
+              communication.selected && communication.selected.stand
+                ? this.drawStands(communication.selected.stand)
+                : this.drawStands();
+            }
+            break;
 
-      if (this.availability.value) {
+          case CanvasAction.SELECT_DAY:
+            this.data.availability.selectedDay = communication.selected.day;
 
-        const free = this.availability.value.isFree(
-          this.availability.selectedDay, stand.id
-        );
+            if (this.cx) {
+              this.clearCanvas();
+              this.drawStands();
+            }
 
-        if (selected) {
-          return free ? this.colors.free.selected : this.colors.occupied.selected;
-        } else {
-          return free ? this.colors.free.default : this.colors.occupied.default;
+            break;
+
+          case CanvasAction.SELECT:
+            const stand = communication.selected.stand;
+
+            if (this.cx) {
+              this.clearCanvas();
+              const color = this.data.getColor(stand, true);
+              this.drawStand(stand, color);
+            }
+
+            break;
+
+          case CanvasAction.SELECT_TO_DELETE:
+            if (this.cx) {
+              this.clearCanvas();
+              this.drawStand(communication.selected.stand, CanvasData.COLOR_DELETE.DEFAULT);
+            }
+            break;
+
+          case CanvasAction.CLEAR:
+            if (this.cx) {
+              this.data.clear();
+              this.clearCanvas();
+            }
+            break;
         }
-      }
-    }
-
-    return selected ? this.colors.default.selected : this.colors.default.default;
+      });
   }
 
   private drawStand(stand: Stand, color: string) {
@@ -234,12 +170,15 @@ export class CanvasComponent implements OnInit, OnDestroy {
   }
 
   private drawStands(selectedStand?: Stand) {
-    const stands = this.pendingStand ? this.stands.concat([this.pendingStand]) : this.stands;
+    const stands = this.data.pendingStand
+      ? this.data.stands.concat([this.data.pendingStand])
+      : this.data.stands;
 
     for (const stand of stands) {
       const selected = selectedStand && selectedStand.id === stand.id;
 
-      const color = this.color(stand, selected);
+      const color = this.data.getColor(stand, selected);
+
       this.drawStand(stand, color);
     }
   }
@@ -253,7 +192,6 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     this.cx.lineWidth = 3;
     this.cx.lineCap = 'round';
-    this.cx.strokeStyle = this.colors.default.default;
   }
 
   private stop() {
@@ -295,7 +233,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
     const mouse: MouseEvent = <MouseEvent>event;
     const rect = canvasEl.getBoundingClientRect();
 
-    this.pendingStand = undefined;
+    this.data.pendingStand = undefined;
 
     const pos = {
       x: mouse.clientX - rect.left,
@@ -319,7 +257,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       pos2: this.convertPosToRelative(pos)
     });
 
-    this.pendingStand = stand;
+    this.data.pendingStand = stand;
     this.canvasService.addNewStand(stand);
   }
 
@@ -360,6 +298,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     // strokes the current path with the styles we set earlier
     this.cx.stroke();
+    this.cx.strokeStyle = null;
   }
 
   private convertPosToRelative(pos: { x: number, y: number }) {

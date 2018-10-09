@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 
-import { CanvasCommunication, CanvasState, Selected } from './canvasCommunication';
+import {
+  CanvasActionCommunication,
+  CanvasState, CanvasAction, Selected
+} from './canvasCommunication';
+
 import { Stand } from '../../stand';
 
 @Injectable({
@@ -11,55 +15,58 @@ import { Stand } from '../../stand';
 })
 export class CanvasService {
 
-  private commSubject = new BehaviorSubject<CanvasCommunication>(
-    new CanvasCommunication(CanvasState.OFF)
+  private commActionSubject = new BehaviorSubject<CanvasActionCommunication>(
+    new CanvasActionCommunication(CanvasAction.OFF)
   );
+
   private newStandSubject = new BehaviorSubject<Stand>(undefined);
 
   constructor() { }
 
+  // --------- Actions --------
+
   setup() {
-    const comm = this.buildCanvasCommunication(CanvasState.SETUP);
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.SETUP);
+    this.commActionSubject.next(comm);
   }
 
   on() {
-    const comm = this.buildCanvasCommunication(CanvasState.ON);
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.ON);
+    this.commActionSubject.next(comm);
   }
 
   off() {
-    const comm = this.buildCanvasCommunication(CanvasState.OFF);
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.OFF);
+    this.commActionSubject.next(comm);
   }
 
   revert(selectedStand?: Stand) {
-    const comm = this.buildCanvasCommunication(CanvasState.REVERT, { stand: selectedStand });
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.REVERT, { stand: selectedStand });
+    this.commActionSubject.next(comm);
   }
 
   clear() {
-    const comm = this.buildCanvasCommunication(CanvasState.CLEAR);
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.CLEAR);
+    this.commActionSubject.next(comm);
   }
 
   selectDay(day: number) {
-    const comm = this.buildCanvasCommunication(CanvasState.SELECT_DAY, { day: day });
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.SELECT_DAY, { day: day });
+    this.commActionSubject.next(comm);
   }
 
   select(selectedStand: Stand) {
-    const comm = this.buildCanvasCommunication(CanvasState.SELECT, { stand: selectedStand });
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.SELECT, { stand: selectedStand });
+    this.commActionSubject.next(comm);
   }
 
   selectToDelete(selectedStand: Stand) {
-    const comm = this.buildCanvasCommunication(CanvasState.SELECT_TO_DELETE, { stand: selectedStand });
-    this.commSubject.next(comm);
+    const comm = this.buildCanvasActionCommunication(CanvasAction.SELECT_TO_DELETE, { stand: selectedStand });
+    this.commActionSubject.next(comm);
   }
 
-  getCommunicationSubject(): Observable<CanvasCommunication> {
-    return this.commSubject.asObservable();
+  getCommunicationSubject(): Observable<CanvasActionCommunication> {
+    return this.commActionSubject.asObservable();
   }
 
   addNewStand(stand: Stand) {
@@ -74,10 +81,10 @@ export class CanvasService {
     return this.newStandSubject.asObservable();
   }
 
-  private buildCanvasCommunication(state: CanvasState, selected?: Selected) {
+  private buildCanvasActionCommunication(state: CanvasAction, selected?: Selected) {
     const comm = selected
-      ? new CanvasCommunication(state, selected)
-      : new CanvasCommunication(state);
+      ? new CanvasActionCommunication(state, selected)
+      : new CanvasActionCommunication(state);
 
     return comm;
   }

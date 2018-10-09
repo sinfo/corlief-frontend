@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 
-import { CanvasState, CanvasCommunication } from './venue-image/canvas/canvasCommunication';
+import { CanvasState } from './venue-image/canvas/canvasCommunication';
 import { Venue } from './venue';
 import { Stand } from './stand';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
@@ -15,13 +15,12 @@ import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/can
   styleUrls: ['./venue.component.css']
 })
 export class VenueComponent implements OnInit, OnDestroy {
+  private canvasState: CanvasState = CanvasState.VENUE;
 
   private venueSubscription: Subscription;
   private newStandSubscription: Subscription;
 
   private venue: Venue;
-  @Input() canBeEdited: boolean;
-
   private newStand: Stand;
 
   private confirmStand: boolean;

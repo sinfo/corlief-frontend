@@ -15,6 +15,7 @@ import { Event } from '../admin/event/event';
 import { Venue } from '../admin/venues/venue/venue';
 import { Stand } from '../admin/venues/venue/stand';
 import { Reservation, Stand as ReservationStand } from '../admin/reservations/reservation/reservation';
+import { CanvasState } from 'src/app/admin/venues/venue/venue-image/canvas/canvasCommunication';
 
 @Component({
   selector: 'app-company',
@@ -22,6 +23,8 @@ import { Reservation, Stand as ReservationStand } from '../admin/reservations/re
   styleUrls: ['./company.component.css']
 })
 export class CompanyComponent implements OnInit, OnDestroy {
+
+  private canvasState: CanvasState = CanvasState.COMPANY_RESERVATIONS;
 
   private eventSubscription: Subscription;
 

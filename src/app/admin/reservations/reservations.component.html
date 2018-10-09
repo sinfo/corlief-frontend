@@ -1,16 +1,39 @@
-<div id="reservations-table" *ngIf="availability">
-    <table class="table table-bordered">
-        <thead>
-            <tr>
-                <th scope="col">Stand</th>
-                <th *ngFor="let day of availability.availability" scope="col">Day {{day.day}}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let stand of availability | buildTable">
-                <th scope="row">{{stand.standId + 1}}</th>
-                <td *ngFor="let day of stand.days">{{day.company ? day.company.name : ''}}</td>
-            </tr>
-        </tbody>
-    </table>
+<div id="stands-wrapper">
+
+    <div class="canvas-stands" *ngIf="event">
+
+        <div class="canvas-wrapper">
+            <div class="canvas">
+
+                <div class="day-selection">
+                    <b>Day: </b>
+                    <ngb-pagination [collectionSize]="event.getDuration()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)" aria-label="Default pagination"
+                        size="sm"></ngb-pagination>
+                </div>
+
+
+                <app-venue-image [maxWidth]="30" [state]="canvasState"></app-venue-image>
+
+            </div>
+        </div>
+
+    </div>
+
+    <div id="reservations-table" *ngIf="availability">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">Stand</th>
+                    <th *ngFor="let day of availability.availability" scope="col">Day {{day.day}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let stand of availability | buildTable">
+                    <th scope="row">{{stand.standId + 1}}</th>
+                    <td *ngFor="let day of stand.days">{{day.company ? day.company.name : ''}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>
