@@ -1,9 +1,14 @@
-#stands-wrapper {
+.info {
+    position: absolute;
+    margin-right: 3%;
     display: flex;
+    width: 50vw;
+    right: 0;
     flex-direction: row;
-    justify-content: space-around;
+}
 
-    height: 85vh;
+.info /deep/ .nav-link {
+    color: black;
 }
 
 .canvas-stands {
@@ -11,11 +16,17 @@
     align-items: center;
     justify-content: space-around;
 
-    height: 95%;
+    height: 85vh;
+    width: 40vw;
+    position: fixed;
 }
 
 .canvas-wrapper {
     height: 100%;
+}
+
+.stands-wrapper {
+    width: 100%;
 }
 
 .day-selection {
@@ -55,8 +66,24 @@
     width: fit-content;
 }
 
-#reservations-table {
+.title {
+    margin-top: 2%;
+}
+
+.reservations {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    flex-wrap: wrap;
+
+    margin-top: 3%;
+}
+
+.reservations div {
     width: 40%;
+}
+
+#reservations-table {
     overflow-y: scroll;
 }
 

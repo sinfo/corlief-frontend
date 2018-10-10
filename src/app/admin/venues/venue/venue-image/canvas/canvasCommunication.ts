@@ -1,5 +1,5 @@
 import { Stand } from '../../stand';
-import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
+import { Reservation, Stand as ReservationStand } from 'src/app/admin/reservations/reservation/reservation';
 import { Availability, Venue } from 'src/app/admin/venues/venue/venue';
 
 export enum CanvasState {
@@ -63,11 +63,12 @@ export class CanvasData {
             case CanvasState.COMPANY_RESERVATIONS:
                 return this.availability && this.availability.selectedDay
                     ? this.getColorFromCompanyReservationsState(stand, selected)
-                    : CanvasData.COLOR_DEFAULT.DEFAULT;
+                    : CanvasData.NO_COLOR;
 
             case CanvasState.RESERVATIONS:
-
-                return CanvasData.NO_COLOR;
+                return this.availability && this.availability.selectedDay && this.availability.value
+                    ? this.getColorFromReservationsState(stand, selected)
+                    : CanvasData.NO_COLOR;
 
             default:
                 return CanvasData.NO_COLOR;
@@ -90,10 +91,22 @@ export class CanvasData {
         }
     }
 
+    private getColorFromReservationsState(stand: Stand, selected?: boolean): string {
+        const free = this.availability.value.isFree(
+            this.availability.selectedDay, stand.id
+        );
+
+        if (selected) {
+            return free ? CanvasData.COLOR_FREE.SELECTED : CanvasData.COLOR_DEFAULT.SELECTED;
+        } else {
+            return free ? CanvasData.NO_COLOR : CanvasData.COLOR_DEFAULT.DEFAULT;
+        }
+    }
+
     private getColorFromCompanyReservationsState(stand: Stand, selected?: boolean): string {
-        if (this.reservation && this.reservation.hasStand(
-            { day: this.availability.selectedDay, standId: stand.id }
-        )) {
+        const s = new ReservationStand(this.availability.selectedDay, stand.id);
+
+        if (this.reservation && this.reservation.hasStand(s)) {
             return this.colorFromReservation();
         }
 

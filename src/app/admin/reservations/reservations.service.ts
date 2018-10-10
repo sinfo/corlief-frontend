@@ -20,6 +20,9 @@ export class ReservationsService {
   private url: String = `${environment.corlief}/reservation`;
   private headers: HttpHeaders;
 
+  private reservationsSubject: BehaviorSubject<[Reservation]>
+    = new BehaviorSubject<[Reservation]>(undefined);
+
   private reservationSubject: BehaviorSubject<Reservation>
     = new BehaviorSubject<Reservation>(undefined);
 
@@ -38,6 +41,14 @@ export class ReservationsService {
       : null;
   }
 
+  setReservations(reservations: [Reservation]) {
+    this.reservationsSubject.next(reservations);
+  }
+
+  getReservationsSubject(): Observable<[Reservation]> {
+    return this.reservationsSubject.asObservable();
+  }
+
   setReservation(reservation: Reservation) {
     this.reservationSubject.next(reservation);
   }
@@ -51,6 +62,10 @@ export class ReservationsService {
       headers: this.headers,
       params: { edition: edition as string }
     });
+  }
+
+  updateWithLatest(): void {
+    this.getLatest().subscribe(reservations => this.setReservations(reservations));
   }
 
   getLatest(): Observable<[Reservation]> {

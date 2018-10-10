@@ -24,7 +24,11 @@ export class ReservationsComponent implements OnInit {
   private canvasState: CanvasState = CanvasState.RESERVATIONS;
 
   private event: Event;
-  private reservations: [Reservation];
+  private reservations: {
+    all: [Reservation],
+    confirmed: [Reservation],
+    pending: [Reservation]
+  };
   private companies: [Company];
   private venue: Venue;
   private availability: Availability;
@@ -34,6 +38,7 @@ export class ReservationsComponent implements OnInit {
   private companiesSubscription: Subscription;
   private venuesSubscription: Subscription;
   private availabilitySubscription: Subscription;
+  private reservationsSubscription: Subscription;
 
   constructor(
     private eventService: EventService,
@@ -44,13 +49,18 @@ export class ReservationsComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    this.reservations = {
+      all: [] as [Reservation],
+      confirmed: [] as [Reservation],
+      pending: [] as [Reservation]
+    };
 
     this.eventSubscription = this.eventService.getEventSubject()
       .subscribe(event => {
         if (event) {
           this.event = new Event(event);
 
-          if (this.availability === undefined && this.event && this.venue && this.reservations && this.companies) {
+          if (this.availability === undefined) {
             this.generateAvailability();
           }
         }
@@ -61,7 +71,7 @@ export class ReservationsComponent implements OnInit {
         if (venue) {
           this.venue = venue;
 
-          if (this.availability === undefined && this.event && this.venue && this.reservations && this.companies) {
+          if (this.availability === undefined) {
             this.generateAvailability();
           }
         }
@@ -71,10 +81,24 @@ export class ReservationsComponent implements OnInit {
       this.venuesService.setVenue(venue);
     });
 
-    this.reservationsService.getLatest().subscribe(reservations => {
-      this.reservations = Reservation.fromArray(reservations);
-    });
+    this.reservationsSubscription = this.reservationsService.getReservationsSubject()
+      .subscribe(_reservations => {
+        if (_reservations) {
+          const reservations = this.companies
+            ? Reservation.fromArray(_reservations, this.companies)
+            : Reservation.fromArray(_reservations);
 
+          this.reservations = {
+            all: reservations,
+            pending: reservations.filter(r => r.isPending()) as [Reservation],
+            confirmed: reservations.filter(r => r.isConfirmed()) as [Reservation]
+          };
+
+          this.generateAvailability();
+        }
+      });
+
+    this.reservationsService.updateWithLatest();
     this.availability = this.venuesService.getAvailability();
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
@@ -82,7 +106,13 @@ export class ReservationsComponent implements OnInit {
         if (companies && companies.all.length > 0) {
           this.companies = companies.all;
 
-          if (this.availability === undefined && this.event && this.venue && this.reservations && this.companies) {
+          if (this.reservations.all.length && this.reservations.all[0].company === undefined) {
+            Reservation.updateArrayWithCompanyInfo(this.reservations.all, companies.all);
+            Reservation.updateArrayWithCompanyInfo(this.reservations.pending, companies.all);
+            Reservation.updateArrayWithCompanyInfo(this.reservations.confirmed, companies.all);
+          }
+
+          if (this.availability === undefined) {
             this.generateAvailability();
           }
         }
@@ -90,15 +120,21 @@ export class ReservationsComponent implements OnInit {
   }
 
   private generateAvailability() {
-    this.availability = Availability.generate(
-      this.event, this.venue, this.reservations, this.companies
-    );
-    this.venuesService.setAvailability(this.availability);
-    this.canvasService.selectDay(1);
+    if (this.event && this.venue && this.reservations && this.companies) {
+      this.availability = Availability.generate(
+        this.event, this.venue, this.reservations.all, this.companies
+      );
+      this.venuesService.setAvailability(this.availability);
+      this.canvasService.selectDay(1);
+    }
   }
 
   private changeDay(day: number) {
     this.canvasService.selectDay(day);
+  }
+
+  private confirmationBlocked(reservation: Reservation): boolean {
+    return !reservation.canbeConfirmed(this.reservations.confirmed);
   }
 
 }

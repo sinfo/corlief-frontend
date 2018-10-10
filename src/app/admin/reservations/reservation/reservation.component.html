@@ -1,3 +1,45 @@
-<p>
-  reservation works!
-</p>
+<div class="reservation" [ngClass]="{'confirmed': reservation.isConfirmed(), 'cancelled': reservation.isCancelled(), 'pending': reservation.isPending()}">
+  <div class="reservation-content" *ngIf="reservation">
+    <div class="status">
+      <div class="company" *ngIf="reservation.company">
+        <h5>{{reservation.company.name}}</h5>
+      </div>
+
+      <span *ngIf="reservation.isPending()">
+        <h5>Pending</h5>
+      </span>
+      <span *ngIf="reservation.isConfirmed()">
+        <h5>Confirmed</h5>
+      </span>
+      <span *ngIf="reservation.isCancelled()">
+        <h5>Cancelled</h5>
+      </span>
+    </div>
+
+    <div class="reservation-stands-wrapper">
+      <span class="reservation-stands-list">
+
+        <div class="reservation-stands border" *ngFor="let stand of reservation.stands">
+          <div class="reservation-day">
+            <b>Day: </b>
+            {{stand.day}}
+          </div>
+          <div class="reservation-stand">
+            <b>Stand: </b>
+            {{stand.standId + 1}}
+          </div>
+        </div>
+
+      </span>
+    </div>
+
+    <div class="issued">
+      <b>Issued: </b>{{reservation.issued | date:'dd/MM/yyyy HH\'h\'mm'}}
+    </div>
+
+    <div class="actions">
+      <button class="btn btn-danger" (click)="cancel()" *ngIf="reservation.feedback.status !== 'CANCELLED'">Cancel</button>
+      <button class="btn btn-success" (click)="confirm()" [disabled]="confirmationBlocked" *ngIf="adminMode && reservation.feedback.status === 'PENDING'">Confirm</button>
+    </div>
+  </div>
+</div>
