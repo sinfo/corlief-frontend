@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 
 import { Observable } from 'rxjs/internal/Observable';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 
 import {
   CanvasActionCommunication,
@@ -19,7 +20,7 @@ export class CanvasService {
     new CanvasActionCommunication(CanvasAction.OFF)
   );
 
-  private newStandSubject = new BehaviorSubject<Stand>(undefined);
+  private newStandSubject = new ReplaySubject<Stand>();
 
   constructor() { }
 

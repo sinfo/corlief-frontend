@@ -51,9 +51,8 @@ export class CompanyComponent implements OnInit, OnDestroy {
 
     this.updateReservations();
 
-    this.eventSubscription = this.eventService.getEventSubject().subscribe(event => {
-      this.event = event;
-    });
+    this.eventSubscription = this.eventService.getEventSubject()
+      .subscribe(event => this.event = event);
 
     this.companyService.getVenueAvailability().subscribe(_availability => {
       const availability = new Availability(_availability);

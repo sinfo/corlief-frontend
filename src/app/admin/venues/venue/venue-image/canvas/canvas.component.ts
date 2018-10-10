@@ -56,11 +56,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
       .subscribe(venue => {
         if (venue) {
           this.data.updateStands(venue);
+        }
 
-          if (this.cx) {
-            this.clearCanvas();
-            this.drawStands();
-          }
+        if (this.cx) {
+          this.clearCanvas();
+          this.drawStands();
         }
 
       });
@@ -76,11 +76,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
       });
 
     this.availabilitySubscription = this.venuesService.getAvailabilitySubject()
-      .subscribe(availability => {
-        if (availability) {
-          this.data.availability.value = availability;
-        }
-      });
+      .subscribe(availability => this.data.availability.value = availability);
 
     this.initCommunicationHandler();
   }

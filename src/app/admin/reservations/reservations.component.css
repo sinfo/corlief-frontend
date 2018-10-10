@@ -70,6 +70,21 @@
     margin-top: 2%;
 }
 
+.filter {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.filter label {
+    width: 20%;
+    margin: 0;
+}
+
+.filter input {
+    width: 40%;
+}
+
 .reservations {
     display: flex;
     flex-direction: row;

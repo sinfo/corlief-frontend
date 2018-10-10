@@ -3,11 +3,12 @@ import { Subscription } from 'rxjs/internal/Subscription';
 import { Subject } from 'rxjs';
 
 import { VenuesService } from 'src/app/admin/venues/venues.service';
+import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
+import { EventService } from 'src/app/admin/event/event.service';
 
 import { CanvasState } from './venue-image/canvas/canvasCommunication';
 import { Venue } from './venue';
 import { Stand } from './stand';
-import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
 
 @Component({
   selector: 'app-venue',
@@ -17,6 +18,7 @@ import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/can
 export class VenueComponent implements OnInit, OnDestroy {
   private canvasState: CanvasState = CanvasState.VENUE;
 
+  private eventSubscription: Subscription;
   private venueSubscription: Subscription;
   private newStandSubscription: Subscription;
 
@@ -27,25 +29,33 @@ export class VenueComponent implements OnInit, OnDestroy {
   private lockedStands: boolean;
   private pendingDeletion = false;
 
+  private canEdit: boolean;
+
   constructor(
+    private eventService: EventService,
     private venuesService: VenuesService,
     private canvasService: CanvasService
   ) { }
 
   ngOnInit() {
-    this.lockedStands = true;
-    this.confirmStand = undefined;
+    this.reset();
 
     this.newStandSubscription = this.canvasService.getNewStandSubject()
       .subscribe(stand => {
-        if (stand) {
-          this.confirmStand = true;
-          this.newStand = stand;
-        }
+        this.confirmStand = true;
+        this.newStand = stand;
       });
 
     this.venueSubscription = this.venuesService.getVenueSubject()
-      .subscribe(venue => this.venue = venue);
+      .subscribe(venue => {
+        this.reset();
+        this.venue = venue;
+      });
+
+    this.eventSubscription = this.eventService.getEventSubject()
+      .subscribe(event => {
+        this.canEdit = this.eventService.isSelectedEventCurrent();
+      });
   }
 
   ngOnDestroy() {
@@ -53,6 +63,12 @@ export class VenueComponent implements OnInit, OnDestroy {
     this.venueSubscription.unsubscribe();
     this.canvasService.clear();
     this.canvasService.off();
+  }
+
+  private reset() {
+    this.newStand = undefined;
+    this.confirmStand = undefined;
+    this.lockedStands = true;
   }
 
   alternateLock() {

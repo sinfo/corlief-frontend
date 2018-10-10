@@ -72,7 +72,7 @@ export class LinkComponent implements OnInit {
 
   check() {
     const link = this.company.link;
-    console.log('Todo: checking', link);
+    // TODO: MAKE THIS HAPPEN
   }
 
   extend() {

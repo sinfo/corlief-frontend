@@ -15,6 +15,20 @@ export class Event {
         this.duration = new Date(event.duration);
     }
 
+    static fromArray(events: [Event]) {
+        const result = [];
+        for (const event of events) {
+            result.push(new Event(event));
+        }
+        return result;
+    }
+
+    static compare(e1: Event, e2: Event) {
+        const t1 = e1.date.getTime();
+        const t2 = e2.date.getTime();
+        return t1 >= t2 ? 1 : 0;
+    }
+
     getDuration(): number {
         return this.duration.getDate();
     }

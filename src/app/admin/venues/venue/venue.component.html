@@ -1,10 +1,6 @@
 <div class="header">
 
-  <span class="edition" *ngIf="venue">
-    <h2>Edition: {{venue.edition}}</h2>
-  </span>
-
-  <span class="upload" *ngIf="venue === undefined || canBeEdited">
+  <span class="upload" *ngIf="(venue === null || venue === undefined) && canEdit">
     <app-upload (newVenue)="onUpdateVenue($event)"></app-upload>
   </span>
 
@@ -23,7 +19,7 @@
 
       <h3>Stands</h3>
 
-      <span class="title-icon">
+      <span class="title-icon" *ngIf="canEdit">
         <span class="icon lock" (click)="alternateLock()">
           <fa-icon *ngIf="lockedStands" [icon]="['fas', 'lock']"></fa-icon>
         </span>

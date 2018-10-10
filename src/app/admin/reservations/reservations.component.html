@@ -1,4 +1,4 @@
-<div class="canvas-stands" *ngIf="event">
+<div class="canvas-stands" *ngIf="event && venue">
 
     <div class="canvas-wrapper">
         <div class="canvas">
@@ -52,14 +52,9 @@
                 </div>
             </ng-template>
         </ngb-tab>
-        <ngb-tab title="ReservationsView">
+        <ngb-tab title="Pending ({{reservations.pending.length}})">
             <ng-template ngbTabContent>
                 <div class="pending">
-                    <div class="title">
-                        <h3>
-                            Pending ({{reservations.pending.length}})
-                        </h3>
-                    </div>
 
                     <div class="reservations">
                         <div *ngFor="let reservation of reservations.pending">
@@ -68,14 +63,11 @@
                     </div>
 
                 </div>
-
+            </ng-template>
+        </ngb-tab>
+        <ngb-tab title="Confirmed ({{reservations.confirmed.length}})">
+            <ng-template ngbTabContent>
                 <div class="confirmed">
-                    <div class="title">
-                        <h3>
-                            Confirmed ({{reservations.confirmed.length}})
-                        </h3>
-                    </div>
-
                     <div class="reservations">
                         <div *ngFor="let reservation of reservations.confirmed">
                             <app-reservation [reservation]="reservation" [adminMode]="true"></app-reservation>
@@ -85,6 +77,33 @@
                 </div>
             </ng-template>
         </ngb-tab>
+
+        <ngb-tab title="Cancelled ({{reservations.cancelled.length}})">
+            <ng-template ngbTabContent>
+                <div class="cancelled">
+                    <div class="filter">
+
+                        <ng-template #rt let-r="result" let-t="term">
+                            <img [src]="r.company.img" class="mr-1" style="width: 70px">
+                            <ngb-highlight [result]="r.company.name" [term]="t"></ngb-highlight>
+                        </ng-template>
+
+                        <label for="typeahead-template">Filter by company:</label>
+                        <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="filteredReservation" [ngbTypeahead]="search"
+                            [resultTemplate]="rt" [inputFormatter]="formatter" />
+
+                    </div>
+
+                    <div class="reservations">
+                        <div *ngFor="let reservation of reservations.cancelled | filterReservations : filteredReservation ">
+                            <app-reservation [reservation]="reservation" [adminMode]="true"></app-reservation>
+                        </div>
+                    </div>
+
+                </div>
+            </ng-template>
+        </ngb-tab>
+
     </ngb-tabset>
 
 </div>

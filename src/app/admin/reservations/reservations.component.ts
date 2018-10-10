@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { Subscription } from 'rxjs/internal/Subscription';
+import { Observable } from 'rxjs/internal/Observable';
+
+import { debounceTime, map } from 'rxjs/operators';
 
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
@@ -27,7 +30,8 @@ export class ReservationsComponent implements OnInit {
   private reservations: {
     all: [Reservation],
     confirmed: [Reservation],
-    pending: [Reservation]
+    pending: [Reservation],
+    cancelled: [Reservation]
   };
   private companies: [Company];
   private venue: Venue;
@@ -39,6 +43,9 @@ export class ReservationsComponent implements OnInit {
   private venuesSubscription: Subscription;
   private availabilitySubscription: Subscription;
   private reservationsSubscription: Subscription;
+
+  private reservationFilter: string;
+  public filteredReservation: Reservation;
 
   constructor(
     private eventService: EventService,
@@ -52,64 +59,59 @@ export class ReservationsComponent implements OnInit {
     this.reservations = {
       all: [] as [Reservation],
       confirmed: [] as [Reservation],
-      pending: [] as [Reservation]
+      pending: [] as [Reservation],
+      cancelled: [] as [Reservation]
     };
 
     this.eventSubscription = this.eventService.getEventSubject()
       .subscribe(event => {
-        if (event) {
-          this.event = new Event(event);
+        this.event = new Event(event);
 
-          if (this.availability === undefined) {
-            this.generateAvailability();
-          }
+        if (this.availability === undefined) {
+          this.generateAvailability();
         }
+
+        this.reservationsService.getFromEdition(event.id)
+          .subscribe(reservations => this.reservationsService.setReservations(reservations));
       });
 
     this.venuesSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => {
-        if (venue) {
-          this.venue = venue;
+        this.venue = venue;
 
-          if (this.availability === undefined) {
-            this.generateAvailability();
-          }
-        }
-      });
-
-    this.venuesService.getVenue().subscribe(venue => {
-      this.venuesService.setVenue(venue);
-    });
-
-    this.reservationsSubscription = this.reservationsService.getReservationsSubject()
-      .subscribe(_reservations => {
-        if (_reservations) {
-          const reservations = this.companies
-            ? Reservation.fromArray(_reservations, this.companies)
-            : Reservation.fromArray(_reservations);
-
-          this.reservations = {
-            all: reservations,
-            pending: reservations.filter(r => r.isPending()) as [Reservation],
-            confirmed: reservations.filter(r => r.isConfirmed()) as [Reservation]
-          };
-
+        if (this.availability === undefined) {
           this.generateAvailability();
         }
       });
 
-    this.reservationsService.updateWithLatest();
+    this.reservationsSubscription = this.reservationsService.getReservationsSubject()
+      .subscribe(_reservations => {
+        const reservations = this.companies
+          ? Reservation.fromArray(_reservations, this.companies)
+          : Reservation.fromArray(_reservations);
+
+        this.reservations = {
+          all: reservations,
+          pending: reservations.filter(r => r.isPending()) as [Reservation],
+          confirmed: reservations.filter(r => r.isConfirmed()) as [Reservation],
+          cancelled: reservations.filter(r => r.isCancelled()) as [Reservation]
+        };
+
+        this.generateAvailability();
+      });
+
     this.availability = this.venuesService.getAvailability();
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => {
-        if (companies && companies.all.length > 0) {
+        if (companies.all.length > 0) {
           this.companies = companies.all;
 
           if (this.reservations.all.length && this.reservations.all[0].company === undefined) {
             Reservation.updateArrayWithCompanyInfo(this.reservations.all, companies.all);
             Reservation.updateArrayWithCompanyInfo(this.reservations.pending, companies.all);
             Reservation.updateArrayWithCompanyInfo(this.reservations.confirmed, companies.all);
+            Reservation.updateArrayWithCompanyInfo(this.reservations.cancelled, companies.all);
           }
 
           if (this.availability === undefined) {
@@ -119,13 +121,41 @@ export class ReservationsComponent implements OnInit {
       });
   }
 
+  search = (text$: Observable<string>) =>
+    text$.pipe(
+      debounceTime(200),
+      map(term => term === ''
+        ? []
+        : this.reservations.cancelled
+          .reduce(this.filterCompaniesHelper(term), [])
+          .slice(0, 10)
+      )
+    )
+
+  formatter = (r: Reservation) => r.company.name;
+
+  private filterCompaniesHelper(company: string) {
+    return function (total: Reservation[], curr: Reservation, currI: number, arr: Reservation[]): Reservation[] {
+      let filter = curr.company.name.toLowerCase().indexOf(company.toLowerCase()) > -1;
+      filter = filter && total.filter(r => r.company.name === curr.company.name).length === 0;
+
+      if (filter) { total.push(curr); }
+
+      return total;
+    };
+  }
+
   private generateAvailability() {
     if (this.event && this.venue && this.reservations && this.companies) {
       this.availability = Availability.generate(
         this.event, this.venue, this.reservations.all, this.companies
       );
+
       this.venuesService.setAvailability(this.availability);
       this.canvasService.selectDay(1);
+
+    } else {
+      this.availability = undefined;
     }
   }
 

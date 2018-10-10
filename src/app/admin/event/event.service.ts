@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs/internal/Observable';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { environment } from '../../../environments/environment';
@@ -19,10 +19,13 @@ import { Venue } from '../venues/venue/venue';
 })
 export class EventService {
 
+  public events: [Event];
+  public event: Event;
+
   private deck = `${environment.deck}/api`;
   private credentials: Credentials;
 
-  private eventSubject: BehaviorSubject<Event> = new BehaviorSubject<Event>(undefined);
+  private eventSubject: ReplaySubject<Event> = new ReplaySubject<Event>();
   private venueSubscription: Subscription;
 
   private headers: HttpHeaders;
@@ -52,8 +55,8 @@ export class EventService {
     return this.eventSubject.asObservable();
   }
 
-  updateEvent(edition: String) {
-    if (edition === undefined) { return; }
+  updateEvent(edition?: String) {
+    if (this.event && edition && this.event.id === edition) { return; }
 
     const { user, token } = this.credentials ? this.credentials : { user: null, token: null };
 
@@ -62,27 +65,37 @@ export class EventService {
         .subscribe(() => {
           this.http.get<[Event]>(`${this.deck}/events`, { withCredentials: true })
             .subscribe(events => {
-              const filtered = events.filter(e => e.id === edition);
-              if (filtered.length > 0) {
-                const event = new Event(filtered[0]);
-                this.eventSubject.next(event);
-              }
+              this.events = Event.fromArray(events).sort(Event.compare) as [Event];
+
+              const filtered = edition
+                ? events.filter(e => e.id === edition)[0]
+                : events[events.length - 1];
+
+              const event = new Event(filtered);
+              this.event = event;
+              this.eventSubject.next(event);
+
             });
         });
     } else {
       this.http.get<[Event]>(`${this.deck}/events`)
         .subscribe(events => {
-          const filtered = events.filter(e => e.id === edition);
-          if (filtered.length > 0) {
-            const event = filtered[0];
+          this.events = Event.fromArray(events).sort(Event.compare) as [Event];
 
-            event.date = new Date(event.date);
-            event.duration = new Date(event.duration);
+          const filtered = edition
+            ? events.filter(e => e.id === edition)[0]
+            : events[events.length - 1];
 
-            this.eventSubject.next(event);
-          }
+          const event = new Event(filtered);
+          this.event = event;
+          this.eventSubject.next(event);
         });
     }
+  }
 
+  isSelectedEventCurrent() {
+    if (this.event === undefined) { return false; }
+    const latest = this.events[this.events.length - 1];
+    return latest.id === this.event.id;
   }
 }

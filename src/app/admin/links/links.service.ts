@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs/internal/Observable';
 import { of } from 'rxjs';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { environment } from '../../../environments/environment';
@@ -30,7 +30,7 @@ export class LinksService {
   event: Event;
   eventSubscription: Subscription;
 
-  private companiesSubject: BehaviorSubject<Companies> = new BehaviorSubject<Companies>(undefined);
+  private companiesSubject: ReplaySubject<Companies> = new ReplaySubject<Companies>();
 
   private headers: HttpHeaders;
 
@@ -49,12 +49,11 @@ export class LinksService {
       'Content-Type': 'application/json'
     });
 
-    this.eventSubscription = this.eventService.getEventSubject().subscribe(event => {
-      if (event) {
+    this.eventSubscription = this.eventService.getEventSubject()
+      .subscribe(event => {
         this.event = event;
         this.updateCompanies(event.id, true);
-      }
-    });
+      });
   }
 
   private deckAuth(): Observable<object> {
