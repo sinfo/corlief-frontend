@@ -13,6 +13,9 @@ export class ReservationComponent implements OnInit {
   @Input() adminMode: boolean;
   @Input() confirmationBlocked: boolean;
 
+  private loadingSrc = 'assets/img/loading.gif';
+  private maxWidth: '10';
+
   constructor(private reservationsService: ReservationsService) { }
 
   ngOnInit() {

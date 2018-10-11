@@ -126,7 +126,7 @@ export class ReservationsComponent implements OnInit {
       debounceTime(200),
       map(term => term === ''
         ? []
-        : this.reservations.cancelled
+        : this.reservations.all
           .reduce(this.filterCompaniesHelper(term), [])
           .slice(0, 10)
       )

@@ -1,19 +1,17 @@
 <div class="reservation" [ngClass]="{'confirmed': reservation.isConfirmed(), 'cancelled': reservation.isCancelled(), 'pending': reservation.isPending()}">
   <div class="reservation-content" *ngIf="reservation">
-    <div class="status">
-      <div class="company" *ngIf="reservation.company">
-        <h5>{{reservation.company.name}}</h5>
+
+    <div class="status" *ngIf="reservation.company">
+      <div class="company-img">
+        <img [defaultImage]="loadingSrc" [lazyLoad]="reservation.company.img" [ngStyle]="{'height': '100%', 'width': 'auto' }">
       </div>
 
-      <span *ngIf="reservation.isPending()">
-        <h5>Pending</h5>
-      </span>
-      <span *ngIf="reservation.isConfirmed()">
-        <h5>Confirmed</h5>
-      </span>
-      <span *ngIf="reservation.isCancelled()">
-        <h5>Cancelled</h5>
-      </span>
+    </div>
+
+    <hr class="divider" />
+
+    <div class="issued">
+      <b>Issued: </b>{{reservation.issued | date:'dd/MM/yyyy HH\'h\'mm'}}
     </div>
 
     <div class="reservation-stands-wrapper">
@@ -31,10 +29,6 @@
         </div>
 
       </span>
-    </div>
-
-    <div class="issued">
-      <b>Issued: </b>{{reservation.issued | date:'dd/MM/yyyy HH\'h\'mm'}}
     </div>
 
     <div class="actions">

@@ -19,7 +19,7 @@ import { CompanyGuard } from './auth/company.guard';
 import { SortStandsPipe } from './admin/venues/venue/sort-stands.pipe';
 import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pipe';
 import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of-participation-days.pipe';
-import { CompanyBatchPipe } from './admin/home/company-batch.pipe';
+import { BatchPipe } from './admin/home/batch.pipe';
 
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
@@ -69,7 +69,7 @@ library.add(fas);
     LinkComponent,
     CompleteCompanyInfoPipe,
     GetArrayOfParticipationDaysPipe,
-    CompanyBatchPipe,
+    BatchPipe,
     CompanyComponent,
     UnauthorizedComponent,
     ReservationsComponent,
