@@ -4,9 +4,13 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { EventService } from 'src/app/admin/event/event.service';
 import { LinksService } from 'src/app/admin/links/links.service';
+import { VenuesService } from 'src/app/admin/venues/venues.service';
+import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
 import { Company, Companies } from '../links/link/company';
 import { Event } from '../event/event';
+import { Venue } from 'src/app/admin/venues/venue/venue';
+import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
 
 @Component({
   selector: 'app-home',
@@ -15,26 +19,80 @@ import { Event } from '../event/event';
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
+  private reservationsFromAPI: [Reservation];
+
   private companies: Companies;
+  private venue: Venue;
+  private reservations: {
+    all: [Reservation],
+    pending: [Reservation],
+    confirmed: [Reservation],
+    cancelled: [Reservation]
+  };
+
+  private eventSubscription: Subscription;
   private companiesSubscription: Subscription;
+  private venueSubscription: Subscription;
+  private reservationsSubscription: Subscription;
 
   private errorSrc = 'assets/img/hacky.png';
   private loadingSrc = 'assets/img/loading.gif';
 
-  constructor(private linksService: LinksService) { }
+  constructor(
+    private eventService: EventService,
+    private linksService: LinksService,
+    private venuesService: VenuesService,
+    private reservationsService: ReservationsService
+  ) { }
 
   ngOnInit() {
     this.companies = new Companies();
 
+    this.eventSubscription = this.eventService.getEventSubject()
+      .subscribe(event => {
+        this.reservationsService.getFromEdition(event.id)
+          .subscribe(reservations => this.reservationsService.setReservations(reservations));
+      });
+
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => {
-        if (companies) {
-          this.companies = companies;
-        }
+        this.companies = companies;
+
+        this.updateReservations();
       });
+
+    this.venueSubscription = this.venuesService.getVenueSubject()
+      .subscribe(venue => this.venue = venue);
+
+    this.reservationsSubscription = this.reservationsService.getReservationsSubject()
+      .subscribe(_reservations => {
+        this.reservationsFromAPI = _reservations;
+        this.updateReservations();
+      });
+  }
+
+  private updateReservations() {
+    if (this.reservations !== undefined
+      || !this.companies.all.length
+      || this.reservationsFromAPI === undefined) {
+      return;
+    }
+
+    const reservations = this.companies
+      ? Reservation.fromArray(this.reservationsFromAPI, this.companies.all)
+      : Reservation.fromArray(this.reservationsFromAPI);
+
+    this.reservations = {
+      all: reservations,
+      pending: reservations.filter(r => r.isPending()) as [Reservation],
+      confirmed: reservations.filter(r => r.isConfirmed()) as [Reservation],
+      cancelled: reservations.filter(r => r.isCancelled()) as [Reservation]
+    };
   }
 
   ngOnDestroy() {
     this.companiesSubscription.unsubscribe();
+    this.venueSubscription.unsubscribe();
+    this.reservationsSubscription.unsubscribe();
   }
 }

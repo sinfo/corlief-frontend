@@ -35,3 +35,10 @@
 .right-side img {
     max-height: 40px;
 }
+
+.event-dropdown {
+    background-color: transparent;
+    border: none;
+    color: white;
+    cursor: pointer;
+}

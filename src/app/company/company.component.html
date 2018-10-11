@@ -5,7 +5,7 @@
 
     <span class="right-side">
         <span class="navbar-text edition" *ngIf="event">
-            {{event.name}}
+            {{credentials.companyName}} @ {{event.name}}
         </span>
 
         <img src="https://sinfo.ams3.digitaloceanspaces.com/static/25-sinfo/powerOn.png" alt="SINFO">
@@ -20,10 +20,14 @@
             <div class="canvas-wrapper">
                 <div class="canvas">
 
-                    <ngb-pagination [collectionSize]="event.duration.getDate()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)"
-                        aria-label="Default pagination" size="lg"></ngb-pagination>
+                    <div class="day-selection">
+                        <b>Day: </b>
+                        <ngb-pagination [collectionSize]="event.duration.getDate()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)"
+                            aria-label="Default pagination" size="sm"></ngb-pagination>
+                    </div>
 
-                    <app-venue-image [maxWidth]="30"></app-venue-image>
+
+                    <app-venue-image [maxWidth]="30" [state]="canvasState"></app-venue-image>
 
                 </div>
             </div>
@@ -56,7 +60,7 @@
 
                         <div class="reservation" *ngIf="pendingReservation && pendingReservation.stands.length" [ngClass]="{'confirmed': pendingReservation.isConfirmed(), 'cancelled': pendingReservation.isCancelled(), 'pending': pendingReservation.isPending()}">
                             <span class="stands-counter">
-                                {{pendingReservation.stands.length}}/{{credentials.participationDays}}
+                                <b>Stands: </b>{{pendingReservation.stands.length}}/{{credentials.participationDays}}
                             </span>
                             <div class="reservation-content">
 
@@ -106,52 +110,11 @@
                         </div>
 
                         <ng-container *ngIf="reservations">
-                            <div class="reservation" *ngFor="let reservation of reservations" [ngClass]="{'confirmed': reservation.isConfirmed(), 'cancelled': reservation.isCancelled(), 'pending': reservation.isPending()}">
-                                <div class="reservation-content">
-                                    <div class="status">
-                                        <span *ngIf="reservation.isPending()">
-                                            <h5>Pending</h5>
-                                        </span>
-                                        <span *ngIf="reservation.isConfirmed()">
-                                            <h5>Confirmed</h5>
-                                        </span>
-                                        <span *ngIf="reservation.isCancelled()">
-                                            <h5>Cancelled</h5>
-                                        </span>
-                                    </div>
-
-                                    <div class="reservation-stands-wrapper">
-                                        <span class="reservation-stands-list">
-
-                                            <div class="reservation-stands border" *ngFor="let stand of reservation.stands">
-                                                <div class="reservation-day">
-                                                    <b>Day: </b>
-                                                    {{stand.day}}
-                                                </div>
-                                                <div class="reservation-stand">
-                                                    <b>Stand: </b>
-                                                    {{stand.standId + 1}}
-                                                </div>
-                                            </div>
-
-                                        </span>
-                                    </div>
-
-                                    <div class="issued">
-                                        <b>Issued: </b>{{reservation.issued | date:'dd/MM/yyyy HH\'h\'mm'}}
-                                    </div>
-
-                                    <div class="actions">
-                                        <button class="btn btn-danger" (click)="cancelReservation()" *ngIf="reservation.feedback.status !== 'CANCELLED'">Cancel</button>
-                                    </div>
-                                </div>
-
-
+                            <div *ngFor="let reservation of reservations">
+                                <app-reservation [reservation]="reservation"></app-reservation>
                             </div>
                         </ng-container>
                     </div>
-
-
 
                 </div>
 

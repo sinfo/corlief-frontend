@@ -1,6 +1,9 @@
 .image-wrapper {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
     position: relative;
-    display: table;
 }
 
 .image-wrapper img {

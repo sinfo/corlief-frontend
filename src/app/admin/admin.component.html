@@ -4,7 +4,7 @@
 
     <a class="nav-link" routerLink="/admin" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">Overview</a>
 
-    <a class="nav-link" routerLink="/admin/venues" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">Venues</a>
+    <a class="nav-link" routerLink="/admin/venues" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">Venue</a>
 
     <a class="nav-link" routerLink="/admin/links" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">Links</a>
 
@@ -14,8 +14,16 @@
 
 
   <span class="right-side">
+
     <span class="navbar-text edition" *ngIf="event">
-      {{event.name}}
+
+      <div ngbDropdown class="d-inline-block">
+        <button class="event-dropdown" id="dropdownBasic1" ngbDropdownToggle>{{ event.name }}</button>
+        <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
+          <button *ngFor="let e of events" class="dropdown-item" (click)="switchEvent(e.id)">{{ e.name }}</button>
+        </div>
+      </div>
+
     </span>
 
     <img src="https://sinfo.ams3.digitaloceanspaces.com/static/25-sinfo/powerOn.png" alt="SINFO">

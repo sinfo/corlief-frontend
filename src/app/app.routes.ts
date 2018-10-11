@@ -12,6 +12,7 @@ import { LinksComponent } from 'src/app/admin/links/links.component';
 import { VenuesComponent } from 'src/app/admin/venues/venues.component';
 import { CompanyComponent } from 'src/app/company/company.component';
 import { UnauthorizedComponent } from 'src/app/unauthorized/unauthorized.component';
+import { ReservationsComponent } from 'src/app/admin/reservations/reservations.component';
 
 const appRoutes: Routes = [
   {
@@ -33,6 +34,11 @@ const appRoutes: Routes = [
       {
         path: 'links',
         component: LinksComponent,
+        canActivate: [AdminGuard]
+      },
+      {
+        path: 'reservations',
+        component: ReservationsComponent,
         canActivate: [AdminGuard]
       }
     ]

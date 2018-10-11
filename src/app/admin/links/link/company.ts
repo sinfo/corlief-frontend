@@ -45,6 +45,11 @@ export class Company {
         return ['in-conversations', 'closed-deal', 'announced']
             .includes(company.currentParticipation.status as string);
     }
+
+    static findById(id: String, companies: [Company]) {
+        const found = companies.filter(company => company.id === id);
+        return found.length > 0 ? found[0] as Company : null;
+    }
 }
 
 export class Companies {

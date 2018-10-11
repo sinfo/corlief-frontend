@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
-import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
+import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 
 import { environment } from '../../../environments/environment';
 
@@ -11,6 +11,7 @@ import { Credentials } from '../login/credentials';
 import { Venue, Availability } from './venue/venue';
 import { Stand } from './venue/stand';
 import { Company } from '../links/link/company';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -23,12 +24,13 @@ export class VenuesService {
 
   private credentials: Credentials;
   private venue: Venue;
+  private availability: Availability;
 
-  private venueSubject: BehaviorSubject<Venue>
-    = new BehaviorSubject<Venue>(undefined);
+  private venueSubject: ReplaySubject<Venue>
+    = new ReplaySubject<Venue>();
 
-  private availabilitySubject: BehaviorSubject<Availability>
-    = new BehaviorSubject<Availability>(undefined);
+  private availabilitySubject: ReplaySubject<Availability>
+    = new ReplaySubject<Availability>(null);
 
   constructor(
     private http: HttpClient,
@@ -43,8 +45,16 @@ export class VenuesService {
 
   // ------------ Venue ------------
 
-  getVenue(): Venue {
-    return this.venue;
+  getVenue(edition?: String): Observable<Venue> {
+    if (this.venue && this.venue.edition === edition) {
+      return of(this.venue);
+    }
+
+    if (edition === undefined) {
+      return this.getCurrentVenue();
+    }
+
+    return this.getVenueFromEdition(edition);
   }
 
   setVenue(venue: Venue) {
@@ -59,6 +69,7 @@ export class VenuesService {
   // ------------ Availability ------------
 
   setAvailability(availability: Availability) {
+    this.availability = availability;
     this.availabilitySubject.next(availability);
   }
 
@@ -66,9 +77,17 @@ export class VenuesService {
     return this.availabilitySubject.asObservable();
   }
 
+  getAvailability() {
+    return this.availability;
+  }
+
   // ------------ HTTP requests ------------
 
-  getCurrentVenue(): Observable<Venue> {
+  private getVenueFromEdition(edition: String): Observable<Venue> {
+    return this.http.get<Venue>(`${this.url}/${edition}`, { headers: this.headers });
+  }
+
+  private getCurrentVenue(): Observable<Venue> {
     return this.http.get<Venue>(`${this.url}/current`, { headers: this.headers });
   }
 

@@ -1,6 +1,6 @@
 <div class="wrapper">
 
-  <div class="info-card venue">
+  <div class="info-card venue" *ngIf="venue">
 
     <div class="title">
       <h3>Venue</h3>
@@ -12,7 +12,7 @@
 
   </div>
 
-  <div class="info-card links">
+  <div class="info-card links" *ngIf="companies">
 
     <div class="title">
       <h3>Links</h3>
@@ -28,7 +28,7 @@
 
         <div class="links-content">
 
-          <div class="links-batch" *ngFor="let companies of companies.withLink.valid | companyBatch : 6">
+          <div class="links-batch" *ngFor="let companies of companies.withLink.valid | batch : 6">
 
             <span class="company-img-wrapper" *ngFor="let company of companies">
               <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
@@ -49,7 +49,7 @@
 
         <div class="links-content">
 
-          <div class="links-batch" *ngFor="let companies of companies.withoutLink | companyBatch : 6">
+          <div class="links-batch" *ngFor="let companies of companies.withoutLink | batch : 6">
 
             <span class="company-img-wrapper" *ngFor="let company of companies">
               <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
@@ -69,10 +69,84 @@
 
         <div class="links-content">
 
-          <div class="links-batch" *ngFor="let companies of companies.withLink.invalid | companyBatch : 6">
+          <div class="links-batch" *ngFor="let companies of companies.withLink.invalid | batch : 6">
 
             <span class="company-img-wrapper" *ngFor="let company of companies">
               <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="company.img" [errorImage]="errorSrc">
+            </span>
+
+          </div>
+
+        </div>
+
+      </span>
+
+    </div>
+
+
+  </div>
+
+  <div class="info-card links" *ngIf="companies && reservations">
+
+    <div class="title">
+      <h3>Reservations</h3>
+    </div>
+
+    <div class="content">
+
+      <span class="valid-link">
+
+        <div class="title">
+          <h5>Confirmed ({{reservations.confirmed.length}})</h5>
+        </div>
+
+        <div class="links-content">
+
+          <div class="links-batch" *ngFor="let reservations of reservations.confirmed | batch : 6">
+
+            <span class="company-img-wrapper" *ngFor="let reservation of reservations">
+              <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="reservation.company.img" [errorImage]="errorSrc">
+            </span>
+
+          </div>
+
+        </div>
+
+      </span>
+
+
+      <span class="without-link">
+
+        <div class="title">
+          <h5>Pending ({{reservations.pending.length}})</h5>
+        </div>
+
+        <div class="links-content">
+
+          <div class="links-batch" *ngFor="let reservations of reservations.pending | batch : 6">
+
+            <span class="company-img-wrapper" *ngFor="let reservation of reservations">
+              <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="reservation.company.img" [errorImage]="errorSrc">
+            </span>
+
+          </div>
+
+        </div>
+
+      </span>
+
+      <span class="invalid-link">
+
+        <div class="title">
+          <h5>Cancelled ({{reservations.cancelled.length}})</h5>
+        </div>
+
+        <div class="links-content">
+
+          <div class="links-batch" *ngFor="let reservations of reservations.cancelled | batch : 6">
+
+            <span class="company-img-wrapper" *ngFor="let reservation of reservations">
+              <img class="company-img" [defaultImage]="loadingSrc" [lazyLoad]="reservation.company.img" [errorImage]="errorSrc">
             </span>
 
           </div>

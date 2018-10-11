@@ -1,3 +1,5 @@
+import { Company } from 'src/app/admin/links/link/company';
+
 export class Feedback {
     status: String;
     member: String;
@@ -11,6 +13,26 @@ export class Stand {
         this.day = day;
         this.standId = standId;
     }
+
+    static fromArray(stands: [Stand]): [Stand] {
+        const result = [] as [Stand];
+
+        for (const stand of stands) {
+            result.push(new Stand(stand.day, stand.standId));
+        }
+
+        return result;
+    }
+
+    isInArray(stands: [Stand]): boolean {
+        for (const stand of stands) {
+            if (stand.day === this.day && stand.standId === this.standId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }
 
 export class Reservation {
@@ -20,6 +42,7 @@ export class Reservation {
     issued?: Date;
     stands: [Stand];
     feedback?: Feedback;
+    company?: Company;
 
     constructor(reservation?: Reservation) {
         if (reservation) {
@@ -27,23 +50,35 @@ export class Reservation {
             this.companyId = reservation.companyId;
             this.edition = reservation.edition;
             this.issued = reservation.issued;
-            this.stands = reservation.stands;
+            this.stands = Stand.fromArray(reservation.stands);
             this.feedback = reservation.feedback;
         } else {
             this.stands = [] as [Stand];
         }
     }
 
-    static fromArray(_reservations: [Reservation]): [Reservation] {
+    static fromArray(_reservations: [Reservation], companies?: [Company]): [Reservation] {
         if (_reservations === undefined) { return [] as [Reservation]; }
 
         const reservations = [] as [Reservation];
 
         for (const reservation of _reservations) {
-            reservations.push(new Reservation(reservation));
+            const r = new Reservation(reservation);
+
+            r.company = companies
+                ? companies.filter(c => c.id === reservation.companyId)[0]
+                : undefined;
+
+            reservations.push(r);
         }
 
         return reservations.sort(Reservation.compareDates);
+    }
+
+    static updateArrayWithCompanyInfo(reservations: [Reservation], companies: [Company]): void {
+        for (const reservation of reservations) {
+            reservation.company = companies.filter(c => c.id === reservation.companyId)[0];
+        }
     }
 
     static compareDates(r1: Reservation, r2: Reservation): number {
@@ -63,6 +98,18 @@ export class Reservation {
         const t2 = new Date(r2.issued).getTime();
 
         return t2 - t1;
+    }
+
+    canbeConfirmed(confirmed: [Reservation]): boolean {
+        for (const reservation of confirmed) {
+            for (const stand of reservation.stands) {
+                if (stand.isInArray(this.stands)) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 
     isPending(): boolean {

@@ -30,11 +30,7 @@ export class LinksComponent implements OnInit, OnDestroy {
     this.companies = new Companies();
 
     this.eventSubscription = this.eventService.getEventSubject()
-      .subscribe(event => {
-        if (event) {
-          this.event = event;
-        }
-      });
+      .subscribe(event => this.event = event);
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => {

@@ -8,7 +8,7 @@ import { ReservationsService } from 'src/app/admin/reservations/reservations.ser
 
 import { Venue } from '../venue';
 import { Stand } from 'src/app/admin/venues/venue/stand';
-import { CanvasState, CanvasCommunication } from './canvas/canvasCommunication';
+import { CanvasState, CanvasActionCommunication, CanvasAction } from './canvas/canvasCommunication';
 
 @Component({
   selector: 'app-venue-image',
@@ -24,6 +24,7 @@ export class VenueImageComponent implements OnInit, OnDestroy {
   private venue: Venue;
 
   @Input() maxWidth = 50;
+  @Input() state: CanvasState;
 
   private loadingSrc = 'assets/img/loading.gif';
   private confirmStand: boolean;
@@ -41,17 +42,17 @@ export class VenueImageComponent implements OnInit, OnDestroy {
       .subscribe(venue => this.venue = venue);
 
     this.canvasSubscription = this.canvasService.getCommunicationSubject()
-      .subscribe((comm: CanvasCommunication) => {
-        switch (comm.state) {
-          case CanvasState.ON:
+      .subscribe((comm: CanvasActionCommunication) => {
+        switch (comm.action) {
+          case CanvasAction.ON:
             this.canvasOn = true;
             break;
 
-          case CanvasState.OFF:
+          case CanvasAction.OFF:
             this.canvasOn = false;
             break;
 
-          case CanvasState.CLEAR:
+          case CanvasAction.CLEAR:
             this.canvasOn = false;
             break;
         }
