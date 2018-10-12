@@ -60,6 +60,11 @@
         {{ company.link.participationDays }}
       </div>
 
+      <div class="expirationDate" *ngIf="company.link.expirationDate">
+        <b>Valid until:</b>
+        {{ company.link.expirationDate | date:'dd/MM/yyyy' }}
+      </div>
+
       <hr class="divider" />
 
       <div class="actions">

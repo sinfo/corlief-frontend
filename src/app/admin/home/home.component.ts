@@ -57,7 +57,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => {
         this.companies = companies;
-
         this.updateReservations();
       });
 

@@ -31,7 +31,7 @@
 
       <div class="companies" *ngIf="companies.withLink.valid">
         <span class="company" *ngFor="let company of companies.withLink.valid">
-          <app-link [company]="company" [event]="event"></app-link>
+          <app-link [company]="company" [event]="event" (invalidate)="invalidate($event)"></app-link>
         </span>
       </div>
 

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { FormsModule, FormGroup } from '@angular/forms';
 
 import { environment } from '../../../../environments/environment';
@@ -20,6 +20,7 @@ export class LinkComponent implements OnInit {
 
   @Input() company: Company;
   @Input() event: Event;
+  @Output() invalidate = new EventEmitter<Link>();
 
   errorSrc = 'assets/img/hacky.png';
   loadingSrc = 'assets/img/loading.gif';
@@ -72,7 +73,14 @@ export class LinkComponent implements OnInit {
 
   check() {
     const link = this.company.link;
-    // TODO: MAKE THIS HAPPEN
+    this.linksService.check(link.companyId).subscribe(
+      value => this.company.link.expirationDate = value.expirationDate,
+      error => {
+        if (error.status === 410) {
+          this.invalidate.emit(link);
+        }
+      }
+    );
   }
 
   extend() {

@@ -85,19 +85,23 @@ export class LinksService {
     this.deckAuth().subscribe(() => {
       this.getCompanies(edition, true).subscribe(companies => {
         this.companies.updateCompanies(companies, edition);
-        this.updateLinks(edition);
+        this.updateLinks();
       });
     });
   }
 
-  updateLinks(edition: String) {
-    if (edition === undefined) { return; }
+  updateLinks(edition?: string) {
+    edition
+      ? this.getLinks({ edition: edition }).subscribe(links => {
+        const l = links instanceof Link ? [links] as [Link] : links as [Link];
+        this.companies.updateLinks(l);
+        this.companiesSubject.next(this.companies);
+      })
+      : this.verifyAndGetLinks().subscribe(links => {
+        this.companies.updateLinks(links);
+        this.companiesSubject.next(this.companies);
+      });
 
-    this.getLinks({ edition: edition as string }).subscribe(links => {
-      const l = links instanceof Link ? [links] as [Link] : links as [Link];
-      this.companies.updateLinks(l);
-      this.companiesSubject.next(this.companies);
-    });
   }
 
   uploadLink(form: LinkForm): Observable<Link> {
@@ -113,6 +117,10 @@ export class LinksService {
       headers: this.headers,
       params: filter
     });
+  }
+
+  verifyAndGetLinks(): Observable<[Link]> {
+    return this.http.get<[Link]>(`${this.corlief}/validity`, { headers: this.headers });
   }
 
   getCompaniesWithMissingLinks(): Observable<[Company]> {
@@ -133,5 +141,14 @@ export class LinksService {
     ).subscribe(link => {
       this.updateLinks(edition as string);
     });
+  }
+
+  check(companyId: String): Observable<{ expirationDate: Date }> {
+    const headers = this.headers.set('Content-Type', 'text/plain; charset=utf-8');
+
+    return this.http.get<{ expirationDate: Date }>(
+      `${this.corlief}/company/${companyId}/validity`,
+      { headers: headers }
+    );
   }
 }

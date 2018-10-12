@@ -61,7 +61,6 @@ export class AdminComponent implements OnInit, OnDestroy {
 
     if (venue !== null) {
       this.eventService.updateEvent(venue.edition);
-      this.linksService.updateLinks(venue.edition as string);
     }
   }
 

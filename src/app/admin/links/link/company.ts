@@ -86,7 +86,7 @@ export class Companies {
                 continue;
             }
 
-            const link = filtered[0];
+            const link = new Link(filtered[0]);
             const newCompany = new Company();
 
             newCompany.id = company.id;

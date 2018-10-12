@@ -14,6 +14,18 @@ export class Link {
     valid: boolean;
     advertisementKind: Advertisement;
     participationDays: number;
+    expirationDate?: Date;
+
+    constructor(link: Link) {
+        this.companyId = link.companyId;
+        this.edition = link.edition;
+        this.created = link.created;
+        this.token = link.token;
+        this.valid = link.valid;
+        this.advertisementKind = link.advertisementKind;
+        this.participationDays = link.participationDays;
+        this.expirationDate = link.expirationDate;
+    }
 
     static linkForm(company: Company, event: Event): FormGroup {
         const duration = event.duration.getDate();
