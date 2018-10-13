@@ -1,0 +1,29 @@
+.content {
+    width: 70%;
+}
+
+.title {
+    font-size: 3rem;
+}
+
+.text p {
+    font-size: 2rem;
+    font-weight: 300;
+    color: #4b5763;
+}
+
+.reservations-link {
+    position: absolute;
+    bottom: 4vh;
+    right: 3vw;
+}
+
+.reservations-link a {
+    font-size: 3rem;
+    color: #00254a;
+    font-weight: 600;
+}
+
+.reservations-link a:hover {
+    text-decoration: none;
+}

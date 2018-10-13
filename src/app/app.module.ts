@@ -20,6 +20,7 @@ import { SortStandsPipe } from './admin/venues/venue/sort-stands.pipe';
 import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pipe';
 import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of-participation-days.pipe';
 import { BatchPipe } from './admin/home/batch.pipe';
+import { DatePtPipe } from './company/welcome/date-pt.pipe';
 
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
@@ -49,6 +50,8 @@ import { ReservationsComponent } from './admin/reservations/reservations.compone
 import { ReservationComponent } from './admin/reservations/reservation/reservation.component';
 import { BuildTablePipe } from './admin/reservations/build-table.pipe';
 import { FilterReservationsPipe } from './admin/reservations/filter-reservations.pipe';
+import { WelcomeComponent } from './company/welcome/welcome.component';
+import { CompanyReservationsComponent } from './company/company-reservations/company-reservations.component';
 
 library.add(fas);
 
@@ -76,6 +79,9 @@ library.add(fas);
     ReservationComponent,
     BuildTablePipe,
     FilterReservationsPipe,
+    WelcomeComponent,
+    CompanyReservationsComponent,
+    DatePtPipe,
   ],
   imports: [
     BrowserModule,
