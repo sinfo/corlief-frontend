@@ -82,4 +82,4 @@ const appRoutes: Routes = [
   }
 ];
 
-export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(appRoutes, { enableTracing: true });
+export const AppRoutes: ModuleWithProviders = RouterModule.forRoot(appRoutes);
