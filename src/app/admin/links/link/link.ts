@@ -1,5 +1,5 @@
-import { Company } from './company';
-import { Event } from '../../event/event';
+import { Company } from 'src/app/deck/company';
+import { Event } from 'src/app/deck/event';
 
 import { FormGroup, FormControl, ValidatorFn, AbstractControl, Validators } from '@angular/forms';
 

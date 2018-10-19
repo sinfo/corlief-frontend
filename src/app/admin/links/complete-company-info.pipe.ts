@@ -1,7 +1,7 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Company, Participation } from './link/company';
-import { Event } from '../event/event';
+import { Company, Participation } from 'src/app/deck/company';
+import { Event } from 'src/app/deck/event';
 
 @Pipe({
   name: 'completeCompanyInfo'

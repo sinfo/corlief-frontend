@@ -4,7 +4,7 @@ import { Subject } from 'rxjs';
 
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
-import { EventService } from 'src/app/admin/event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 
 import { CanvasState } from './venue-image/canvas/canvasCommunication';
 import { Venue } from './venue';
@@ -32,7 +32,7 @@ export class VenueComponent implements OnInit, OnDestroy {
   private canEdit: boolean;
 
   constructor(
-    private eventService: EventService,
+    private deckService: DeckService,
     private venuesService: VenuesService,
     private canvasService: CanvasService
   ) { }
@@ -52,9 +52,9 @@ export class VenueComponent implements OnInit, OnDestroy {
         this.venue = venue;
       });
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
-        this.canEdit = this.eventService.isSelectedEventCurrent();
+        this.canEdit = this.deckService.isSelectedEventCurrent();
       });
   }
 

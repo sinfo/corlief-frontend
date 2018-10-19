@@ -1,6 +1,6 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-import { Event } from '../../event/event';
+import { Event } from 'src/app/deck/event';
 
 @Pipe({
   name: 'getArrayOfParticipationDays'

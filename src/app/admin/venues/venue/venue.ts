@@ -1,7 +1,7 @@
 import { Stand } from './stand';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
-import { Event } from '../../event/event';
-import { Company } from 'src/app/admin/links/link/company';
+import { Event } from 'src/app/deck/event';
+import { Company } from 'src/app/deck/company';
 
 export class Venue {
     edition: String;

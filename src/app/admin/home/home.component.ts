@@ -2,13 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/internal/Subscription';
 
-import { EventService } from 'src/app/admin/event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
-import { Company, Companies } from '../links/link/company';
-import { Event } from '../event/event';
+import { Companies } from '../links/link/companies';
+import { Event } from 'src/app/deck/event';
 import { Venue } from 'src/app/admin/venues/venue/venue';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
 
@@ -39,7 +39,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   private loadingSrc = 'assets/img/loading.gif';
 
   constructor(
-    private eventService: EventService,
+    private deckService: DeckService,
     private linksService: LinksService,
     private venuesService: VenuesService,
     private reservationsService: ReservationsService
@@ -48,7 +48,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.companies = new Companies();
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         this.reservationsService.getFromEdition(event.id)
           .subscribe(reservations => this.reservationsService.setReservations(reservations));

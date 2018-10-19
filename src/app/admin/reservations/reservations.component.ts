@@ -7,13 +7,13 @@ import { debounceTime, map } from 'rxjs/operators';
 
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
-import { EventService } from 'src/app/admin/event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
 
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
-import { Event } from '../event/event';
-import { Company, Companies } from 'src/app/admin/links/link/company';
+import { Event } from 'src/app/deck/event';
+import { Company } from 'src/app/deck/company';
 import { Venue, Availability } from 'src/app/admin/venues/venue/venue';
 import { CanvasState } from 'src/app/admin/venues/venue/venue-image/canvas/canvasCommunication';
 
@@ -48,7 +48,7 @@ export class ReservationsComponent implements OnInit {
   public filteredReservation: Reservation;
 
   constructor(
-    private eventService: EventService,
+    private deckService: DeckService,
     private reservationsService: ReservationsService,
     private linksService: LinksService,
     private venuesService: VenuesService,
@@ -63,7 +63,7 @@ export class ReservationsComponent implements OnInit {
       cancelled: [] as [Reservation]
     };
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         this.event = new Event(event);
 

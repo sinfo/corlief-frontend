@@ -2,11 +2,13 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { Subscription } from 'rxjs/internal/Subscription';
 
-import { EventService } from 'src/app/admin/event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 import { LinksService } from 'src/app/admin/links/links.service';
 
-import { Company, Companies } from './link/company';
-import { Event } from '../event/event';
+import { Companies } from './link/companies';
+import { Company } from 'src/app/deck/company';
+
+import { Event } from 'src/app/deck/event';
 import { Link } from 'src/app/admin/links/link/link';
 
 @Component({
@@ -23,14 +25,14 @@ export class LinksComponent implements OnInit, OnDestroy {
   companiesSubscription: Subscription;
 
   constructor(
-    private eventService: EventService,
+    private deckService: DeckService,
     private linksService: LinksService
   ) { }
 
   ngOnInit() {
     this.companies = new Companies();
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => this.event = event);
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()

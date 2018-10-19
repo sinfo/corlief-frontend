@@ -4,9 +4,9 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { VenuesService } from './venues/venues.service';
 import { LinksService } from './links/links.service';
-import { EventService } from './event/event.service';
+import { DeckService } from '../deck/deck.service';
 
-import { Event } from './event/event';
+import { Event } from '../deck/event';
 import { Venue } from 'src/app/admin/venues/venue/venue';
 
 @Component({
@@ -22,7 +22,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   private venue: Venue;
 
   constructor(
-    private eventService: EventService,
+    private deckService: DeckService,
     private venuesService: VenuesService,
     private linksService: LinksService
   ) { }
@@ -30,14 +30,14 @@ export class AdminComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.venuesService.getVenue().subscribe(
       venue => this.updateData(venue),
-      error => this.eventService.updateEvent()
+      error => this.deckService.updateEvent()
     );
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         if (this.event === undefined || this.event.id !== event.id) {
           this.event = event;
-          this.events = this.eventService.events;
+          this.events = this.deckService.events;
 
           this.venuesService.getVenue(event.id).subscribe(
             venue => this.updateData(venue),
@@ -52,7 +52,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   }
 
   private switchEvent(edition: string) {
-    this.eventService.updateEvent(edition);
+    this.deckService.updateEvent(edition);
   }
 
   private updateData(venue: Venue) {
@@ -60,7 +60,7 @@ export class AdminComponent implements OnInit, OnDestroy {
     this.venuesService.setVenue(venue);
 
     if (venue !== null) {
-      this.eventService.updateEvent(venue.edition);
+      this.deckService.updateEvent(venue.edition);
     }
   }
 

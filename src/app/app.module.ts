@@ -28,7 +28,6 @@ import { LinksService } from 'src/app/admin/links/links.service';
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { UploadService } from 'src/app/admin/venues/upload/upload.service';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
-import { EventService } from 'src/app/admin/event/event.service';
 import { CompanyService } from 'src/app/company/company.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 import { DeckService } from 'src/app/deck/deck.service';
@@ -105,7 +104,6 @@ library.add(fas);
     VenuesService,
     UploadService,
     CanvasService,
-    EventService,
     CompanyService,
     ReservationsService
   ],

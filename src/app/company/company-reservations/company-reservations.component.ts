@@ -5,13 +5,13 @@ import { NgbPaginationConfig } from '@ng-bootstrap/ng-bootstrap';
 
 import { CompanyService } from '../company.service';
 import { VenuesService } from '../../admin/venues/venues.service';
-import { EventService } from '../../admin/event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 import { CanvasService } from '../../admin/venues/venue/venue-image/canvas/canvas.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
 import { Credentials } from '../credentials';
 import { Availability } from '../../admin/venues/venue/venue';
-import { Event } from '../../admin/event/event';
+import { Event } from 'src/app/deck/event';
 import { Venue } from '../../admin/venues/venue/venue';
 import { Stand } from '../../admin/venues/venue/stand';
 import { Reservation, Stand as ReservationStand } from '../../admin/reservations/reservation/reservation';
@@ -39,7 +39,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   constructor(
     private companyService: CompanyService,
-    private eventService: EventService,
+    private deckService: DeckService,
     private venuesService: VenuesService,
     private canvasService: CanvasService,
     private pagination: NgbPaginationConfig,
@@ -49,7 +49,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
     this.updateReservations();
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => this.event = event);
 
     this.companyService.getVenueAvailability().subscribe(_availability => {
@@ -57,7 +57,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       this.availability = availability;
 
       this.venuesService.setVenue(availability.venue);
-      this.eventService.updateEvent(availability.venue.edition);
+      this.deckService.updateEvent(availability.venue.edition);
       this.venuesService.setAvailability(availability);
       this.canvasService.selectDay(1);
     });

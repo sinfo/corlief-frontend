@@ -10,7 +10,7 @@ import { StorageService } from '../../storage.service';
 import { Credentials } from '../login/credentials';
 import { Venue, Availability } from './venue/venue';
 import { Stand } from './venue/stand';
-import { Company } from '../links/link/company';
+import { Company } from 'src/app/deck/company';
 import { of } from 'rxjs';
 
 @Injectable({

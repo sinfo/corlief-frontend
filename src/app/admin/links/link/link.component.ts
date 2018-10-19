@@ -8,8 +8,8 @@ import { ClipboardService } from 'ngx-clipboard';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 import { Link, LinkForm } from './link';
-import { Company } from './company';
-import { Event } from '../../event/event';
+import { Company } from 'src/app/deck/company';
+import { Event } from 'src/app/deck/event';
 
 @Component({
   selector: 'app-link',
