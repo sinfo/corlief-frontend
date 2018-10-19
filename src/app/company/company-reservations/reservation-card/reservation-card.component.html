@@ -1,0 +1,23 @@
+<div class="card" *ngIf="event && reservation" [ngClass]="{'confirmed': status && status === 'CONFIRMED', 'cancelled': status && status === 'CANCELLED', 'pending': status && status === 'PENDING' }">
+  <div class="issued" *ngIf="reservation.issued">
+    {{reservation.issued | date : 'dd/MM/yyyy | HH\'h\'mm\'m\'in'}}
+    <span *ngIf="reservation.feedback" class="status">
+      <b>- {{reservation.feedback.status}}</b>
+    </span>
+  </div>
+
+  <div class="stands">
+    <div *ngFor="let stand of reservation.stands | standsDisplay : event" class="stand" [ngClass]="{'booked': stand.id !== undefined}">
+      <div class="info">
+        <b>Day {{stand.day}}</b> ({{stand.date | date : 'MMMM d'}})
+        <span *ngIf="stand.id !== undefined">
+          <b>- Stand {{stand.id + 1}}</b>
+        </span>
+      </div>
+
+      <div class="action" *ngIf="stand.id !== undefined && reservation.feedback === undefined">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </div>
+    </div>
+  </div>
+</div>

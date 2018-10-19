@@ -1,3 +1,30 @@
+<span *ngIf="event && availability && availability.venue" class="content">
+
+  <div class="venue">
+
+  </div>
+
+  <div class="reservations">
+
+    <div class="title">
+      <b>{{credentials.companyName}}</b> Reservations
+    </div>
+
+    <div *ngIf="latestReservation" class="reservation">
+      <app-reservation-card [reservation]="latestReservation" [event]="event"></app-reservation-card>
+    </div>
+
+  </div>
+
+  <!--
+<div *ngFor="let reservation of reservations" class="reservation">
+      <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
+    </div>
+  -->
+
+</span>
+
+<!--
 <span *ngIf="event && availability.venue">
   <div class="canvas-stands">
 
@@ -107,3 +134,4 @@
   </div>
 
 </span>
+-->

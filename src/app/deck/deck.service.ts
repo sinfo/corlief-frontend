@@ -59,9 +59,11 @@ export class DeckService {
   }
 
   private deckAuth(): Observable<object> {
-    const { user, token } = this.credentials;
-    return this.http.get(`${this.deck}/auth/login/${user}/${token}`,
-      { withCredentials: true });
+    const { user, token } = this.credentials ? this.credentials : { user: null, token: null };
+
+    return user && token
+      ? this.http.get(`${this.deck}/auth/login/${user}/${token}`, { withCredentials: true })
+      : of(null);
   }
 
   private getCompanies(edition: String): void {
