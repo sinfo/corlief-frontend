@@ -36,6 +36,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   private reservations: [Reservation];
   private latestReservation: Reservation;
 
+  private showAllReservations: boolean;
+
   constructor(
     private companyService: CompanyService,
     private deckService: DeckService,
@@ -44,6 +46,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     private reservationService: ReservationsService
   ) {
     this.credentials = this.companyService.getCredentials();
+    this.showAllReservations = false;
 
     this.updateReservations();
 
@@ -75,35 +78,32 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   }
 
   private updateReservations() {
-    this.companyService.getReservations(false).subscribe(reservations => {
-      this.reservations = Reservation.fromArray(reservations);
-    });
+    this.companyService.getReservations(false).subscribe(r => {
+      this.reservations = Reservation.fromArray(r);
 
-    this.companyService.getReservations(true).subscribe(reservations => {
-      if (!reservations.length) {
-        this.latestReservation = new Reservation();
-        return;
-      }
+      this.companyService.getReservations(true).subscribe(reservations => {
+        if (!reservations.length) {
+          this.latestReservation = new Reservation();
+          return;
+        }
 
-      const latest = reservations[0];
-      const status = latest.feedback.status;
+        const latest = reservations[0];
+        const status = latest.feedback.status;
 
-      this.latestReservation = status !== 'CANCELLED'
-        ? new Reservation(latest)
-        : new Reservation();
+        if (status !== 'CANCELLED') {
+          this.latestReservation = new Reservation(reservations[0]);
 
-      if (status === 'PENDING') {
-        this.latestReservation = new Reservation(reservations[0]);
-
-        if (this.reservations) {
           this.reservations = this.reservations.filter(
             reservation => reservation.id !== latest.id
           ) as [Reservation];
 
           this.reservationService.setReservation(latest);
+        } else {
+          this.latestReservation = new Reservation();
         }
-      }
+      });
     });
+
   }
 
   private changeDay(day: number) {
@@ -181,5 +181,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       });
   }
 
+  private alternateShowAllReservations() {
+    this.showAllReservations = !this.showAllReservations;
+  }
 
 }
