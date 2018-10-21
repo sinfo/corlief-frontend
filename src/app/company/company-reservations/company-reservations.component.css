@@ -3,13 +3,123 @@
     flex-direction: row;
 
     height: 100%;
+    cursor: default;
 }
 
 .venue {
+    display: flex;
+    flex-direction: column;
+
     width: 60vw;
     padding: 1%;
 
     border-right: 2px solid #0000004a;
+}
+
+.selection {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.selection .title {
+    width: 100%;
+    margin-bottom: 0%;
+}
+
+.selection .canChangeDay:hover {
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+    width: 65%;
+}
+
+.day {
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: grey;
+}
+
+.day.selected {
+    font-weight: 500;
+    color: #212529;
+    text-decoration: underline;
+}
+
+.day:hover {
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.canvas-wrapper {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+}
+
+.canvas {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.canvas, .stands {
+    width: 50%;
+    padding: 1%;
+}
+
+.stands {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.stands h6 {
+    font-weight: 200;
+}
+
+.stands-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+
+    width: 60%;
+}
+
+.stand {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    color: #8080809e;
+    border: 1px solid #8080809e;
+
+    font-size: 1.6rem;
+
+    min-width: 3rem;
+    min-height: 3rem;
+
+    margin: 2.5%;
+}
+
+.stand.clickable {
+    color: black;
+    border-color: black;
+}
+
+.stand.pending {
+    color: black;
+    border: 2px solid #1e5abf;
+}
+
+.stand.clickable:hover {
+    cursor: pointer;
 }
 
 .reservations {
@@ -20,6 +130,15 @@
     overflow-y: scroll;
 }
 
+.info {
+    margin-top: 5%;
+}
+
+.info .action {
+    display: flex;
+    justify-content: center;
+}
+
 .title {
     display: flex;
     justify-content: center;
@@ -28,6 +147,24 @@
     font-weight: 300;
 
     margin-bottom: 4%;
+}
+
+.title b {
+    font-weight: 600;
+}
+
+.title span {
+    margin: 1%;
+}
+
+.missing {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.missing h6 {
+    font-weight: 200;
 }
 
 /* ------ LEGACY -------- */

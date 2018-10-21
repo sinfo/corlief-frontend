@@ -1,4 +1,4 @@
-<div class="card" *ngIf="event && reservation" [ngClass]="{'confirmed': status && status === 'CONFIRMED', 'cancelled': status && status === 'CANCELLED', 'pending': status && status === 'PENDING' }">
+<div class="card" *ngIf="event && reservation" [ngClass]="{'confirmed': reservation.feedback && reservation.feedback.status === 'CONFIRMED', 'cancelled': reservation.feedback && reservation.feedback.status === 'CANCELLED', 'pending': reservation.feedback && reservation.feedback.status === 'PENDING' }">
   <div class="issued" *ngIf="reservation.issued">
     {{reservation.issued | date : 'dd/MM/yyyy | HH\'h\'mm\'m\'in'}}
     <span *ngIf="reservation.feedback" class="status">

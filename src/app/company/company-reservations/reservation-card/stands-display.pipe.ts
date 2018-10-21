@@ -4,7 +4,8 @@ import { Stand } from '../../../admin/reservations/reservation/reservation';
 import { Event } from 'src/app/deck/event';
 
 @Pipe({
-  name: 'standsDisplay'
+  name: 'standsDisplay',
+  pure: false
 })
 export class StandsDisplayPipe implements PipeTransform {
 

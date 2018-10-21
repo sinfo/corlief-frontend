@@ -19,7 +19,6 @@ export class ReservationCardComponent implements OnInit {
 
   ngOnInit() {
     this.status = this.reservation.feedback ? this.reservation.feedback.status : null;
-    console.log(this.reservation);
   }
 
 }
