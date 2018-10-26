@@ -6,15 +6,16 @@ import { of } from 'rxjs';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { Subscription } from 'rxjs/internal/Subscription';
 
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 import { StorageService } from '../../storage.service';
 import { Credentials } from '../login/credentials';
 
-import { EventService } from '../event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 
 import { Link, LinkForm } from './link/link';
-import { Company, Companies } from './link/company';
-import { Event } from '../event/event';
+import { Companies } from './link/companies';
+import { Company } from 'src/app/deck/company';
+import { Event } from 'src/app/deck/event';
 
 @Injectable({
   providedIn: 'root'
@@ -22,13 +23,14 @@ import { Event } from '../event/event';
 export class LinksService {
 
   private corlief = `${environment.corlief}/link`;
-  private deck = `${environment.deck}/api`;
   private credentials: Credentials;
 
   companies: Companies;
 
   event: Event;
+
   eventSubscription: Subscription;
+  deckCompaniesSubscription: Subscription;
 
   private companiesSubject: ReplaySubject<Companies> = new ReplaySubject<Companies>();
 
@@ -37,7 +39,7 @@ export class LinksService {
   constructor(
     private http: HttpClient,
     private storage: StorageService,
-    private eventService: EventService
+    private deckService: DeckService
   ) {
     this.companies = new Companies();
 
@@ -49,45 +51,20 @@ export class LinksService {
       'Content-Type': 'application/json'
     });
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         this.event = event;
-        this.updateCompanies(event.id, true);
       });
-  }
 
-  private deckAuth(): Observable<object> {
-    const { user, token } = this.credentials;
-    return this.http.get(`${this.deck}/auth/login/${user}/${token}`,
-      { withCredentials: true });
-  }
-
-  private getCompanies(edition: String, force?: boolean): Observable<[Company]> {
-    return force || !this.companies.all.length
-      ? this.http.get<[Company]>(
-        `${this.deck}/companies?event=${edition}&&participations=true`,
-        { withCredentials: true }
-      )
-      : of(this.companies.all);
+    this.deckCompaniesSubscription = this.deckService.getDeckCompaniesSubject()
+      .subscribe(companies => {
+        this.companies.updateCompanies(companies, this.event.id);
+        this.updateLinks();
+      });
   }
 
   getCompaniesSubscription(): Observable<Companies> {
     return this.companiesSubject.asObservable();
-  }
-
-  updateCompanies(edition: String, force?: boolean) {
-    if (edition === undefined) { return; }
-
-    if (force === false && this.companies.all.length > 0) {
-      return this.companiesSubject.next(this.companies);
-    }
-
-    this.deckAuth().subscribe(() => {
-      this.getCompanies(edition, true).subscribe(companies => {
-        this.companies.updateCompanies(companies, edition);
-        this.updateLinks();
-      });
-    });
   }
 
   updateLinks(edition?: string) {

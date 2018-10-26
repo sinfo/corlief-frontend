@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { EventService } from 'src/app/admin/event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 
 @Component({
   selector: 'app-company',
@@ -9,10 +9,10 @@ import { EventService } from 'src/app/admin/event/event.service';
 })
 export class CompanyComponent implements OnInit {
 
-  constructor(private eventService: EventService) { }
+  constructor(private deckService: DeckService) { }
 
   ngOnInit() {
-    this.eventService.updateEvent();
+    this.deckService.updateEvent();
   }
 
 }

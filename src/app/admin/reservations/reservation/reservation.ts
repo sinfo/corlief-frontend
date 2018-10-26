@@ -1,4 +1,4 @@
-import { Company } from 'src/app/admin/links/link/company';
+import { Company } from 'src/app/deck/company';
 
 export class Feedback {
     status: String;

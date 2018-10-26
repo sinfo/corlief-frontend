@@ -3,10 +3,10 @@ import { Component, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { CompanyService } from 'src/app/company/company.service';
-import { EventService } from 'src/app/admin/event/event.service';
+import { DeckService } from 'src/app/deck/deck.service';
 
 import { Credentials } from '../credentials';
-import { Event } from 'src/app/admin/event/event';
+import { Event } from 'src/app/deck/event';
 
 @Component({
   selector: 'app-welcome',
@@ -22,13 +22,13 @@ export class WelcomeComponent implements OnInit {
 
   constructor(
     private companyService: CompanyService,
-    private eventService: EventService
+    private deckService: DeckService
   ) { }
 
   ngOnInit() {
     this.credentials = this.companyService.getCredentials();
 
-    this.eventSubscription = this.eventService.getEventSubject()
+    this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         this.event = event;
         console.log(event);

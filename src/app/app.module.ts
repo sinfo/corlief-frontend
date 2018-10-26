@@ -21,6 +21,7 @@ import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pip
 import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of-participation-days.pipe';
 import { BatchPipe } from './admin/home/batch.pipe';
 import { DatePtPipe } from './company/welcome/date-pt.pipe';
+import { StandsDisplayPipe } from './company/company-reservations/reservation-card/stands-display.pipe';
 
 import { LoginService } from 'src/app/admin/login/login.service';
 import { StorageService } from 'src/app/storage.service';
@@ -28,9 +29,9 @@ import { LinksService } from 'src/app/admin/links/links.service';
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { UploadService } from 'src/app/admin/venues/upload/upload.service';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
-import { EventService } from 'src/app/admin/event/event.service';
 import { CompanyService } from 'src/app/company/company.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
+import { DeckService } from 'src/app/deck/deck.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
@@ -52,6 +53,7 @@ import { BuildTablePipe } from './admin/reservations/build-table.pipe';
 import { FilterReservationsPipe } from './admin/reservations/filter-reservations.pipe';
 import { WelcomeComponent } from './company/welcome/welcome.component';
 import { CompanyReservationsComponent } from './company/company-reservations/company-reservations.component';
+import { ReservationCardComponent } from './company/company-reservations/reservation-card/reservation-card.component';
 
 library.add(fas);
 
@@ -82,6 +84,8 @@ library.add(fas);
     WelcomeComponent,
     CompanyReservationsComponent,
     DatePtPipe,
+    ReservationCardComponent,
+    StandsDisplayPipe,
   ],
   imports: [
     BrowserModule,
@@ -99,11 +103,11 @@ library.add(fas);
     LoginService,
     AdminGuard,
     CompanyGuard,
+    DeckService,
     LinksService,
     VenuesService,
     UploadService,
     CanvasService,
-    EventService,
     CompanyService,
     ReservationsService
   ],

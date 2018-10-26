@@ -1,0 +1,50 @@
+.card {
+    padding: 1%;
+
+    border-width: 3px;
+    border-color: #3e6ec3;
+
+    background-color: #eef7fb;
+}
+
+.card.cancelled {
+    border-color: #fd4343;
+    background-color: #ff000012;
+}
+
+.card.confirmed {
+    border-color: #a0eeb2;
+    background-color: #f1fdf8;
+}
+
+.card.pending {
+    border-color: #e1d068;
+    background-color: #f7fcf7;
+}
+
+.issued {
+    margin-bottom: 1%;
+    font-weight: lighter;
+}
+
+.status {
+    font-weight: normal;
+}
+
+.stands .stand:not(:first-child) {
+    border-top: 1px solid #0000006e;
+}
+.stand {
+    display: flex;
+    justify-content: space-between;
+
+    padding: 1%;
+
+    color: #1a395a6b;
+    font-weight: lighter;
+}
+
+.stand.booked {
+    color: #1a395a;
+    font-weight: normal;
+}

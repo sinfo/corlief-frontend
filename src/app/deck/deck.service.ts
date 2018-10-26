@@ -4,28 +4,34 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { Subscription } from 'rxjs/internal/Subscription';
+import { of } from 'rxjs';
 
-import { environment } from '../../../environments/environment';
+import { environment } from 'src/environments/environment';
 
-import { VenuesService } from '../venues/venues.service';
-import { StorageService } from '../../storage.service';
+import { VenuesService } from '../admin/venues/venues.service';
+import { StorageService } from '../storage.service';
 
-import { Credentials } from '../login/credentials';
+import { Credentials } from '../admin/login/credentials';
 import { Event } from './event';
-import { Venue } from '../venues/venue/venue';
+import { Venue } from '../admin/venues/venue/venue';
+import { Company } from './company';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class EventService {
+export class DeckService {
 
   public events: [Event];
   public event: Event;
+  private companies: [Company];
 
   private deck = `${environment.deck}/api`;
   private credentials: Credentials;
 
   private eventSubject: ReplaySubject<Event> = new ReplaySubject<Event>();
+  private deckCompaniesSubject: ReplaySubject<[Company]> = new ReplaySubject<[Company]>();
+
   private venueSubscription: Subscription;
 
   private headers: HttpHeaders;
@@ -47,12 +53,34 @@ export class EventService {
       .subscribe(venue => {
         if (venue) {
           this.updateEvent(venue.edition);
+          this.getCompanies(venue.edition);
         }
       });
   }
 
+  private deckAuth(): Observable<object> {
+    const { user, token } = this.credentials ? this.credentials : { user: null, token: null };
+
+    return user && token
+      ? this.http.get(`${this.deck}/auth/login/${user}/${token}`, { withCredentials: true })
+      : of(null);
+  }
+
+  private getCompanies(edition: String): void {
+    this.deckAuth().subscribe(() => {
+      this.http.get<[Company]>(
+        `${this.deck}/companies?event=${edition}&&participations=true`,
+        { withCredentials: true }
+      ).subscribe(companies => this.deckCompaniesSubject.next(companies));
+    });
+  }
+
   getEventSubject(): Observable<Event> {
     return this.eventSubject.asObservable();
+  }
+
+  getDeckCompaniesSubject(): Observable<[Company]> {
+    return this.deckCompaniesSubject.asObservable();
   }
 
   updateEvent(edition?: String) {
@@ -61,22 +89,21 @@ export class EventService {
     const { user, token } = this.credentials ? this.credentials : { user: null, token: null };
 
     if (user && token) {
-      this.http.get(`${this.deck}/auth/login/${user}/${token}`)
-        .subscribe(() => {
-          this.http.get<[Event]>(`${this.deck}/events`, { withCredentials: true })
-            .subscribe(events => {
-              this.events = Event.fromArray(events).sort(Event.compare) as [Event];
+      this.deckAuth().subscribe(() => {
+        this.http.get<[Event]>(`${this.deck}/events`, { withCredentials: true })
+          .subscribe(events => {
+            this.events = Event.fromArray(events).sort(Event.compare) as [Event];
 
-              const filtered = edition
-                ? events.filter(e => e.id === edition)[0]
-                : events[events.length - 1];
+            const filtered = edition
+              ? events.filter(e => e.id === edition)[0]
+              : events[events.length - 1];
 
-              const event = new Event(filtered);
-              this.event = event;
-              this.eventSubject.next(event);
+            const event = new Event(filtered);
+            this.event = event;
+            this.eventSubject.next(event);
 
-            });
-        });
+          });
+      });
     } else {
       this.http.get<[Event]>(`${this.deck}/events`)
         .subscribe(events => {
@@ -93,9 +120,10 @@ export class EventService {
     }
   }
 
-  isSelectedEventCurrent() {
+  isSelectedEventCurrent(): boolean {
     if (this.event === undefined) { return false; }
     const latest = this.events[this.events.length - 1];
     return latest.id === this.event.id;
   }
+
 }

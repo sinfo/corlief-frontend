@@ -23,7 +23,8 @@ export class VenueImageComponent implements OnInit, OnDestroy {
 
   private venue: Venue;
 
-  @Input() maxWidth = 50;
+  @Input() maxWidth;
+  @Input() maxHeight;
   @Input() state: CanvasState;
 
   private loadingSrc = 'assets/img/loading.gif';
@@ -38,6 +39,10 @@ export class VenueImageComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    if (this.maxWidth === undefined && this.maxHeight === undefined) {
+      this.maxWidth = 50;
+    }
+
     this.venueSubscription = this.venuesService.getVenueSubject()
       .subscribe(venue => this.venue = venue);
 

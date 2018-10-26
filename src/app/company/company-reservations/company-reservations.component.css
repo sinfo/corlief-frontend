@@ -1,292 +1,194 @@
-.canvas-stands {
+.content {
     display: flex;
+    flex-direction: row;
+
+    height: 100%;
+    cursor: default;
+}
+
+.venue {
+    display: flex;
+    flex-direction: column;
+
+    width: 60vw;
+    padding: 1%;
+
+    border-right: 2px solid #0000004a;
+}
+
+.selection {
+    display: flex;
+    flex-direction: column;
     align-items: center;
+}
+
+.selection .title {
+    width: 100%;
+    margin-bottom: 0%;
+}
+
+.selection .canChangeDay:hover {
+    cursor: pointer;
+}
+
+.options {
+    display: flex;
+    flex-direction: row;
     justify-content: space-around;
 
-    height: 95%;
+    width: 65%;
+}
+
+.day {
+    font-size: 1.6rem;
+    font-weight: 300;
+    color: grey;
+}
+
+.day.selected {
+    font-weight: 500;
+    color: #212529;
+    text-decoration: underline;
+}
+
+.day:hover {
+    cursor: pointer;
+    text-decoration: underline;
 }
 
 .canvas-wrapper {
-    height: 100%;
-}
-
-.day-selection {
     display: flex;
-    justify-content: center;
-    align-items: center;
-
-    width: 100%;
-    margin-bottom: 2%;
-}
-
-.day-selection b {
-    margin-right: 20px;
-}
-
-/deep/ .pagination {
-    margin: 0;
-}
-
-/deep/ .pagination .page-item .page-link {
-    color: black !important;
-}
-
-/deep/ .pagination .page-item.active .page-link {
-    background-color: #00386f !important;
-    border-color: #00386f !important;
-    color: white !important;
+    flex-direction: row;
+    flex-grow: 1;
 }
 
 .canvas {
     display: flex;
-    flex-direction: column;
-    align-items: center;
     justify-content: center;
-    
-    height: 100%;
-    width: fit-content;
-}
-
-.stands-wrapper {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
     align-items: center;
-
-    height: 100%;
-    width: 45%;
 }
 
-.stands-wrapper .stands, .stands-wrapper .reservations-content-wrapper {
-    background-color: #ffffff36;
-    border: 2px solid black;
-    border-radius: 15px;
-    padding: 2%;
+.canvas, .stands {
+    width: 50%;
+    padding: 1%;
 }
 
 .stands {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    
-    text-align: center;
-    height: 45%;
-}
-
-.stands .title, .reservations-content-wrapper .title {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    position: relative;
+    justify-content: center;
 }
 
-.stands .title h3 {
-    margin: 0;
+.stands h6 {
+    font-weight: 200;
 }
 
-.stands .stands-list {
+.stands-list {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    justify-content: start;
 
-    width: 100%;
-    padding-top: 2%;
-    padding-bottom: 2%;
-
-    height: 90%;
-    overflow-y: scroll;
+    width: 60%;
 }
 
-.stands .stands-list .stand {
-    margin: 1%;
-    margin-left: 1.6%;
-    margin-right: 1.6%;
-    height: fit-content;
-    width: fit-content;
-
-    color: black;
-}
-
-.stands .stands-list .stand button, .stands .stands-list .stand div {
-    width: 8vh;
-    height: 8vh;
-}
-
-.stands .stands-list .stand div {
+.stand {
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 3vh;
-    background-color: white;
+
+    color: #8080809e;
+    border: 1px solid #8080809e;
+
+    font-size: 1.6rem;
+
+    min-width: 3rem;
+    min-height: 3rem;
+
+    margin: 2.5%;
 }
 
-.stands .stands-list .stand div {
-    border: 2px solid #00386f !important;
+.stand.clickable {
+    color: black;
+    border-color: black;
 }
 
-.stands .stands-list .stand div:hover {
-    border-color: #5ee0ff !important;
+.stand.pending, .stand.confirmed {
+    color: black;
+    border: 2px solid #1e5abf;
 }
 
-.stands .stands-list .stand div.free {
-    border: 2px solid #018e01 !important;
-}
-
-.stands .stands-list .stand div.free:hover {
-    border-color: #34ca34 !important;
-}
-
-.stands .stands-list .stand div.free.clickable:hover {
-    background-color: #028e0121 !important;
-}
-
-.stands .stands-list .stand div.occupied {
-    border: 2px solid red !important;
-}
-
-.stands .stands-list .stand div.occupied:hover {
-    border-color: red !important;
-}
-
-.stands .stands-list .stand div.pending {
-    border: 2px solid #d8d80c !important;
-}
-
-.stands .stands-list .stand div.pending:hover {
-    border-color: #e8e850 !important;
-}
-
-.stands .stands-list .stand div.pending.clickable:hover {
-    background-color: #e8e85026 !important;
-}
-
-.stands .stands-list .stand div:hover {
-    cursor: default;
-}
-
-.stands .stands-list .stand .clickable:hover {
+.stand.clickable:hover {
     cursor: pointer;
-}
-
-.reservations-content-wrapper {
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 45%;
 }
 
 .reservations {
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    flex-wrap: wrap;
+    flex-direction: column;
+    flex-grow: 1;
 
-    height: 90%;
+    padding: 1%;
+    margin-left: 2%;
+
     overflow-y: scroll;
 }
 
-.reservation-content {
+.allReservations {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 
-    position: relative;
-    width: 100%;
-    height: 100%;
+    height: 85%;
+    margin-bottom: 5%;
+
+    overflow-y: scroll;
 }
 
-.reservation-content .issued {
-    font-size: 1vw;
+.reservation.showAll {
+    margin-bottom: 5%;
 }
 
-.reservation {
-    position: relative;
-
-    width: 48%;
-    height: fit-content;
-    min-height: 50%;
-
-    padding: 2%;
-    margin-bottom: 3%;
-
-    border: 2px solid black;
-    border-radius: 15px;
+.info {
+    flex-grow: 1;
+    margin-top: 5%;
+    overflow-y: scroll;
 }
 
-.cancelled {
-    border-color: red;
-    background-color: #ff000033;
-}
-
-.confirmed {
-    border-color: #00386f;
-    background-color: #00386f29;
-}
-
-.pending {
-    border-color: #d8d80c;
-    background-color: #d8d80c26;
-}
-
-.reservation-stands-wrapper {
+.info .action {
     display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-
-    margin-bottom: 3%;
+    justify-content: center;
 }
 
-.reservation-stands-list {
+.title {
     display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    flex-wrap: wrap;
+    justify-content: center;
 
-    font-size: 1vw;
+    font-size: 2.5rem;
+    font-weight: 300;
+
+    margin-bottom: 4%;
 }
 
-.reservation-stands {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    
-    width: fit-content;
-    padding: 1%;
+.title b {
+    font-weight: 600;
+}
 
+.title span {
     margin: 1%;
 }
 
-.reservation-stands div {
+.missing {
     display: flex;
-    justify-content: space-between;
+    flex-direction: row;
+    justify-content: center;
 }
 
-.reservation-stands div b {
-    margin-right: 10px;
+.missing h6 {
+    font-weight: 200;
 }
 
-.reservation .status {
+.history {
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
+    align-items: center
 }
 
-.reservation .status .submit button {
-    font-size: 1vw;
-}
-
-.reservation .actions {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-}
-
-.reservation .actions button {
-    font-size: 1vw;
-}
-
-.reservation .stands-counter {
-    position: absolute;
-    top: 3%;
-    left: 5%;
-}
