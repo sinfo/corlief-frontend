@@ -8,6 +8,10 @@ export type Advertisement =
 
 export class Link {
     companyId: String;
+    contacts: {
+        company: String,
+        member: String
+    };
     edition: String;
     created: Date;
     token: String;
@@ -18,6 +22,7 @@ export class Link {
 
     constructor(link: Link) {
         this.companyId = link.companyId;
+        this.contacts = link.contacts;
         this.edition = link.edition;
         this.created = link.created;
         this.token = link.token;
@@ -36,6 +41,10 @@ export class Link {
         return new FormGroup({
             companyId: new FormControl(company.id, [
                 Validators.required
+            ]),
+            companyEmail: new FormControl('', [
+                Validators.required,
+                Validators.email
             ]),
             participationDays: new FormControl(1, [
                 Validators.required,
@@ -81,6 +90,7 @@ export class Activity {
 
 export class LinkForm {
     companyId: String;
+    companyEmail: String;
     participationDays: number;
     advertisementKind: String;
     activities: [Activity];

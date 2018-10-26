@@ -48,7 +48,7 @@
 
     <ng-template ngbPanelContent>
 
-      <div class="companies" *ngIf="companies.withLink">
+      <div class="companies" *ngIf="companies.withLink.invalid">
         <span class="company" *ngFor="let company of companies.withLink.invalid">
           <app-link [company]="company" [event]="event"></app-link>
         </span>

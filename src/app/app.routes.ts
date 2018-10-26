@@ -13,6 +13,8 @@ import { VenuesComponent } from 'src/app/admin/venues/venues.component';
 import { CompanyComponent } from 'src/app/company/company.component';
 import { UnauthorizedComponent } from 'src/app/unauthorized/unauthorized.component';
 import { ReservationsComponent } from 'src/app/admin/reservations/reservations.component';
+import { WelcomeComponent } from 'src/app/company/welcome/welcome.component';
+import { CompanyReservationsComponent } from 'src/app/company/company-reservations/company-reservations.component';
 
 const appRoutes: Routes = [
   {
@@ -50,9 +52,21 @@ const appRoutes: Routes = [
   },
   {
     path: '',
-    pathMatch: 'full',
     component: CompanyComponent,
-    canActivate: [CompanyGuard]
+    canActivate: [CompanyGuard],
+    children: [
+      {
+        path: '',
+        pathMatch: 'full',
+        component: WelcomeComponent,
+        canActivate: [CompanyGuard]
+      },
+      {
+        path: 'reservations',
+        component: CompanyReservationsComponent,
+        canActivate: [CompanyGuard]
+      }
+    ]
   },
   {
     path: 'login',
