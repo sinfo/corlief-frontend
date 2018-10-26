@@ -34,10 +34,7 @@ export class LinksComponent implements OnInit, OnDestroy {
       .subscribe(event => this.event = event);
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
-      .subscribe(companies => {
-        this.companies = companies;
-        console.log(this.companies);
-      });
+      .subscribe(companies => this.companies = companies);
   }
 
   ngOnDestroy() {
