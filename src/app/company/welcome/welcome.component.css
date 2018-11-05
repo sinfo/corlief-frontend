@@ -3,13 +3,25 @@
 }
 
 .title {
-    font-size: 3rem;
+    font-size: 4rem;
 }
 
 .text p {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 300;
     color: #4b5763;
+}
+
+b.extra {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #00254a;
+}
+
+b.title_extra {
+    font-size: 4rem;
+    font-weight: bold;
+    color: #00254a;
 }
 
 .reservations-link {
@@ -25,5 +37,40 @@
 }
 
 .reservations-link a:hover {
+    text-decoration: none;
+}
+
+.next-page {
+    position: absolute;
+    bottom: 4vh;
+    right: 3vw;
+}
+
+.next-page a {
+    font-size: 3rem;
+    color: #00254a;
+    font-weight: 600;
+}
+
+.next-page a:hover {
+    cursor: pointer;
+    text-decoration: none;
+}
+
+
+.back-page {
+    position: absolute;
+    bottom: 4vh;
+    left: 3vw;
+}
+
+.back-page a {
+    font-size: 3rem;
+    color: #00254a;
+    font-weight: 600;
+}
+
+.back-page a:hover {
+    cursor: pointer;
     text-decoration: none;
 }

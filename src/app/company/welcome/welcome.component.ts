@@ -19,6 +19,7 @@ export class WelcomeComponent implements OnInit {
 
   private event: Event;
   private eventSubscription: Subscription;
+  private page: number;
 
   constructor(
     private companyService: CompanyService,
@@ -27,6 +28,7 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.credentials = this.companyService.getCredentials();
+    this.page=0;
 
     this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
@@ -35,4 +37,13 @@ export class WelcomeComponent implements OnInit {
       });
   }
 
+  next(){
+    this.page===2? this.page=0 : this.page++;
+  }
+
+  back(){
+    if(this.page!==0){
+      this.page--;
+    } 
+  }
 }
