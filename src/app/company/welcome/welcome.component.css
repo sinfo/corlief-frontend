@@ -1,5 +1,23 @@
 .content {
-    width: 70%;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.paragraphs {
+    order: 1;
+}
+
+.buttons {
+    order: 2;
+    display: flex;
+    justify-content: space-between;
+}
+
+.one_button {
+    justify-content: flex-end !important;
 }
 
 .title {
@@ -7,13 +25,13 @@
 }
 
 .text p {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: 300;
     color: #4b5763;
 }
 
 b.extra {
-    font-size: 2rem;
+    font-size: 3rem;
     font-weight: bold;
     color: #00254a;
 }
@@ -22,12 +40,6 @@ b.title_extra {
     font-size: 4rem;
     font-weight: bold;
     color: #00254a;
-}
-
-.reservations-link {
-    position: absolute;
-    bottom: 4vh;
-    right: 3vw;
 }
 
 .reservations-link a {
@@ -40,12 +52,6 @@ b.title_extra {
     text-decoration: none;
 }
 
-.next-page {
-    position: absolute;
-    bottom: 4vh;
-    right: 3vw;
-}
-
 .next-page a {
     font-size: 3rem;
     color: #00254a;
@@ -55,13 +61,6 @@ b.title_extra {
 .next-page a:hover {
     cursor: pointer;
     text-decoration: none;
-}
-
-
-.back-page {
-    position: absolute;
-    bottom: 4vh;
-    left: 3vw;
 }
 
 .back-page a {
