@@ -3,11 +3,12 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
 }
 
 .paragraphs {
     order: 1;
+    height: 90%;
+    overflow-y: scroll;
 }
 
 .buttons {
@@ -24,6 +25,11 @@
     font-size: 4rem;
 }
 
+.title b {
+    font-weight: bold;
+    color: #00254a;
+}
+
 .text p {
     font-size: 3rem;
     font-weight: 300;
@@ -32,12 +38,6 @@
 
 b.extra {
     font-size: 3rem;
-    font-weight: bold;
-    color: #00254a;
-}
-
-b.title_extra {
-    font-size: 4rem;
     font-weight: bold;
     color: #00254a;
 }
