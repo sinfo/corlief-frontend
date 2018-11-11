@@ -1,30 +1,125 @@
 <span *ngIf="credentials && event">
   <div class="content">
 
-    <p class="title">Damos as boas vindas à
-      <b>{{credentials.companyName}}</b>
-      !
-    </p>
+    <div class="paragraphs">
+      <span *ngIf="page===0">
+        <p class="title" *ngIf="page==0">
+          Damos as boas vindas à
+          <b>{{credentials.companyName}}</b>
+          !
+        </p>
 
-    <div class="text">
+        <div class="text">
 
-      <p>
-        Desde já queríamos agradecer a vossa participação nesta edição da SINFO que esperamos que seja a melhor de sempre!
-      </p>
+          <p>
+            Desde já queríamos agradecer a vossa participação nesta edição da SINFO que esperamos que seja a melhor de sempre!
+          </p>
 
-      <p>
-        Nesta aplicação poderá reservar os
-        <i>stands</i> para cada um dos vários dias da SINFO a decorrer de {{ event.date | datePt : event.duration }}.
-      </p>
+          <p>
+            Nesta aplicação poderá reservar os
+            <i>stands</i> para cada um dos vários dias da SINFO a decorrer de {{ event.date | datePt : event.duration }}.
+          </p>
+
+          <p>
+            <b class="extra">Relembramos que a {{credentials.companyName}} tem direito a {{credentials.participationDays}} {{credentials.participationDays
+              == 1? "dia" : "dias"}} de stand!</b>
+          </p>
+
+        </div>
+
+      </span>
+
+      <span *ngIf="page===1">
+
+        <p class="title">
+          Como funciona o Corlief?
+        </p>
+
+        <div class="text">
+
+          <p>
+            Para reservar os
+            <i>stands</i> deverá seguir os seguintes passos:
+          </p>
+
+          <p>
+            <b class="extra">1.</b> Escolher o dia
+          </p>
+
+          <p>
+            <b class="extra">2.</b> Escolher o
+            <i>stand</i> para esse dia
+          </p>
+
+          <p>
+            <b class="extra">3.</b> Repetir para todos os dias a que tiverem direito
+          </p>
+
+          <p>
+            <b class="extra">4.</b> Submeter a reserva
+          </p>
+
+          <p>
+            <b class="extra">5.</b> Aguardar pela confirmação por parte da comissão da SINFO
+          </p>
+
+        </div>
+
+      </span>
+
+      <span *ngIf="page===2">
+
+        <p class="title" *ngIf="page==2">
+          <b>Pedimos ainda:</b>
+        </p>
+
+        <div class="text" *ngIf="page==2">
+          <p>
+            Pedimos que
+            <b class="extra">reserve sempre que possível o mesmo stand</b>
+            pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta
+            de marcação de stand.
+          </p>
+
+          <p>
+            Pedimos que sempre que possível
+            <b class="extra">reserve dias consecutivos</b>, novamente por questões idênticas às mencionadas acima.
+          </p>
+
+          <p>
+            <b class="extra">Aviso:</b> a comissão não poderá de todo guardar qualquer tipo de material de empresas que não aquele que irá
+            permanecer no stand para o dia seguinte.
+          </p>
+
+          <p>
+            Obrigado.
+          </p>
+
+        </div>
+
+      </span>
 
     </div>
 
+    <div class="buttons" [ngClass]="{'one_button': page===0}">
+      <span class="back-page" *ngIf="page > 0">
+        <a (click)="back()">
+          Retroceder
+          < </a>
+      </span>
+
+      <span class="next-page" *ngIf="page &lt; 2">
+        <a (click)="next()">
+          > Seguinte
+        </a>
+      </span>
+
+      <span class="reservations-link" *ngIf="page==2">
+        <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">
+          > Reservar Stands
+        </a>
+      </span>
+    </div>
+
   </div>
-
-  <span class="reservations-link">
-    <a routerLink="/reservations" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">
-      > Reservar Stands
-    </a>
-  </span>
-
 </span>
