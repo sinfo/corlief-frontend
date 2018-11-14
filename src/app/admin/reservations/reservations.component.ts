@@ -26,15 +26,15 @@ export class ReservationsComponent implements OnInit {
 
   private canvasState: CanvasState = CanvasState.RESERVATIONS;
 
-  private event: Event;
-  private reservations: {
+  event: Event;
+  reservations: {
     all: [Reservation],
     confirmed: [Reservation],
     pending: [Reservation],
     cancelled: [Reservation]
   };
   private companies: [Company];
-  private venue: Venue;
+  venue: Venue;
   private availability: Availability;
   private day = 1;
 

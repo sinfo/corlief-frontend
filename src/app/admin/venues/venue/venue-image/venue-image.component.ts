@@ -21,7 +21,7 @@ export class VenueImageComponent implements OnInit, OnDestroy {
   private canvasSubscription: Subscription;
   private reservationsSubscription: Subscription;
 
-  private venue: Venue;
+  venue: Venue;
 
   @Input() maxWidth;
   @Input() maxHeight;

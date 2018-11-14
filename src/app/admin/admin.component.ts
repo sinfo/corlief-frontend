@@ -17,7 +17,7 @@ import { Venue } from 'src/app/admin/venues/venue/venue';
 export class AdminComponent implements OnInit, OnDestroy {
 
   private eventSubscription: Subscription;
-  private event: Event;
+  event: Event;
   private events: [Event];
   private venue: Venue;
 

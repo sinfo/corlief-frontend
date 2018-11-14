@@ -22,14 +22,14 @@ export class VenueComponent implements OnInit, OnDestroy {
   private venueSubscription: Subscription;
   private newStandSubscription: Subscription;
 
-  private venue: Venue;
+  venue: Venue;
   private newStand: Stand;
 
   private confirmStand: boolean;
   private lockedStands: boolean;
   private pendingDeletion = false;
 
-  private canEdit: boolean;
+  canEdit: boolean;
 
   constructor(
     private deckService: DeckService,

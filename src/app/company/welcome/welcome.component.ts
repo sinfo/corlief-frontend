@@ -15,9 +15,9 @@ import { Event } from 'src/app/deck/event';
 })
 export class WelcomeComponent implements OnInit {
 
-  private credentials: Credentials;
+  credentials: Credentials;
 
-  private event: Event;
+  event: Event;
   private eventSubscription: Subscription;
   private page: number;
 
@@ -28,7 +28,7 @@ export class WelcomeComponent implements OnInit {
 
   ngOnInit() {
     this.credentials = this.companyService.getCredentials();
-    this.page=0;
+    this.page = 0;
 
     this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
@@ -37,13 +37,13 @@ export class WelcomeComponent implements OnInit {
       });
   }
 
-  next(){
-    this.page===2? this.page=0 : this.page++;
+  next() {
+    this.page === 2 ? this.page = 0 : this.page++;
   }
 
-  back(){
-    if(this.page!==0){
+  back() {
+    if (this.page !== 0) {
       this.page--;
-    } 
+    }
   }
 }

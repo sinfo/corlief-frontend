@@ -21,9 +21,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private reservationsFromAPI: [Reservation];
 
-  private companies: Companies;
-  private venue: Venue;
-  private reservations: {
+  venue: Venue;
+  companies: Companies;
+  reservations: {
     all: [Reservation],
     pending: [Reservation],
     confirmed: [Reservation],

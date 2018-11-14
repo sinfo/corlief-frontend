@@ -27,8 +27,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private eventSubscription: Subscription;
 
-  private event: Event;
-  private availability: Availability;
+  event: Event;
+  availability: Availability;
   private credentials: Credentials;
 
   private selectedDay: { day: number, date: Date, allDays: number[] };
