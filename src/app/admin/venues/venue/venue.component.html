@@ -1,6 +1,6 @@
 <div class="header">
 
-  <span class="upload" *ngIf="(venue === null || venue === undefined) && canEdit">
+  <span class="upload" *ngIf="canEdit">
     <app-upload (newVenue)="onUpdateVenue($event)"></app-upload>
   </span>
 

@@ -76,7 +76,11 @@ export class CanvasComponent implements OnInit, OnDestroy {
       });
 
     this.availabilitySubscription = this.venuesService.getAvailabilitySubject()
-      .subscribe(availability => this.data.availability.value = availability);
+      .subscribe(availability => {
+        if (this.data.availability) {
+          this.data.availability.value = availability;
+        }
+      });
 
     this.initCommunicationHandler();
   }

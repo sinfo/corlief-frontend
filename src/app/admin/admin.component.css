@@ -13,6 +13,10 @@
     align-items: center;
 }
 
+.navbar-brand {
+    cursor: default;
+}
+
 .nav-link {
     color: #8c9aa9;
 }

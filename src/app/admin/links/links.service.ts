@@ -54,6 +54,7 @@ export class LinksService {
     this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         this.event = event;
+        this.updateLinks(event.id as string);
       });
 
     this.deckCompaniesSubscription = this.deckService.getDeckCompaniesSubject()

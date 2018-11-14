@@ -25,6 +25,7 @@
 .issued {
     margin-bottom: 1%;
     font-weight: lighter;
+    font-size: 1.5vw;
 }
 
 .status {
@@ -42,6 +43,7 @@
 
     color: #1a395a6b;
     font-weight: lighter;
+    font-size: 1.3vw
 }
 
 .stand.booked {

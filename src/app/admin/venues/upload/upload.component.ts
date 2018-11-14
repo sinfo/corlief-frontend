@@ -44,6 +44,7 @@ export class UploadComponent implements OnInit {
   }
 
   upload() {
+    this.error = undefined;
     this.progress.percentage = 0;
     this.currentFileUpload = this.selectedFiles.item(0);
     this.uploadService.upload(this.currentFileUpload).subscribe(

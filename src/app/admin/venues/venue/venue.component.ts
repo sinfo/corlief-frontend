@@ -105,7 +105,7 @@ export class VenueComponent implements OnInit, OnDestroy {
   }
 
   onUpdateVenue(venue: Venue) {
-    this.venue = venue;
+    this.venuesService.setVenue(venue);
     this.canvasService.clear();
   }
 
