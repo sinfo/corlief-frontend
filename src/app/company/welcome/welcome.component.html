@@ -104,13 +104,12 @@
     <div class="buttons" [ngClass]="{'one_button': page===0}">
       <span class="back-page" *ngIf="page > 0">
         <a (click)="back()">
-          Retroceder
-          < </a>
+          &lt; Retroceder </a>
       </span>
 
       <span class="next-page" *ngIf="page &lt; 2">
         <a (click)="next()">
-          > Seguinte
+          Seguinte &gt;
         </a>
       </span>
 
