@@ -5,16 +5,16 @@
     <div class="selection" *ngIf="selectedDay">
 
       <div class="title">
-        <span [ngClass]="{'canChangeDay': selectedDay.day > 1}" (click)="changeDay(selectedDay.day - 1)">
+        <div [ngClass]="{'canChangeDay': selectedDay.day > 1}" (click)="changeDay(selectedDay.day - 1)">
           <b>&lt;</b>
-        </span>
-        <span>
+        </div>
+        <div>
           <b>Day {{selectedDay.day}}</b>
-        </span>
-        <span>{{selectedDay.date | date : 'MMMM d'}}</span>
-        <span [ngClass]="{'canChangeDay': selectedDay.day < event.getDuration()}" (click)="changeDay(selectedDay.day + 1)">
+        </div>
+        <div>{{selectedDay.date | date : 'MMMM d'}}</div>
+        <div [ngClass]="{'canChangeDay': selectedDay.day < event.getDuration()}" (click)="changeDay(selectedDay.day + 1)">
           <b>&gt;</b>
-        </span>
+        </div>
       </div>
 
       <div class="options">

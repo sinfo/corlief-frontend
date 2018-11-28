@@ -28,12 +28,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 15%;
 }
 
 .selection .title {
     width: 100%;
-    margin-bottom: 0%;
+    margin-bottom: 1%;
 }
 
 .selection .canChangeDay:hover {
@@ -49,7 +48,7 @@
 }
 
 .day {
-    font-size: 2vw;
+    font-size: 1.5vw;
     font-weight: 300;
     color: grey;
 }
@@ -171,9 +170,9 @@
 
 .title {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
 
-    font-size: 3vw;
+    font-size: 2vw;
     font-weight: 300;
 
     margin-bottom: 4%;
@@ -183,7 +182,7 @@
     font-weight: 600;
 }
 
-.title span {
+.title div {
     margin: 1%;
 }
 
@@ -191,7 +190,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 60%;
+    width: 40%;
 }
 
 .missing {
