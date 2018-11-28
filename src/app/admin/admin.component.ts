@@ -16,15 +16,15 @@ import { Venue } from 'src/app/admin/venues/venue/venue';
 })
 export class AdminComponent implements OnInit, OnDestroy {
 
-  private eventSubscription: Subscription;
   event: Event;
+
+  private eventSubscription: Subscription;
   private events: [Event];
   private venue: Venue;
 
   constructor(
     private deckService: DeckService,
-    private venuesService: VenuesService,
-    private linksService: LinksService
+    private venuesService: VenuesService
   ) { }
 
   ngOnInit() {
