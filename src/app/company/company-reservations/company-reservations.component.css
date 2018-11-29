@@ -87,7 +87,7 @@
     align-items: center;
     justify-content: center;
 
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .stands h6 {
@@ -140,7 +140,7 @@
     padding: 1%;
     margin-left: 2%;
 
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .allReservations {
@@ -150,7 +150,7 @@
     height: 85%;
     margin-bottom: 5%;
 
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .reservation.showAll {
@@ -160,7 +160,7 @@
 .info {
     flex-grow: 1;
     margin-top: 5%;
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 .info .action {
