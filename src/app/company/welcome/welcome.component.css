@@ -42,6 +42,12 @@ b.extra {
     color: #00254a;
 }
 
+b.days {
+    font-size: 3rem;
+    font-weight: bold;
+    color: #00254a;
+}
+
 .reservations-link a {
     font-size: 2rem;
     color: #00254a;

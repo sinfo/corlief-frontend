@@ -65,7 +65,7 @@
     <ng-container *ngIf="!showAllReservations && latestReservation">
       <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays" class="missing">
         <h6>
-          You can still book {{credentials.participationDays - latestReservation.stands.length}} {{credentials.participationDays -
+          You can still book <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays -
           latestReservation.stands.length > 1 ? 'days' : 'day'}}
         </h6>
       </div>
