@@ -101,7 +101,7 @@
 }
 
 #reservations-table {
-    overflow-y: scroll;
+    overflow-y: hidden;
 }
 
 table td, th {
