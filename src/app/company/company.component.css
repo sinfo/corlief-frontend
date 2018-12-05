@@ -28,7 +28,7 @@ nav {
     height: 70%;
 }
 
-.right-side button {
+.right-side a {
     height: 100%;
 
     border-radius: 100rem;
@@ -36,7 +36,7 @@ nav {
     border: 0px;
 }
 
-.right-side button:first-of-type {
+.right-side a:first-of-type {
     margin-right: 2%;
 }
 

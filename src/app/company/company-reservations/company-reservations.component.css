@@ -150,7 +150,7 @@
     height: 85%;
     margin-bottom: 5%;
 
-    overflow-y: hidden;
+    overflow-y: scroll;
 }
 
 .reservation.showAll {

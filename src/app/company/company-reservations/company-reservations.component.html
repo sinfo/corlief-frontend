@@ -47,9 +47,7 @@
     </div>
 
     <div class="help">
-      <button class="btn btn-info">
-        <a [routerLink]="['/']">&lt; Back to explanation</a>
-      </button>
+      <a class="btn btn-info" [routerLink]="['/']" mat-icon-button>&lt; Back to explanation</a>
     </div>
   </div>
 
@@ -65,8 +63,9 @@
     <ng-container *ngIf="!showAllReservations && latestReservation">
       <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays" class="missing">
         <h6>
-          You can still book <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays -
-          latestReservation.stands.length > 1 ? 'days' : 'day'}}
+          You can still book
+          <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays - latestReservation.stands.length
+          > 1 ? 'days' : 'day'}}
         </h6>
       </div>
 
