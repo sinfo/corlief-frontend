@@ -21,8 +21,8 @@
           </p>
 
           <p>
-            <b class="extra">Relembramos que a {{credentials.companyName}} tem direito a {{credentials.participationDays}} {{credentials.participationDays
-              == 1? "dia" : "dias"}} de stand!</b>
+            <b class="extra">Relembramos que a {{credentials.companyName}} tem direito a 
+              <b class ="days">{{credentials.participationDays}}</b> {{credentials.participationDays== 1? "dia" : "dias"}} de stand!</b>
           </p>
 
         </div>
@@ -76,9 +76,9 @@
         <div class="text" *ngIf="page==2">
           <p>
             Pedimos que
-            <b class="extra">reserve sempre que possível o mesmo stand</b>
+            <b class="extra">reserve sempre que possível o mesmo <i>stand</i></b>
             pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta
-            de marcação de stand.
+            de marcação de <i>stand</i>.
           </p>
 
           <p>
@@ -87,8 +87,8 @@
           </p>
 
           <p>
-            <b class="extra">Aviso:</b> a comissão não poderá de todo guardar qualquer tipo de material de empresas que não aquele que irá
-            permanecer no stand para o dia seguinte.
+            <b class="extra">Aviso:</b> A comissão não poderá de todo guardar qualquer tipo de material de empresas que não aquele que irá
+            permanecer no <i>stand</i> para o dia seguinte.
           </p>
 
           <p>
@@ -115,7 +115,7 @@
 
       <span class="reservations-link" *ngIf="page==2">
         <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">
-          > Reservar Stands
+          Reservar Stands >
         </a>
       </span>
     </div>

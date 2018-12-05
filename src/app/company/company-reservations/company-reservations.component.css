@@ -201,6 +201,12 @@
 
 .missing h6 {
     font-weight: 200;
+    font-size: 2rem;
+}
+
+.missing b {
+    font-weight: 300;
+    font-size: 3rem;
 }
 
 .history {
