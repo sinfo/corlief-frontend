@@ -11,7 +11,6 @@ import { ReservationsService } from 'src/app/admin/reservations/reservations.ser
 import { Credentials } from '../credentials';
 import { Availability } from '../../admin/venues/venue/venue';
 import { Event } from 'src/app/deck/event';
-import { Venue } from '../../admin/venues/venue/venue';
 import { Stand } from '../../admin/venues/venue/stand';
 import { Reservation, Stand as ReservationStand } from '../../admin/reservations/reservation/reservation';
 import { CanvasState } from 'src/app/admin/venues/venue/venue-image/canvas/canvasCommunication';
@@ -75,6 +74,10 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.eventSubscription.unsubscribe();
+  }
+
+  public clickStandFromCanvas(stand) {
+    this.clickStand(stand.id);
   }
 
   private updateReservations() {
