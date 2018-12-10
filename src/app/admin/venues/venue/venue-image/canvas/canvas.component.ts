@@ -1,12 +1,11 @@
 import {
   Component, OnInit, OnDestroy,
-  AfterViewInit, ElementRef, ViewChild, SimpleChanges,
-  SimpleChange, Input, Output, EventEmitter
+  ElementRef, ViewChild,
+  Input, Output, EventEmitter, DoCheck
 } from '@angular/core';
 
-import { Observable } from 'rxjs/internal/Observable';
 import { fromEvent } from 'rxjs';
-import { switchMap, takeUntil, pairwise, tap } from 'rxjs/operators';
+import { switchMap, takeUntil, tap } from 'rxjs/operators';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { VenuesService } from '../../../venues.service';
@@ -18,7 +17,6 @@ import {
 } from './canvasCommunication';
 
 import { Stand } from '../../stand';
-import { Venue, Availability } from '../../venue';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
 
 @Component({
@@ -26,13 +24,16 @@ import { Reservation } from 'src/app/admin/reservations/reservation/reservation'
   templateUrl: './canvas.component.html',
   styleUrls: ['./canvas.component.css']
 })
-export class CanvasComponent implements OnInit, OnDestroy {
+export class CanvasComponent implements OnInit, OnDestroy, DoCheck {
 
   @ViewChild('canvas') public canvas: ElementRef;
+  private canvasBounds;
+  public standHover = false;
+
   @Input() state: CanvasState;
+  @Output() standClickCanvas: EventEmitter<Stand> = new EventEmitter();
 
   private venueSubscription: Subscription;
-  private availabilitySubscription: Subscription;
   private commSubscription: Subscription;
   private reservationSubscription: Subscription;
   private canvasEventsSubscription: Subscription;
@@ -75,7 +76,7 @@ export class CanvasComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.availabilitySubscription = this.venuesService.getAvailabilitySubject()
+    this.venuesService.getAvailabilitySubject()
       .subscribe(availability => {
         if (this.data.availability) {
           this.data.availability.value = availability;
@@ -90,6 +91,61 @@ export class CanvasComponent implements OnInit, OnDestroy {
     this.venueSubscription.unsubscribe();
     this.commSubscription.unsubscribe();
     this.reservationSubscription.unsubscribe();
+  }
+
+  ngDoCheck() {
+    this.canvasBounds = this.canvas.nativeElement.getBoundingClientRect();
+  }
+
+  // highlight and select stand on mouseover
+  public standHoverHandler(event) {
+    let found = false;
+
+    event.preventDefault();
+    this.clearCanvas();
+    this.drawStands();
+
+    // get the mouse position
+    const mouseX = (event.clientX - this.canvasBounds.left) / this.canvasBounds.width;
+    const mouseY = (event.clientY - this.canvasBounds.top) / this.canvasBounds.height;
+
+    for (const stand of this.data.stands) {
+      const left = stand.topLeft.x;
+      const right = stand.bottomRight.x;
+      const top = stand.topLeft.y;
+      const bottom = stand.bottomRight.y;
+
+      if (mouseX > left && mouseX < right && mouseY < top && mouseY > bottom) {
+        found = true;
+
+        const color = this.data.getColor(stand, true);
+        this.drawStand(stand, color);
+        break;
+      }
+    }
+
+    this.standHover = found;
+  }
+
+  // highlight and select stand on mouseover
+  public standClickHandler(event) {
+    event.preventDefault();
+
+    // get the mouse position
+    const mouseX = (event.clientX - this.canvasBounds.left) / this.canvasBounds.width;
+    const mouseY = (event.clientY - this.canvasBounds.top) / this.canvasBounds.height;
+
+    for (const stand of this.data.stands) {
+      const left = stand.topLeft.x;
+      const right = stand.bottomRight.x;
+      const top = stand.topLeft.y;
+      const bottom = stand.bottomRight.y;
+
+      if (mouseX > left && mouseX < right && mouseY < top && mouseY > bottom) {
+        this.standClickCanvas.emit(stand);
+        break;
+      }
+    }
   }
 
   private initCommunicationHandler() {
@@ -204,18 +260,18 @@ export class CanvasComponent implements OnInit, OnDestroy {
     const canvasEl: HTMLCanvasElement = this.canvas.nativeElement;
     this.canvasEventsSubscription = fromEvent(canvasEl, 'mousedown')
       .pipe(
-      tap(start => this.captureFirstPoint(canvasEl, start)),
-      switchMap(e => {
-        return fromEvent(canvasEl, 'mousemove')
-          .pipe(
-          takeUntil(fromEvent(canvasEl, 'mouseup').pipe(
-            tap(end => this.captureLastPoint(canvasEl, end))
-          )),
-          takeUntil(fromEvent(canvasEl, 'mouseleave').pipe(
-            tap(end => this.captureLastPoint(canvasEl, end))
-          ))
-          );
-      })
+        tap(start => this.captureFirstPoint(canvasEl, start)),
+        switchMap(e => {
+          return fromEvent(canvasEl, 'mousemove')
+            .pipe(
+              takeUntil(fromEvent(canvasEl, 'mouseup').pipe(
+                tap(end => this.captureLastPoint(canvasEl, end))
+              )),
+              takeUntil(fromEvent(canvasEl, 'mouseleave').pipe(
+                tap(end => this.captureLastPoint(canvasEl, end))
+              ))
+            );
+        })
       ).subscribe((mouse: MouseEvent) => {
         const rect = canvasEl.getBoundingClientRect();
 
@@ -314,4 +370,5 @@ export class CanvasComponent implements OnInit, OnDestroy {
 
     return { x: pos.x * w, y: pos.y * h };
   }
+
 }

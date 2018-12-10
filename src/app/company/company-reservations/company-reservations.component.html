@@ -18,7 +18,8 @@
       </div>
 
       <div class="options">
-        <div class="day" *ngFor="let day of selectedDay.allDays" [ngClass]="{'selected': day === selectedDay.day}" (click)="changeDay(day)">
+        <div class="day" *ngFor="let day of selectedDay.allDays" [ngClass]="{'selected': day === selectedDay.day}"
+          (click)="changeDay(day)">
           Day {{day}}
         </div>
       </div>
@@ -28,7 +29,7 @@
     <div class="canvas-wrapper">
 
       <div class="canvas">
-        <app-venue-image [maxHeight]="55" [state]="canvasState"></app-venue-image>
+        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [state]="canvasState"></app-venue-image>
       </div>
 
       <div class="stands">
@@ -36,8 +37,8 @@
         <h6>Please choose a stand for this day</h6>
 
         <div class="stands-list">
-          <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)"
-            (click)="clickStand(stand.id)" [ngClass]="{'free': isFreeStand(stand.id), 'occupied': isOccupiedStand(stand.id), 'clickable': clickableStand(stand.id), 'pending': isPendingBook(stand.id), 'confirmed': isConfirmedBook(stand.id)}">
+          <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)"
+            (mouseleave)="deselectStand(stand.id)" (click)="clickStand(stand.id)" [ngClass]="{'free': isFreeStand(stand.id), 'occupied': isOccupiedStand(stand.id), 'clickable': clickableStand(stand.id), 'pending': isPendingBook(stand.id), 'confirmed': isConfirmedBook(stand.id)}">
             {{stand.id + 1}}
           </div>
         </div>
@@ -61,10 +62,12 @@
     </div>
 
     <ng-container *ngIf="!showAllReservations && latestReservation">
-      <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays" class="missing">
+      <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays"
+        class="missing">
         <h6>
           You can still book
-          <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays - latestReservation.stands.length
+          <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays -
+          latestReservation.stands.length
           > 1 ? 'days' : 'day'}}
         </h6>
       </div>
