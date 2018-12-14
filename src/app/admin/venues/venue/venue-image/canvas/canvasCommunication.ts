@@ -36,7 +36,7 @@ export class CanvasData {
     state: CanvasState;
     availability: { value: Availability; selectedDay: number; };
     reservation: Reservation;
-    stands: [Stand];
+    stands: Stand[];
     pendingStand: Stand;
 
     constructor(state: CanvasState) {

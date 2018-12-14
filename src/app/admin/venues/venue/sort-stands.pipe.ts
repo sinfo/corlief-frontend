@@ -6,7 +6,7 @@ import { Stand } from './stand';
 })
 export class SortStandsPipe implements PipeTransform {
 
-  transform(stands: [Stand], args?: any): [Stand] {
+  transform(stands: Stand[], args?: any): Stand[] {
     return stands.sort(Stand.compare);
   }
 

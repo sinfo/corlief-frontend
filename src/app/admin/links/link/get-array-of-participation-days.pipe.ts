@@ -7,9 +7,9 @@ import { Event } from 'src/app/deck/event';
 })
 export class GetArrayOfParticipationDaysPipe implements PipeTransform {
 
-  transform(event: Event): [number] {
+  transform(event: Event): number[] {
     const duration = event.duration.getDate();
-    const result = [] as [number];
+    const result = [] as number[];
 
     for (let day = 1; day <= duration; day += 1) {
       result.push(day);

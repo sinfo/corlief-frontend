@@ -32,7 +32,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private selectedDay: { day: number, date: Date, allDays: number[] };
 
-  private reservations: [Reservation];
+  private reservations: Reservation[];
   private latestReservation: Reservation;
 
   private showAllReservations: boolean;
@@ -98,7 +98,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
           this.reservations = this.reservations.filter(
             reservation => reservation.id !== latest.id
-          ) as [Reservation];
+          ) as Reservation[];
 
           this.reservationService.setReservation(latest);
         } else {

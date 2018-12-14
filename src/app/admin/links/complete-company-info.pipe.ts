@@ -8,10 +8,10 @@ import { Event } from 'src/app/deck/event';
 })
 export class CompleteCompanyInfoPipe implements PipeTransform {
 
-  transform(simple: [Company], complete: [Company], event?: Event): [Company] {
+  transform(simple: Company[], complete: Company[], event?: Event): Company[] {
     const ids: String[] = complete.map(company => company.id);
 
-    return <[Company]>simple.map((company: Company) => {
+    return <Company[]>simple.map((company: Company) => {
       const index = ids.indexOf(company.id);
 
       if (index === -1) { return null; }

@@ -5,7 +5,8 @@ import { environment } from '../../../../environments/environment';
 
 import { LinksService } from '../links.service';
 import { ClipboardService } from 'ngx-clipboard';
-import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NgbTooltip, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
 
 import { Link, LinkForm } from './link';
 import { Company } from 'src/app/deck/company';
@@ -28,9 +29,12 @@ export class LinkComponent implements OnInit {
   linkForm: FormGroup;
   extendLinkForm: FormGroup;
 
+  closeLinkFormResult: string;
+
   constructor(
     private linksService: LinksService,
-    private clipboardService: ClipboardService
+    private clipboardService: ClipboardService,
+    private modalService: NgbModal
   ) { }
 
   ngOnInit() { }
@@ -46,22 +50,16 @@ export class LinkComponent implements OnInit {
     this.clipboardService.copyFromContent(url);
   }
 
-  alternateLinkFormVisibility() {
-    this.linkForm = this.linkForm === undefined
-      ? Link.linkForm(this.company, this.event)
-      : undefined;
-  }
-
   alternateExtendLinkFormVisibility() {
     this.extendLinkForm = this.extendLinkForm === undefined
       ? Link.extendLinkForm(this.event)
       : undefined;
   }
 
-  submitLink() {
+  submitLink(modal) {
     this.linksService.uploadLink(<LinkForm>this.linkForm.value)
       .subscribe(link => {
-        this.alternateLinkFormVisibility();
+        modal.close();
         this.linksService.updateLinks(this.event.id as string);
       });
   }
@@ -88,14 +86,32 @@ export class LinkComponent implements OnInit {
     const expirationDate = this.extendLinkForm.value;
     this.linksService.extend(link.companyId, link.edition, expirationDate)
       .subscribe(newLink => {
-        this.alternateExtendLinkFormVisibility();
-
         if (!this.company.link.valid) {
           this.linksService.updateLinks(newLink.edition as string);
         } else {
           this.company.link = newLink;
+          this.extendLinkForm = undefined;
         }
       });
+  }
+
+  openLinkForm(content) {
+    this.linkForm = Link.linkForm(this.company, this.event);
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeLinkFormResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeLinkFormResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
   }
 
 }

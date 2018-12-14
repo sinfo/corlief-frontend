@@ -71,7 +71,7 @@ export class LinksService {
   updateLinks(edition?: string) {
     edition
       ? this.getLinks({ edition: edition }).subscribe(links => {
-        const l = links instanceof Link ? [links] as [Link] : links as [Link];
+        const l = links instanceof Link ? [links] as Link[] : links as Link[];
         this.companies.updateLinks(l);
         this.companiesSubject.next(this.companies);
       })
@@ -90,19 +90,19 @@ export class LinksService {
     companyId?: string,
     edition?: string,
     token?: string
-  }): Observable<Link | [Link]> {
-    return this.http.get<Link | [Link]>(this.corlief, {
+  }): Observable<Link | Link[]> {
+    return this.http.get<Link | Link[]>(this.corlief, {
       headers: this.headers,
       params: filter
     });
   }
 
-  verifyAndGetLinks(): Observable<[Link]> {
-    return this.http.get<[Link]>(`${this.corlief}/validity`, { headers: this.headers });
+  verifyAndGetLinks(): Observable<Link[]> {
+    return this.http.get<Link[]>(`${this.corlief}/validity`, { headers: this.headers });
   }
 
-  getCompaniesWithMissingLinks(): Observable<[Company]> {
-    return this.http.get<[Company]>(`${this.corlief}/missing`, { headers: this.headers });
+  getCompaniesWithMissingLinks(): Observable<Company[]> {
+    return this.http.get<Company[]>(`${this.corlief}/missing`, { headers: this.headers });
   }
 
   extend(companyId: String, edition: String, form: { expirationDate: Date }): Observable<Link> {
