@@ -53,8 +53,9 @@ export class LinksService {
 
     this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
+        const eventOverride = this.event !== undefined && this.event.id !== event.id;
         this.event = event;
-        this.updateLinks(event.id as string);
+        if (eventOverride) { this.updateLinks(event.id as string); }
       });
 
     this.deckCompaniesSubscription = this.deckService.getDeckCompaniesSubject()

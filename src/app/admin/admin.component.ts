@@ -58,10 +58,6 @@ export class AdminComponent implements OnInit, OnDestroy {
   private updateData(venue: Venue) {
     this.venue = venue;
     this.venuesService.setVenue(venue);
-
-    if (venue !== null) {
-      this.deckService.updateEvent(venue.edition);
-    }
   }
 
 }
