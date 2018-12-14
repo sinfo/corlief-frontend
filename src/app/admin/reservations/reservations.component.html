@@ -5,8 +5,8 @@
 
             <div class="day-selection">
                 <b>Day: </b>
-                <ngb-pagination [collectionSize]="event.getDuration()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)" aria-label="Default pagination"
-                    size="sm"></ngb-pagination>
+                <ngb-pagination [collectionSize]="event.getDuration()" [pageSize]="1" [(page)]="day" (pageChange)="changeDay($event)"
+                    aria-label="Default pagination" size="sm"></ngb-pagination>
             </div>
 
 
@@ -25,8 +25,8 @@
                 <div id="stands-wrapper">
 
                     <div id="reservations-table" *ngIf="availability">
-                        <table class="table table-bordered">
-                            <thead>
+                        <table class="table table-bordered table-striped">
+                            <thead class="thead-dark">
                                 <tr>
                                     <th scope="col">
                                         Stand
@@ -64,8 +64,8 @@
                         </ng-template>
 
                         <label for="typeahead-template">Filter by company:</label>
-                        <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="filteredReservation" [ngbTypeahead]="search"
-                            [resultTemplate]="rt" [inputFormatter]="formatter" />
+                        <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="filteredReservation"
+                            [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" />
 
                     </div>
 
@@ -90,8 +90,8 @@
                         </ng-template>
 
                         <label for="typeahead-template">Filter by company:</label>
-                        <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="filteredReservation" [ngbTypeahead]="search"
-                            [resultTemplate]="rt" [inputFormatter]="formatter" />
+                        <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="filteredReservation"
+                            [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" />
 
                     </div>
 
@@ -116,8 +116,8 @@
                         </ng-template>
 
                         <label for="typeahead-template">Filter by company:</label>
-                        <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="filteredReservation" [ngbTypeahead]="search"
-                            [resultTemplate]="rt" [inputFormatter]="formatter" />
+                        <input id="typeahead-template" type="text" class="form-control" [(ngModel)]="filteredReservation"
+                            [ngbTypeahead]="search" [resultTemplate]="rt" [inputFormatter]="formatter" />
 
                     </div>
 

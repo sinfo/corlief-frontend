@@ -109,3 +109,16 @@ table td, th {
     vertical-align: middle;
     width: 16.67%;
 }
+
+.table .thead-dark th {
+    background-color: #00234b;
+    border-color: #32383e;
+}
+
+.table-bordered, .table-bordered td, .table-bordered th {
+    border-color: #00224c9e;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 34, 76, 0.1);
+}
