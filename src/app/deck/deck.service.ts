@@ -24,13 +24,13 @@ export class DeckService {
 
   public events: [Event];
   public event: Event;
-  private companies: [Company];
+  private companies: Company[];
 
   private deck = `${environment.deck}/api`;
   private credentials: Credentials;
 
   private eventSubject: ReplaySubject<Event> = new ReplaySubject<Event>();
-  private deckCompaniesSubject: ReplaySubject<[Company]> = new ReplaySubject<[Company]>();
+  private deckCompaniesSubject: ReplaySubject<Company[]> = new ReplaySubject<Company[]>();
 
   private venueSubscription: Subscription;
 
@@ -68,7 +68,7 @@ export class DeckService {
 
   private getCompanies(edition: String): void {
     this.deckAuth().subscribe(() => {
-      this.http.get<[Company]>(
+      this.http.get<Company[]>(
         `${this.deck}/companies?event=${edition}&&participations=true`,
         { withCredentials: true }
       ).subscribe(companies => this.deckCompaniesSubject.next(companies));
@@ -79,7 +79,7 @@ export class DeckService {
     return this.eventSubject.asObservable();
   }
 
-  getDeckCompaniesSubject(): Observable<[Company]> {
+  getDeckCompaniesSubject(): Observable<Company[]> {
     return this.deckCompaniesSubject.asObservable();
   }
 

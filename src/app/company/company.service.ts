@@ -60,8 +60,8 @@ export class CompanyService {
     return this.http.get<Availability>(`${this.corlief}/venue`, this.getHeaders());
   }
 
-  getReservations(latest: boolean): Observable<[Reservation]> {
-    return this.http.get<[Reservation]>(
+  getReservations(latest: boolean): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(
       `${this.corlief}/reservation?latest=${latest}`, this.getHeaders()
     );
   }

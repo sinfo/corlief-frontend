@@ -19,15 +19,15 @@ import { Reservation } from 'src/app/admin/reservations/reservation/reservation'
 })
 export class HomeComponent implements OnInit, OnDestroy {
 
-  private reservationsFromAPI: [Reservation];
+  private reservationsFromAPI: Reservation[];
 
   venue: Venue;
   companies: Companies;
   reservations: {
-    all: [Reservation],
-    pending: [Reservation],
-    confirmed: [Reservation],
-    cancelled: [Reservation]
+    all: Reservation[],
+    pending: Reservation[],
+    confirmed: Reservation[],
+    cancelled: Reservation[]
   };
 
   private eventSubscription: Subscription;
@@ -83,9 +83,9 @@ export class HomeComponent implements OnInit, OnDestroy {
 
     this.reservations = {
       all: reservations,
-      pending: reservations.filter(r => r.isPending()) as [Reservation],
-      confirmed: reservations.filter(r => r.isConfirmed()) as [Reservation],
-      cancelled: reservations.filter(r => r.isCancelled()) as [Reservation]
+      pending: reservations.filter(r => r.isPending()) as Reservation[],
+      confirmed: reservations.filter(r => r.isConfirmed()) as Reservation[],
+      cancelled: reservations.filter(r => r.isCancelled()) as Reservation[]
     };
   }
 

@@ -28,12 +28,12 @@ export class ReservationsComponent implements OnInit {
 
   event: Event;
   reservations: {
-    all: [Reservation],
-    confirmed: [Reservation],
-    pending: [Reservation],
-    cancelled: [Reservation]
+    all: Reservation[],
+    confirmed: Reservation[],
+    pending: Reservation[],
+    cancelled: Reservation[]
   };
-  private companies: [Company];
+  private companies: Company[];
   venue: Venue;
   private availability: Availability;
   private day = 1;
@@ -57,10 +57,10 @@ export class ReservationsComponent implements OnInit {
 
   ngOnInit() {
     this.reservations = {
-      all: [] as [Reservation],
-      confirmed: [] as [Reservation],
-      pending: [] as [Reservation],
-      cancelled: [] as [Reservation]
+      all: [] as Reservation[],
+      confirmed: [] as Reservation[],
+      pending: [] as Reservation[],
+      cancelled: [] as Reservation[]
     };
 
     this.eventSubscription = this.deckService.getEventSubject()
@@ -92,9 +92,9 @@ export class ReservationsComponent implements OnInit {
 
         this.reservations = {
           all: reservations,
-          pending: reservations.filter(r => r.isPending()) as [Reservation],
-          confirmed: reservations.filter(r => r.isConfirmed()) as [Reservation],
-          cancelled: reservations.filter(r => r.isCancelled()) as [Reservation]
+          pending: reservations.filter(r => r.isPending()) as Reservation[],
+          confirmed: reservations.filter(r => r.isConfirmed()) as Reservation[],
+          cancelled: reservations.filter(r => r.isCancelled()) as Reservation[]
         };
 
         this.generateAvailability();

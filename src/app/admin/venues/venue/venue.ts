@@ -6,7 +6,7 @@ import { Company } from 'src/app/deck/company';
 export class Venue {
     edition: String;
     image: String;
-    stands: [Stand];
+    stands: Stand[];
 
     constructor(edition: String, image: String) {
         this.edition = edition;
@@ -30,17 +30,17 @@ export class Availability {
         this.availability = availability.availability;
     }
 
-    static generate(event: Event, venue: Venue, reservations: [Reservation], companies: [Company]) {
+    static generate(event: Event, venue: Venue, reservations: Reservation[], companies: Company[]) {
         const result = {
             venue: venue,
-            availability: [] as [{
+            availability: [] as {
                 day: number;
                 stands: [{
                     id: number;
                     free: boolean;
                     company?: Company;
                 }]
-            }]
+            }[]
         };
 
         const stands = venue.stands.map(stand => {
@@ -63,7 +63,7 @@ export class Availability {
         return availability;
     }
 
-    fillReservations(reservations: [Reservation], companies: [Company]) {
+    fillReservations(reservations: Reservation[], companies: Company[]) {
         const confirmed = reservations.filter(r => r.isConfirmed());
 
         for (const reservation of confirmed) {

@@ -14,17 +14,17 @@ export class Stand {
         this.standId = standId;
     }
 
-    static fromArray(stands: [Stand]): [Stand] {
-        const result = [] as [Stand];
+    static fromArray(stands: Stand[]): Stand[] {
+        const result = [];
 
         for (const stand of stands) {
             result.push(new Stand(stand.day, stand.standId));
         }
 
-        return result;
+        return result as Stand[];
     }
 
-    isInArray(stands: [Stand]): boolean {
+    isInArray(stands: Stand[]): boolean {
         for (const stand of stands) {
             if (stand.day === this.day && stand.standId === this.standId) {
                 return true;
@@ -40,7 +40,7 @@ export class Reservation {
     companyId?: String;
     edition?: String;
     issued?: Date;
-    stands: [Stand];
+    stands: Stand[];
     feedback?: Feedback;
     company?: Company;
 
@@ -53,14 +53,14 @@ export class Reservation {
             this.stands = Stand.fromArray(reservation.stands);
             this.feedback = reservation.feedback;
         } else {
-            this.stands = [] as [Stand];
+            this.stands = [] as Stand[];
         }
     }
 
-    static fromArray(_reservations: [Reservation], companies?: [Company]): [Reservation] {
-        if (_reservations === undefined) { return [] as [Reservation]; }
+    static fromArray(_reservations: Reservation[], companies?: Company[]): Reservation[] {
+        if (_reservations === undefined) { return [] as Reservation[]; }
 
-        const reservations = [] as [Reservation];
+        const reservations = [] as Reservation[];
 
         for (const reservation of _reservations) {
             const r = new Reservation(reservation);
@@ -75,7 +75,7 @@ export class Reservation {
         return reservations.sort(Reservation.compareDates);
     }
 
-    static updateArrayWithCompanyInfo(reservations: [Reservation], companies: [Company]): void {
+    static updateArrayWithCompanyInfo(reservations: Reservation[], companies: Company[]): void {
         for (const reservation of reservations) {
             reservation.company = companies.filter(c => c.id === reservation.companyId)[0];
         }
@@ -100,7 +100,7 @@ export class Reservation {
         return t2 - t1;
     }
 
-    canbeConfirmed(confirmed: [Reservation]): boolean {
+    canbeConfirmed(confirmed: Reservation[]): boolean {
         for (const reservation of confirmed) {
             for (const stand of reservation.stands) {
                 if (stand.isInArray(this.stands)) {
@@ -145,7 +145,7 @@ export class Reservation {
     private removeStand(stand: Stand) {
         this.stands = this.stands.filter(
             _stand => _stand.day !== stand.day || _stand.standId !== stand.standId
-        ) as [Stand];
+        ) as Stand[];
     }
 
     update(participationDays: number, stand: Stand) {
