@@ -28,23 +28,23 @@ export class LoginComponent implements OnInit {
     this.changeLoading();
     this.loginService.login(this.user, this.token)
       .subscribe(
-      (credentials: Credentials) => {
-        this.changeLoading();
-        this.error = undefined;
-        this.loginService.saveCredentials(credentials);
-        this.router.navigate(['admin']);
-      },
-      error => {
-        this.changeLoading();
+        (credentials: Credentials) => {
+          this.changeLoading();
+          this.error = undefined;
+          this.loginService.saveCredentials(credentials);
+          this.router.navigate(['admin/reservations']);
+        },
+        error => {
+          this.changeLoading();
 
-        if (error.status === 401) {
-          this.error = 'Invalid credentials';
-        } else if (error.status === 0) {
-          this.error = 'Server down. Please contact the administrator';
-        } else {
-          this.error = 'Unknown error';
+          if (error.status === 401) {
+            this.error = 'Invalid credentials';
+          } else if (error.status === 0) {
+            this.error = 'Server down. Please contact the administrator';
+          } else {
+            this.error = 'Unknown error';
+          }
         }
-      }
       );
   }
 
