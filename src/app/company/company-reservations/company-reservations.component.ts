@@ -142,6 +142,12 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     this.reservationService.setReservation(this.latestReservation);
   }
 
+  private removePendingStand(stand: { day: number, id: number }) {
+    const s = new ReservationStand(stand.day, stand.id);
+    this.latestReservation.update(this.credentials.participationDays, s);
+    this.reservationService.setReservation(this.latestReservation);
+  }
+
   private isFreeStand(standId: number): boolean {
     return !this.isConfirmedBook(standId)
       && !this.isPendingBook(standId)

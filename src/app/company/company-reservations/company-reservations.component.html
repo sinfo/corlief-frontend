@@ -75,7 +75,7 @@
         </div>
 
         <div *ngIf="latestReservation" class="reservation">
-          <app-reservation-card [reservation]="latestReservation" [event]="event"></app-reservation-card>
+          <app-reservation-card [reservation]="latestReservation" [event]="event" (removeStandEvent)="removePendingStand($event)"></app-reservation-card>
         </div>
 
         <div class="info">

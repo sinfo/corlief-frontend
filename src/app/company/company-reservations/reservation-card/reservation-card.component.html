@@ -15,7 +15,7 @@
         </span>
       </div>
 
-      <div class="action" *ngIf="stand.id !== undefined && reservation.feedback === undefined">
+      <div class="action" *ngIf="stand.id !== undefined && reservation.feedback === undefined" (click)="removeStand(stand)">
         <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </div>
     </div>

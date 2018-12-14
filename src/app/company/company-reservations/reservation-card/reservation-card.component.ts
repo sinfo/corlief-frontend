@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Event } from 'src/app/deck/event';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
@@ -12,6 +12,7 @@ export class ReservationCardComponent implements OnInit {
 
   @Input() reservation: Reservation;
   @Input() event: Event;
+  @Output() removeStandEvent = new EventEmitter<{ day: number, id: number }>();
 
   status: String;
 
@@ -19,6 +20,10 @@ export class ReservationCardComponent implements OnInit {
 
   ngOnInit() {
     this.status = this.reservation.feedback ? this.reservation.feedback.status : null;
+  }
+
+  removeStand(stand: { day: number, id: number }) {
+    this.removeStandEvent.emit(stand);
   }
 
 }

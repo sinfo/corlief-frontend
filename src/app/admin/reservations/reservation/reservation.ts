@@ -144,7 +144,7 @@ export class Reservation {
 
     private removeStand(stand: Stand) {
         this.stands = this.stands.filter(
-            _stand => _stand.day !== stand.day || _stand.standId !== stand.standId
+            _stand => !(_stand.day === stand.day && _stand.standId === stand.standId)
         ) as Stand[];
     }
 
