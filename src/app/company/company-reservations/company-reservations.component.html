@@ -61,40 +61,44 @@
       <span>Reservations</span>
     </div>
 
-    <ng-container *ngIf="!showAllReservations && latestReservation">
-      <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays"
-        class="missing">
-        <h6>
-          You can still book
-          <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays -
-          latestReservation.stands.length
-          > 1 ? 'days' : 'day'}}
-        </h6>
-      </div>
-
-      <div *ngIf="latestReservation" class="reservation">
-        <app-reservation-card [reservation]="latestReservation" [event]="event"></app-reservation-card>
-      </div>
-
-      <div class="info">
-        <div *ngIf="latestReservation && latestReservation.isPending() && latestReservation.issued !== undefined" class="action cancel">
-          <button class="btn btn-danger" (click)="cancelReservation()">Cancel reservation</button>
+    <div class="reservations-list">
+      <ng-container *ngIf="!showAllReservations && latestReservation">
+        <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays"
+          class="missing">
+          <h6>
+            You can still book
+            <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays
+            -
+            latestReservation.stands.length
+            > 1 ? 'days' : 'day'}}
+          </h6>
         </div>
 
-        <div *ngIf="latestReservation && latestReservation.issued === undefined && latestReservation.stands.length === credentials.participationDays"
-          class="action submit">
-          <button class="btn btn-primary" (click)="makeReservation()">Submit reservation</button>
+        <div *ngIf="latestReservation" class="reservation">
+          <app-reservation-card [reservation]="latestReservation" [event]="event"></app-reservation-card>
         </div>
-      </div>
-    </ng-container>
 
-    <ng-container *ngIf="showAllReservations">
-      <div class="allReservations">
-        <div *ngFor="let reservation of reservations" class="reservation showAll">
-          <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
+        <div class="info">
+          <div *ngIf="latestReservation && latestReservation.isPending() && latestReservation.issued !== undefined"
+            class="action cancel">
+            <button class="btn btn-danger" (click)="cancelReservation()">Cancel reservation</button>
+          </div>
+
+          <div *ngIf="latestReservation && latestReservation.issued === undefined && latestReservation.stands.length === credentials.participationDays"
+            class="action submit">
+            <button class="btn btn-primary" (click)="makeReservation()">Submit reservation</button>
+          </div>
         </div>
-      </div>
-    </ng-container>
+      </ng-container>
+
+      <ng-container *ngIf="showAllReservations">
+        <div class="allReservations">
+          <div *ngFor="let reservation of reservations" class="reservation showAll">
+            <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
+          </div>
+        </div>
+      </ng-container>
+    </div>
 
     <div class="history">
       <button class="btn btn-primary" (click)="alternateShowAllReservations()">

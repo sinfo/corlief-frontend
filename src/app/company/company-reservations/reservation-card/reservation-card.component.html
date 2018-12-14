@@ -20,4 +20,16 @@
       </div>
     </div>
   </div>
+
+  <div class="message" *ngIf="reservation.feedback && reservation.feedback.status === 'PENDING'">
+    <p>
+      We were notified of this reservation. You will be notified if this reservation
+      is approved.
+    </p>
+
+    <p>
+      If this reservation is approved, the card will turn green and will show that is confirmed.
+    </p>
+  </div>
+
 </div>

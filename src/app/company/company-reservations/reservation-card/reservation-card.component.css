@@ -50,3 +50,8 @@
     color: #1a395a;
     font-weight: normal;
 }
+
+.card .message {
+    margin: 3%;
+    font-size: 1.2vw;
+}
