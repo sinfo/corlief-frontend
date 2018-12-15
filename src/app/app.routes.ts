@@ -22,6 +22,11 @@ const appRoutes: Routes = [
     canActivate: [AdminGuard],
     children: [
       {
+        path: '',
+        pathMatch: 'full',
+        redirectTo: 'reservations'
+      },
+      {
         path: 'venues',
         component: VenuesComponent,
         canActivate: [AdminGuard]
