@@ -120,3 +120,9 @@
     top: 3%;
     left: 5%;
 }
+
+.modal-footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}

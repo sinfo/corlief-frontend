@@ -78,7 +78,12 @@ export class ReservationsService {
   }
 
   cancel(companyId: String): Observable<Reservation> {
-    return this.http.delete<Reservation>(`${this.url}/company/${companyId}`,
+    return this.http.get<Reservation>(`${this.url}/company/${companyId}/cancel`,
+      { headers: this.headers });
+  }
+
+  remove(companyId: String, reservationId: number): Observable<Reservation> {
+    return this.http.delete<Reservation>(`${this.url}/${reservationId}/company/${companyId}`,
       { headers: this.headers });
   }
 
