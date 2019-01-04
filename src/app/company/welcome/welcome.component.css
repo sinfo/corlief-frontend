@@ -56,26 +56,35 @@ b.days {
 
 .reservations-link a:hover {
     text-decoration: none;
+    color: #4b5763;
 }
 
-.next-page a {
+.nav-buttons a {
     font-size: 3rem;
     color: #00254a;
     font-weight: 600;
 }
 
-.next-page a:hover {
+.nav-buttons a:hover {
     cursor: pointer;
     text-decoration: none;
+    color: #4b5763;
 }
 
-.back-page a {
+.lang-button{
+    order: 3;
+    overflow-y: hidden;
+    align-self: center;
+}
+
+.lang-button a {
     font-size: 3rem;
     color: #00254a;
     font-weight: 600;
 }
 
-.back-page a:hover {
+.lang-button a:hover{
     cursor: pointer;
     text-decoration: none;
+    color: #4b5763 ;
 }

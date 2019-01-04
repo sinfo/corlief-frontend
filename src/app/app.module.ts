@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -21,6 +21,7 @@ import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pip
 import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of-participation-days.pipe';
 import { BatchPipe } from './admin/home/batch.pipe';
 import { DatePtPipe } from './company/welcome/date-pt.pipe';
+import {DateEnPipe} from './company/welcome/date-en.pipe';
 import { StandsDisplayPipe } from './company/company-reservations/reservation-card/stands-display.pipe';
 
 import { LoginService } from 'src/app/admin/login/login.service';
@@ -54,8 +55,11 @@ import { FilterReservationsPipe } from './admin/reservations/filter-reservations
 import { WelcomeComponent } from './company/welcome/welcome.component';
 import { CompanyReservationsComponent } from './company/company-reservations/company-reservations.component';
 import { ReservationCardComponent } from './company/company-reservations/reservation-card/reservation-card.component';
+import { TranslateModule, TranslateLoader } from '@ngx-translate/core';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
 
 library.add(fas);
+
 
 @NgModule({
   declarations: [
@@ -84,6 +88,7 @@ library.add(fas);
     WelcomeComponent,
     CompanyReservationsComponent,
     DatePtPipe,
+    DateEnPipe,
     ReservationCardComponent,
     StandsDisplayPipe,
   ],
@@ -96,7 +101,14 @@ library.add(fas);
     NgbModule.forRoot(),
     FontAwesomeModule,
     LazyLoadImageModule,
-    ClipboardModule
+    ClipboardModule,
+    TranslateModule.forRoot({
+      loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+      }
+  })
   ],
   providers: [
     StorageService,
@@ -114,3 +126,7 @@ library.add(fas);
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http);
+}
