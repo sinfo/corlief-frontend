@@ -78,6 +78,7 @@
           class="action submit">
           <button class="btn btn-primary" (click)="makeReservation()" [innerHTML]="'reservations.submit' | translate"></button>
         </div>
+      </div>
       </ng-container>
 
       <ng-container *ngIf="showAllReservations">
@@ -87,7 +88,6 @@
           </div>
         </div>
       </ng-container>
-    </div>
 
     <div class="history">
       <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.current' | translate">
@@ -96,7 +96,6 @@
       </button>
     </div>
 
-
-  </div>
+    </div>
 
 </span>
