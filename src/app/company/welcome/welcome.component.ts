@@ -21,13 +21,14 @@ export class WelcomeComponent implements OnInit {
     private companyService: CompanyService,
     private deckService: DeckService,
     private translate: TranslateService) {
-      translate.setDefaultLang('en');
+      this.english = this.translate.currentLang === 'en';
   }
 
   credentials: Credentials;
 
   event: Event;
   private eventSubscription: Subscription;
+  private translateSubscription: Subscription;
   private page: number;
   private english: boolean;
 
@@ -35,12 +36,15 @@ export class WelcomeComponent implements OnInit {
   ngOnInit() {
     this.credentials = this.companyService.getCredentials();
     this.page = 0;
-    this.english = true;
 
     this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         this.event = event;
         console.log(event);
+      });
+
+      this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent => {
+        this.english = !this.english;
       });
   }
 
@@ -53,15 +57,4 @@ export class WelcomeComponent implements OnInit {
       this.page--;
     }
   }
-  
-  lang(){
-    if(this.english){
-      this.translate.use('pt');
-    }
-    else{
-      this.translate.use('en');
-    }
-    this.english = !this.english;
-  }
-  
 }

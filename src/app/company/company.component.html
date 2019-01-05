@@ -1,11 +1,12 @@
-<nav class="navbar navbar-dark bg-dark justify-content-between">
+<nav class="navbar navbar-dark bg-dark justify-content-between"> 
     <span class="left-side">
-        <b>Corlief &ndash;</b> Stands Reservation
+        <b>Corlief &ndash;</b> <span [innerHTML]="'navbar.corlief' | translate"></span>
     </span>
 
     <span class="right-side">
-        <a class="btn btn-primary" href="https://sinfo.org" target="_blank">Visit sinfo.org</a>
-        <a class="btn btn-primary" href="https://partners.sinfo.org" target="_blank">Visit Partners Page</a>
+        <a class="btn btn-primary"  (click)="changeLang()" [innerHTML] = "'navbar.lang'| translate"> </a>
+        <a class="btn btn-primary" href="https://sinfo.org" target="_blank" [innerHTML] = "'navbar.sinfo_org' | translate"></a>
+        <a class="btn btn-primary" href="https://partners.sinfo.org" target="_blank" [innerHTML] = "'navbar.partners' | translate"></a>
     </span>
 
 </nav>

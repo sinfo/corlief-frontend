@@ -1,4 +1,10 @@
 {
+    "navbar":{
+        "corlief": "Stands reservation",
+        "sinfo_org": "Visit sinfo.org",
+        "partners": "visit partners page",
+        "lang": "Change language (PT)"
+    },
     "page0":{
         "title":"Welcome <b>{{companyName}}</b> !",
         "text": {
@@ -42,7 +48,17 @@
     "buttons": {
         "back": " < Previous Page",
         "next": "Next Page >",
-        "reserve": "Book Stands >",
-        "lang": "Portuguese"
+        "reserve": "Book Stands >"
+    },
+    "reservations": {
+        "day": "Day {{day}}",
+        "info": "Please choose a stand for this day",
+        "button": "< Back to explanation",
+        "reservations": "Reservations",
+        "remaining": "You can still book <b>{{days}}</b> days",
+        "cancel": "Cancel reservation",
+        "submit": "Submit reservation",
+        "current": "Show current reservations",
+        "previous": "Show previous reservations" 
     }
 }

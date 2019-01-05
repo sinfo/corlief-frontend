@@ -70,21 +70,3 @@ b.days {
     text-decoration: none;
     color: #4b5763;
 }
-
-.lang-button{
-    order: 3;
-    overflow-y: hidden;
-    align-self: center;
-}
-
-.lang-button a {
-    font-size: 3rem;
-    color: #00254a;
-    font-weight: 600;
-}
-
-.lang-button a:hover{
-    cursor: pointer;
-    text-decoration: none;
-    color: #4b5763 ;
-}

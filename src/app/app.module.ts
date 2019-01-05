@@ -22,6 +22,7 @@ import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of
 import { BatchPipe } from './admin/home/batch.pipe';
 import { DatePtPipe } from './company/welcome/date-pt.pipe';
 import {DateEnPipe} from './company/welcome/date-en.pipe';
+import {PtDatePipe} from './company/company-reservations/pt-date.pipe';
 import { StandsDisplayPipe } from './company/company-reservations/reservation-card/stands-display.pipe';
 
 import { LoginService } from 'src/app/admin/login/login.service';
@@ -89,6 +90,7 @@ library.add(fas);
     CompanyReservationsComponent,
     DatePtPipe,
     DateEnPipe,
+    PtDatePipe,
     ReservationCardComponent,
     StandsDisplayPipe,
   ],

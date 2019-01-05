@@ -9,17 +9,16 @@
           <b>&lt;</b>
         </div>
         <div>
-          <b>Day {{selectedDay.day}}</b>
+          <b [innerHTML]="'reservations.day' | translate: {day: selectedDay.day}"></b>
         </div>
-        <div>{{selectedDay.date | date : 'MMMM d'}}</div>
+        <div>{{english? ( selectedDay.date | date : 'MMMM d') : ( selectedDay.date | ptDate) }}</div>
         <div [ngClass]="{'canChangeDay': selectedDay.day < event.getDuration()}" (click)="changeDay(selectedDay.day + 1)">
           <b>&gt;</b>
         </div>
       </div>
 
       <div class="options">
-        <div class="day" *ngFor="let day of selectedDay.allDays" [ngClass]="{'selected': day === selectedDay.day}" (click)="changeDay(day)">
-          Day {{day}}
+        <div class="day" *ngFor="let day of selectedDay.allDays" [ngClass]="{'selected': day === selectedDay.day}" (click)="changeDay(day)" [innerHTML]="'reservations.day' | translate: {day: day}">
         </div>
       </div>
 
@@ -33,7 +32,7 @@
 
       <div class="stands">
 
-        <h6>Please choose a stand for this day</h6>
+        <h6 [innerHTML]="'reservations.info' | translate"></h6>
 
         <div class="stands-list">
           <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)"
@@ -47,7 +46,7 @@
     </div>
 
     <div class="help">
-      <a class="btn btn-info" [routerLink]="['/']" mat-icon-button>&lt; Back to explanation</a>
+      <a class="btn btn-info" [routerLink]="['/']" mat-icon-button [innerHTML]="'reservations.button' | translate"></a>
     </div>
   </div>
 
@@ -57,15 +56,12 @@
       <span>
         <b>{{credentials.companyName}}</b>
       </span>
-      <span>Reservations</span>
+      <span [innerHTML]="'reservations.reservations' |translate "></span>
     </div>
 
     <ng-container *ngIf="!showAllReservations && latestReservation">
       <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays" class="missing">
-        <h6>
-          You can still book
-          <b>{{credentials.participationDays - latestReservation.stands.length}}</b> {{credentials.participationDays - latestReservation.stands.length
-          > 1 ? 'days' : 'day'}}
+        <h6 [innerHTML]="'reservations.remaining' | translate: {days: credentials.participationDays - latestReservation.stands.length}">
         </h6>
       </div>
 
@@ -75,12 +71,12 @@
 
       <div class="info">
         <div *ngIf="latestReservation && latestReservation.isPending() && latestReservation.issued !== undefined" class="action cancel">
-          <button class="btn btn-danger" (click)="cancelReservation()">Cancel reservation</button>
+          <button class="btn btn-danger" (click)="cancelReservation()" [innerHTML]="'reservations.cancel' | translate"></button>
         </div>
 
         <div *ngIf="latestReservation && latestReservation.issued === undefined && latestReservation.stands.length === credentials.participationDays"
           class="action submit">
-          <button class="btn btn-primary" (click)="makeReservation()">Submit reservation</button>
+          <button class="btn btn-primary" (click)="makeReservation()" [innerHTML]="'reservations.submit' | translate"></button>
         </div>
       </div>
     </ng-container>
@@ -94,8 +90,9 @@
     </ng-container>
 
     <div class="history">
-      <button class="btn btn-primary" (click)="alternateShowAllReservations()">
-        {{showAllReservations ? 'Check current reservation' : 'Check previous reservations'}}
+      <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.current' | translate">
+      </button>
+      <button *ngIf="showAllReservations == false" class="btn btn-primary" (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.previous' | translate">
       </button>
     </div>
 

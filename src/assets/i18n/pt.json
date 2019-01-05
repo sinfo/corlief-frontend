@@ -1,4 +1,10 @@
 {
+    "navbar":{
+        "corlief": "Reserva de Stands",
+        "sinfo_org": "Visitar sinfo.org",
+        "partners": "Visitar partners page",
+        "lang": "Mudar linguagem (EN)"
+    },
     "page0":{
         "title":"Damos as boas vindas à <b>{{companyName}}</b>",
         "text": {
@@ -42,7 +48,19 @@
     "buttons": {
         "back": " < Retroceder",
         "next": "Seguinte >",
-        "reserve": "Reservar Stands >",
-        "lang": "English"
+        "reserve": "Reservar Stands >"
+    },
+    "reservations": {
+        "day": "Dia {{day}}",
+        "info": "Escolha um stand para este dia",
+        "button": "< Voltar à explicação",
+        "reservations": "Reservas",
+        "remaining": "Ainda pode reservar <b>{{days}}</b> dia(s)",
+        "days": "dias",
+        "cancel": "Cancelar reserva",
+        "submit": "Submeter reserva",
+        "current": "Mostrar reservas atuais",
+        "previous": "Mostrar reservas prévias"
+
     }
 }

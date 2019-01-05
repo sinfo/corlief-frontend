@@ -15,6 +15,7 @@ import { Venue } from '../../admin/venues/venue/venue';
 import { Stand } from '../../admin/venues/venue/stand';
 import { Reservation, Stand as ReservationStand } from '../../admin/reservations/reservation/reservation';
 import { CanvasState } from 'src/app/admin/venues/venue/venue-image/canvas/canvasCommunication';
+import {TranslateService} from '@ngx-translate/core';
 
 @Component({
   selector: 'app-company-reservations',
@@ -26,10 +27,12 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   private canvasState: CanvasState = CanvasState.COMPANY_RESERVATIONS;
 
   private eventSubscription: Subscription;
+  private translateSubscription: Subscription;
 
   event: Event;
   availability: Availability;
   private credentials: Credentials;
+  private english: boolean;
 
   private selectedDay: { day: number, date: Date, allDays: number[] };
 
@@ -43,7 +46,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     private deckService: DeckService,
     private venuesService: VenuesService,
     private canvasService: CanvasService,
-    private reservationService: ReservationsService
+    private reservationService: ReservationsService,
+    private translate: TranslateService
   ) {
     this.credentials = this.companyService.getCredentials();
     this.showAllReservations = false;
@@ -67,14 +71,20 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       this.deckService.updateEvent(availability.venue.edition);
       this.venuesService.setAvailability(availability);
       this.canvasService.selectDay(1);
+      this.english = this.translate.currentLang === 'en';
+      
     });
   }
 
   ngOnInit() {
+    this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent =>{
+      this.english = !this.english;
+    });
   }
 
   ngOnDestroy() {
     this.eventSubscription.unsubscribe();
+    this.translateSubscription.unsubscribe();
   }
 
   private updateReservations() {
