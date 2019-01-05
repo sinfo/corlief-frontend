@@ -19,7 +19,6 @@ import { CompanyGuard } from './auth/company.guard';
 import { SortStandsPipe } from './admin/venues/venue/sort-stands.pipe';
 import { CompleteCompanyInfoPipe } from './admin/links/complete-company-info.pipe';
 import { GetArrayOfParticipationDaysPipe } from './admin/links/link/get-array-of-participation-days.pipe';
-import { BatchPipe } from './admin/home/batch.pipe';
 import { DatePtPipe } from './company/welcome/date-pt.pipe';
 import {DateEnPipe} from './company/welcome/date-en.pipe';
 import {PtDatePipe} from './company/company-reservations/pt-date.pipe';
@@ -37,7 +36,6 @@ import { DeckService } from 'src/app/deck/deck.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
-import { HomeComponent } from './admin/home/home.component';
 import { NotfoundComponent } from './notfound/notfound.component';
 import { AdminComponent } from './admin/admin.component';
 import { LinksComponent } from './admin/links/links.component';
@@ -65,7 +63,6 @@ library.add(fas);
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     LoginComponent,
     NotfoundComponent,
     AdminComponent,
@@ -79,7 +76,6 @@ library.add(fas);
     LinkComponent,
     CompleteCompanyInfoPipe,
     GetArrayOfParticipationDaysPipe,
-    BatchPipe,
     CompanyComponent,
     UnauthorizedComponent,
     ReservationsComponent,

@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 
 import { Subscription } from 'rxjs/internal/Subscription';
 
@@ -26,6 +26,7 @@ export class VenueImageComponent implements OnInit, OnDestroy {
   @Input() maxWidth;
   @Input() maxHeight;
   @Input() state: CanvasState;
+  @Output() standClick: EventEmitter<Stand> = new EventEmitter();
 
   private loadingSrc = 'assets/img/loading.gif';
   private confirmStand: boolean;
@@ -67,6 +68,10 @@ export class VenueImageComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.venueSubscription.unsubscribe();
     this.canvasSubscription.unsubscribe();
+  }
+
+  public standClickCanvas(event) {
+    this.standClick.emit(event);
   }
 
   private canvasStateSetup() {

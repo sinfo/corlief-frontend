@@ -3,33 +3,33 @@ import { Event } from 'src/app/deck/event';
 import { Company, Participation } from 'src/app/deck/company';
 
 export class Companies {
-    all: [Company];
+    all: Company[];
     withLink: {
-        valid: [Company];
-        invalid: [Company];
+        valid: Company[];
+        invalid: Company[];
     };
-    withoutLink: [Company];
+    withoutLink: Company[];
 
     constructor() {
-        this.all = [] as [Company];
+        this.all = [] as Company[];
         this.withLink = {
-            valid: [] as [Company],
-            invalid: [] as [Company]
+            valid: [] as Company[],
+            invalid: [] as Company[]
         };
-        this.withoutLink = [] as [Company];
+        this.withoutLink = [] as Company[];
     }
 
-    private fillLinks(companies: [Company], links: [Link]): {
-        withLink: { valid: [Company], invalid: [Company] },
-        withoutLink: [Company]
+    private fillLinks(companies: Company[], links: Link[]): {
+        withLink: { valid: Company[], invalid: Company[] },
+        withoutLink: Company[]
     } {
         const result = {
-            withLink: { valid: <[Company]>[], invalid: <[Company]>[] },
-            withoutLink: <[Company]>[]
+            withLink: { valid: <Company[]>[], invalid: <Company[]>[] },
+            withoutLink: <Company[]>[]
         };
 
         for (const company of companies) {
-            const filtered = <[Link]>links.filter(l => l.companyId === company.id);
+            const filtered = <Link[]>links.filter(l => l.companyId === company.id);
 
             if (!filtered.length) {
                 result.withoutLink.push(company);
@@ -58,18 +58,18 @@ export class Companies {
         return result;
     }
 
-    update(companies: [Company], links: [Link]) {
+    update(companies: Company[], links: Link[]) {
         if (!links.length) { return; }
         this.updateCompanies(companies, links[0].edition);
         this.updateLinks(links);
     }
 
-    updateCompanies(companies: [Company], edition: String) {
-        const filtered = <[Company]>companies.filter(c => Company.filter(c, edition));
+    updateCompanies(companies: Company[], edition: String) {
+        const filtered = <Company[]>companies.filter(c => Company.filter(c, edition));
         this.all = filtered;
     }
 
-    updateLinks(links: [Link]) {
+    updateLinks(links: Link[]) {
         const result = this.fillLinks(this.all, links);
         this.withLink = result.withLink;
         this.withoutLink = result.withoutLink;

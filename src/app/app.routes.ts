@@ -4,7 +4,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './auth/admin.guard';
 import { CompanyGuard } from './auth/company.guard';
 
-import { HomeComponent } from 'src/app/admin/home/home.component';
 import { LoginComponent } from 'src/app/admin/login/login.component';
 import { NotfoundComponent } from 'src/app/notfound/notfound.component';
 import { AdminComponent } from 'src/app/admin/admin.component';
@@ -25,8 +24,7 @@ const appRoutes: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        component: HomeComponent,
-        canActivate: [AdminGuard]
+        redirectTo: 'reservations'
       },
       {
         path: 'venues',

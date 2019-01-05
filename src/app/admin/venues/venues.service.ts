@@ -22,7 +22,6 @@ export class VenuesService {
   private url: String = `${environment.corlief}/venue`;
   private headers: HttpHeaders;
 
-  private credentials: Credentials;
   private venue: Venue;
   private availability: Availability;
 
@@ -37,7 +36,6 @@ export class VenuesService {
     private storage: StorageService
   ) {
     const credentials = <Credentials>this.storage.getItem('credentials');
-    this.credentials = credentials;
     this.headers = credentials ? new HttpHeaders({
       Authorization: `${credentials.user} ${credentials.token}`,
     }) : new HttpHeaders();

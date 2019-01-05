@@ -27,7 +27,7 @@
     <div class="canvas-wrapper">
 
       <div class="canvas">
-        <app-venue-image [maxHeight]="55" [state]="canvasState"></app-venue-image>
+        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [state]="canvasState"></app-venue-image>
       </div>
 
       <div class="stands">
@@ -35,8 +35,8 @@
         <h6 [innerHTML]="'reservations.info' | translate"></h6>
 
         <div class="stands-list">
-          <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)"
-            (click)="clickStand(stand.id)" [ngClass]="{'free': isFreeStand(stand.id), 'occupied': isOccupiedStand(stand.id), 'clickable': clickableStand(stand.id), 'pending': isPendingBook(stand.id), 'confirmed': isConfirmedBook(stand.id)}">
+          <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)"
+            (mouseleave)="deselectStand(stand.id)" (click)="clickStand(stand.id)" [ngClass]="{'free': isFreeStand(stand.id), 'occupied': isOccupiedStand(stand.id), 'clickable': clickableStand(stand.id), 'pending': isPendingBook(stand.id), 'confirmed': isConfirmedBook(stand.id)}">
             {{stand.id + 1}}
           </div>
         </div>
@@ -78,16 +78,16 @@
           class="action submit">
           <button class="btn btn-primary" (click)="makeReservation()" [innerHTML]="'reservations.submit' | translate"></button>
         </div>
-      </div>
-    </ng-container>
+      </ng-container>
 
-    <ng-container *ngIf="showAllReservations">
-      <div class="allReservations">
-        <div *ngFor="let reservation of reservations" class="reservation showAll">
-          <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
+      <ng-container *ngIf="showAllReservations">
+        <div class="allReservations">
+          <div *ngFor="let reservation of reservations" class="reservation showAll">
+            <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
+          </div>
         </div>
-      </div>
-    </ng-container>
+      </ng-container>
+    </div>
 
     <div class="history">
       <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.current' | translate">

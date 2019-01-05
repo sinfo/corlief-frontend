@@ -9,7 +9,7 @@ import { Event } from 'src/app/deck/event';
 })
 export class StandsDisplayPipe implements PipeTransform {
 
-  transform(stands: [Stand], event: Event): any {
+  transform(stands: Stand[], event: Event): any {
     const duration = event.getDuration();
     const result = [];
     const date = new Date(event.date);

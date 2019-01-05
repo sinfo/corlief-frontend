@@ -35,6 +35,11 @@
 .stands .stand:not(:first-child) {
     border-top: 1px solid #0000006e;
 }
+
+.stands .action:hover {
+    cursor: pointer;
+}
+
 .stand {
     display: flex;
     justify-content: space-between;
@@ -49,4 +54,9 @@
 .stand.booked {
     color: #1a395a;
     font-weight: normal;
+}
+
+.card .message {
+    margin: 3%;
+    font-size: 1.2vw;
 }

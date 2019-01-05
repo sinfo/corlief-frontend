@@ -6,9 +6,9 @@ import { Reservation } from 'src/app/admin/reservations/reservation/reservation'
 })
 export class FilterReservationsPipe implements PipeTransform {
 
-  transform(reservations: [Reservation], reservation?: Reservation): [Reservation] {
+  transform(reservations: Reservation[], reservation?: Reservation): Reservation[] {
     return reservation && reservation instanceof Reservation
-      ? reservations.filter(r => r.companyId === reservation.companyId) as [Reservation]
+      ? reservations.filter(r => r.companyId === reservation.companyId) as Reservation[]
       : reservations;
   }
 

@@ -11,7 +11,6 @@ import { ReservationsService } from 'src/app/admin/reservations/reservations.ser
 import { Credentials } from '../credentials';
 import { Availability } from '../../admin/venues/venue/venue';
 import { Event } from 'src/app/deck/event';
-import { Venue } from '../../admin/venues/venue/venue';
 import { Stand } from '../../admin/venues/venue/stand';
 import { Reservation, Stand as ReservationStand } from '../../admin/reservations/reservation/reservation';
 import { CanvasState } from 'src/app/admin/venues/venue/venue-image/canvas/canvasCommunication';
@@ -36,7 +35,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private selectedDay: { day: number, date: Date, allDays: number[] };
 
-  private reservations: [Reservation];
+  private reservations: Reservation[];
   private latestReservation: Reservation;
 
   private showAllReservations: boolean;
@@ -87,6 +86,10 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     this.translateSubscription.unsubscribe();
   }
 
+  public clickStandFromCanvas(stand) {
+    this.clickStand(stand.id);
+  }
+
   private updateReservations() {
     this.companyService.getReservations(false).subscribe(r => {
       this.reservations = Reservation.fromArray(r);
@@ -105,7 +108,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
           this.reservations = this.reservations.filter(
             reservation => reservation.id !== latest.id
-          ) as [Reservation];
+          ) as Reservation[];
 
           this.reservationService.setReservation(latest);
         } else {
@@ -146,6 +149,12 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   private clickStand(standId: number) {
     const stand = new ReservationStand(this.selectedDay.day, standId);
     this.latestReservation.update(this.credentials.participationDays, stand);
+    this.reservationService.setReservation(this.latestReservation);
+  }
+
+  private removePendingStand(stand: { day: number, id: number }) {
+    const s = new ReservationStand(stand.day, stand.id);
+    this.latestReservation.update(this.credentials.participationDays, s);
     this.reservationService.setReservation(this.latestReservation);
   }
 

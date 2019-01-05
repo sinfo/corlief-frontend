@@ -20,8 +20,8 @@ export class ReservationsService {
   private url: String = `${environment.corlief}/reservation`;
   private headers: HttpHeaders;
 
-  private reservationsSubject: BehaviorSubject<[Reservation]>
-    = new BehaviorSubject<[Reservation]>(undefined);
+  private reservationsSubject: BehaviorSubject<Reservation[]>
+    = new BehaviorSubject<Reservation[]>(undefined);
 
   private reservationSubject: BehaviorSubject<Reservation>
     = new BehaviorSubject<Reservation>(undefined);
@@ -41,11 +41,11 @@ export class ReservationsService {
       : null;
   }
 
-  setReservations(reservations: [Reservation]) {
+  setReservations(reservations: Reservation[]) {
     this.reservationsSubject.next(reservations);
   }
 
-  getReservationsSubject(): Observable<[Reservation]> {
+  getReservationsSubject(): Observable<Reservation[]> {
     return this.reservationsSubject.asObservable();
   }
 
@@ -57,8 +57,8 @@ export class ReservationsService {
     return this.reservationSubject.asObservable();
   }
 
-  getFromEdition(edition: String): Observable<[Reservation]> {
-    return this.http.get<[Reservation]>(`${this.url}`, {
+  getFromEdition(edition: String): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(`${this.url}`, {
       headers: this.headers,
       params: { edition: edition as string }
     });
@@ -68,8 +68,8 @@ export class ReservationsService {
     this.getLatest().subscribe(reservations => this.setReservations(reservations));
   }
 
-  getLatest(): Observable<[Reservation]> {
-    return this.http.get<[Reservation]>(`${this.url}/latest`, { headers: this.headers });
+  getLatest(): Observable<Reservation[]> {
+    return this.http.get<Reservation[]>(`${this.url}/latest`, { headers: this.headers });
   }
 
   confirm(companyId: String): Observable<Reservation> {
@@ -78,7 +78,12 @@ export class ReservationsService {
   }
 
   cancel(companyId: String): Observable<Reservation> {
-    return this.http.delete<Reservation>(`${this.url}/company/${companyId}`,
+    return this.http.get<Reservation>(`${this.url}/company/${companyId}/cancel`,
+      { headers: this.headers });
+  }
+
+  remove(companyId: String, reservationId: number): Observable<Reservation> {
+    return this.http.delete<Reservation>(`${this.url}/${reservationId}/company/${companyId}`,
       { headers: this.headers });
   }
 

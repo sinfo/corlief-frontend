@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Event } from 'src/app/deck/event';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
@@ -15,6 +15,7 @@ export class ReservationCardComponent implements OnInit {
 
   @Input() reservation: Reservation;
   @Input() event: Event;
+  @Output() removeStandEvent = new EventEmitter<{ day: number, id: number }>();
 
   private english: boolean
   private translateSubscription: Subscription;
@@ -32,6 +33,10 @@ export class ReservationCardComponent implements OnInit {
     this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent => {
       this.english = !this.english;
     });
+  }
+
+  removeStand(stand: { day: number, id: number }) {
+    this.removeStandEvent.emit(stand);
   }
 
 }

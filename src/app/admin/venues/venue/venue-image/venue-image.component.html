@@ -1,6 +1,6 @@
 <span class="image-wrapper" *ngIf="venue" [ngClass]="{'on': canvasOn}">
   <img (onLoad)="canvasStateSetup()" [defaultImage]="loadingSrc" [lazyLoad]="venue.image" [ngStyle]="{'max-width.vw': maxWidth ? maxWidth: 'unset', 'max-height.vh': maxHeight ? maxHeight : 'unset'}">
   <span class="venue-canvas">
-    <app-canvas [state]="state"></app-canvas>
+    <app-canvas [state]="state" (standClickCanvas)="standClickCanvas($event)"></app-canvas>
   </span>
 </span>

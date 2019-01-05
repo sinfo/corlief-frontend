@@ -135,6 +135,7 @@
 .reservations {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     flex-grow: 1;
 
     padding: 1%;
@@ -147,7 +148,6 @@
     display: flex;
     flex-direction: column;
 
-    height: 85%;
     margin-bottom: 5%;
 
     overflow-y: scroll;
@@ -215,3 +215,8 @@
     align-items: center
 }
 
+.reservations-list {
+    overflow-y: scroll;
+    flex-grow: 1;
+    margin: 3%;
+}
