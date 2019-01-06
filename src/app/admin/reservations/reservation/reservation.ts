@@ -134,6 +134,19 @@ export class Reservation {
         return false;
     }
 
+    daysAreContiguous(): boolean {
+        this.stands.sort((s1, s2) => s1.day - s2.day);
+        var last = -1;
+        for (const _stand of this.stands) {
+          if (last != -1 && _stand.day - last != 1) {
+              return false;
+          }
+          last = _stand.day;
+        }
+
+        return true;
+    }
+
     private getStandIndexByDay(day: number): number {
         return this.stands.findIndex(stand => stand.day === day);
     }
