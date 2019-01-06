@@ -174,6 +174,17 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   }
 
   private makeReservation() {
+      if (!this.latestReservation.daysAreContiguous()) {
+        this.popupConfirmSubmission();
+      }
+      this.commitReservation();
+  }
+
+  private popupConfirmSubmission() {
+      console.log("trawman");
+  }
+
+  private commitReservation() {
     this.companyService.makeReservation(this.latestReservation)
       .subscribe(_reservation => {
         const reservation = new Reservation(_reservation);
