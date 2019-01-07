@@ -8,6 +8,8 @@ import { DeckService } from 'src/app/deck/deck.service';
 import { CanvasService } from '../../admin/venues/venue/venue-image/canvas/canvas.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
+import { NgbTooltip, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
 import { Credentials } from '../credentials';
 import { Availability } from '../../admin/venues/venue/venue';
 import { Event } from 'src/app/deck/event';
@@ -40,12 +42,14 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private showAllReservations: boolean;
 
+
   constructor(
     private companyService: CompanyService,
     private deckService: DeckService,
     private venuesService: VenuesService,
     private canvasService: CanvasService,
     private reservationService: ReservationsService,
+    private modalService: NgbModal,
     private translate: TranslateService
   ) {
     this.credentials = this.companyService.getCredentials();
@@ -182,7 +186,39 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       : false;
   }
 
-  private makeReservation() {
+  private makeReservation(content) {
+    const contiguous: boolean = this.latestReservation.daysAreContiguous();
+    const same_stand: boolean = this.latestReservation.standIsSame();
+    if (!(contiguous && same_stand)) {
+      this.popupConfirmSubmission(content, contiguous, same_stand);
+    } else {
+      this.commitReservation();
+    }
+  }
+
+  private popupConfirmSubmission(content, contiguous: boolean, same_stand: boolean) {
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      const closeResult = `${result}`;
+      if (closeResult === 'Confirmed') {
+        this.commitReservation();
+      }
+    }, (reason) => {
+      const closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+      console.log(`Dismissed ${this.getDismissReason(reason)}`);
+    });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    } else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    } else {
+      return `with: ${reason}`;
+    }
+  }
+
+  private commitReservation() {
     this.companyService.makeReservation(this.latestReservation)
       .subscribe(_reservation => {
         const reservation = new Reservation(_reservation);
