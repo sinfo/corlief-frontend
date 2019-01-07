@@ -3,96 +3,87 @@
 
     <div class="paragraphs">
       <span *ngIf="page===0">
-        <p class="title" *ngIf="page==0">
-          Damos as boas vindas à
-          <b>{{credentials.companyName}}</b>
-          !
+        <p class="title" *ngIf="page==0" [innerHTML]="'page0.title' | translate: {companyName: credentials.companyName}">
         </p>
 
         <div class="text">
 
-          <p>
-            Desde já queríamos agradecer a vossa participação nesta edição da SINFO que esperamos que seja a melhor de sempre!
+          <p [innerHTML]= "'page0.text.p1' | translate">
           </p>
 
-          <p>
-            Nesta aplicação poderá reservar os
-            <i>stands</i> para cada um dos vários dias da SINFO a decorrer de {{ event.date | datePt : event.duration }}.
-          </p>
+            <p>
+              <span [innerHTML]= "'page0.text.p2' | translate"></span> 
+              <span> {{english ? (event.date | dateEn: event.duration) : (event.date | datePt: event.duration) }}</span>
+            </p>
 
           <p>
-            <b class="extra">Relembramos que a {{credentials.companyName}} tem direito a 
-              <b class ="days">{{credentials.participationDays}}</b> {{credentials.participationDays== 1? "dia" : "dias"}} de stand!</b>
+            <b class="extra" 
+            [innerHTML]="'page0.text.p3.body' | translate: {
+              companyName: credentials.companyName, 
+              participationDays: credentials.participationDays }"></b>
           </p>
 
         </div>
 
       </span>
 
-      <span *ngIf="page===1">
+      <span *ngIf="page===1 ">
 
-        <p class="title">
-          Como funciona o Corlief?
+        <p class="title" [innerHTML]=" 'page1.title' | translate ">
         </p>
 
         <div class="text">
 
-          <p>
-            Para reservar os
-            <i>stands</i> deverá seguir os seguintes passos:
+          <p [innerHTML] = " 'page1.subtitle' | translate">
           </p>
 
           <p>
-            <b class="extra">1.</b> Escolher o dia
+            <b class="extra">1.</b> <span [innerHTML] = " 'page1.text.1' | translate"></span>
           </p>
 
           <p>
-            <b class="extra">2.</b> Escolher o
-            <i>stand</i> para esse dia
+            <b class="extra">2.</b> <span [innerHTML] = " 'page1.text.2' | translate"></span>
           </p>
 
           <p>
-            <b class="extra">3.</b> Repetir para todos os dias a que tiverem direito
+            <b class="extra">3.</b> <span [innerHTML] = " 'page1.text.3' | translate"></span>
           </p>
 
           <p>
-            <b class="extra">4.</b> Submeter a reserva
+            <b class="extra">4.</b> <span [innerHTML] = " 'page1.text.4' | translate"></span>
           </p>
 
           <p>
-            <b class="extra">5.</b> Aguardar pela confirmação por parte da comissão da SINFO
+            <b class="extra">5.</b><span [innerHTML] = " 'page1.text.5' | translate"></span>
           </p>
 
         </div>
 
       </span>
 
-      <span *ngIf="page===2">
+      <span *ngIf="page===2 ">
 
-        <p class="title" *ngIf="page==2">
-          <b>Pedimos ainda:</b>
+        <p class="title " [innerHTML] = " 'page2.title' | translate" >
         </p>
 
-        <div class="text" *ngIf="page==2">
+        <div class="text">
           <p>
-            Pedimos que
-            <b class="extra">reserve sempre que possível o mesmo <i>stand</i></b>
-            pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta
-            de marcação de <i>stand</i>.
+            <b class="extra" [innerHTML]=" 'page2.text.p1.bold' | translate" ></b>
+            <span [innerHTML]="'page2.text.p1.normal' | translate"></span>
           </p>
 
           <p>
-            Pedimos que sempre que possível
-            <b class="extra">reserve dias consecutivos</b>, novamente por questões idênticas às mencionadas acima.
+            <span [innerHTML]="'page2.text.p2.normal1' | translate"></span>
+            <b class="extra" [innerHTML]="'page2.text.p2.bold' | translate"></b>
+            <span [innerHTML]="'page2.text.p2.normal2' | translate"></span>
           </p>
 
           <p>
-            <b class="extra">Aviso:</b> A comissão não poderá de todo guardar qualquer tipo de material de empresas que não aquele que irá
-            permanecer no <i>stand</i> para o dia seguinte.
+            <b class="extra" [innerHTML]="'page2.text.p3.warning' | translate"></b> 
+            <span [innerHTML]="'page2.text.p3.normal' | translate"></span>
           </p>
 
-          <p>
-            Obrigado.
+          <p [innerHTML]="'page2.thanks' | translate">
           </p>
 
         </div>
@@ -102,20 +93,18 @@
     </div>
 
     <div class="buttons" [ngClass]="{'one_button': page===0}">
-      <span class="back-page" *ngIf="page > 0">
-        <a (click)="back()">
-          &lt; Retroceder </a>
+      <span class="nav-buttons" *ngIf="page > 0">
+        <a (click)="back()"[innerHTML]="'buttons.back' | translate">
+          </a>
       </span>
 
-      <span class="next-page" *ngIf="page &lt; 2">
-        <a (click)="next()">
-          Seguinte &gt;
+      <span class="nav-buttons" *ngIf="page &lt; 2">
+        <a (click)="next()" [innerHTML]="'buttons.next' | translate">
         </a>
       </span>
 
       <span class="reservations-link" *ngIf="page==2">
-        <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}">
-          Reservar Stands >
+        <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}" [innerHTML]="'buttons.reserve' | translate">
         </a>
       </span>
     </div>

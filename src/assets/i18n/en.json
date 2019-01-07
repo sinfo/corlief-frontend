@@ -1,0 +1,73 @@
+{
+    "navbar": {
+        "corlief": "Stands reservation",
+        "sinfo_org": "Visit sinfo.org",
+        "partners": "Visit partners page",
+        "lang": "Change language (PT)"
+    },
+    "page0": {
+        "title": "Welcome <b>{{companyName}}</b> !",
+        "text": {
+            "p1": "Thank you very much for being a part of this year's SINFO, which we hope is the best one so far!",
+            "p2": "On this app you can book your <i>stands</i> for every SINFO day, happening from ",
+            "p3": {
+                "body": "May we remind you that {{companyName}} is entitled to <b>{{participationDays}}</b>  <i>stand</i> day(s)! "
+            }
+        }
+    },
+    "page1": {
+        "title": "How does Corlief work?",
+        "subtitle": "To book <i>stands</i>, just follow the following steps:",
+        "text": {
+            "1": "Pick a day",
+            "2": "Pick the <i>stand</i> for that day",
+            "3": "Repeat for every dat you're entitled to",
+            "4": "Submit your reservation",
+            "5": "Wait for our comission to aprove and confirm you reservation"
+        }
+    },
+    "page2": {
+        "title": "We also ask:",
+        "text": {
+            "p1": {
+                "bold": "Try to book always the same <i>stand</i> ",
+                "normal": ", as it simplifies and agilizes our work and may lead to your <i>stands</i> being rejected."
+            },
+            "p2": {
+                "normal1": "Anytime possible ",
+                "bold": "try to book consecutive days",
+                "normal2": ", because of the motives mentioned above."
+            },
+            "p3": {
+                "warning": "Warning: ",
+                "normal": "The commision cannot and will not store any material other than that which will remain on your <i>stand</i> for the following day."
+            }
+        },
+        "thanks": "Thank you very much!"
+    },
+    "buttons": {
+        "back": " < Previous Page",
+        "next": "Next Page >",
+        "reserve": "Book Stands >"
+    },
+    "reservations": {
+        "day": "Day {{day}}",
+        "info": "Please choose a stand for this day",
+        "button": "< Back to explanation",
+        "reservations": "Reservations",
+        "remaining": "You can still book <b>{{days}}</b> days",
+        "cancel": "Cancel reservation",
+        "submit": "Submit reservation",
+        "current": "Show current reservations",
+        "previous": "Show previous reservations"
+    },
+    "reservationWarning": {
+        "msg1": "Your reservation does meet SINFO's guidelines, because",
+        "msg2": "it is not on consecutive days",
+        "msg3": " and",
+        "msg4": "it is not on the same stand",
+        "msg5": "Do you wish to proceed?",
+        "cancel": "Cancel",
+        "confirm": "Confirm"
+    }
+}
