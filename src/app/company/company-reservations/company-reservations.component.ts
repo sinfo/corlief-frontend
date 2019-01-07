@@ -174,14 +174,19 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   }
 
   private makeReservation() {
-      if (!this.latestReservation.daysAreContiguous()) {
-        this.popupConfirmSubmission();
+      const contiguous = this.latestReservation.daysAreContiguous();
+      const same_stand = this.latestReservation.standIsSame();
+      if (! ( contiguous && same_stand ) ) {
+        this.popupConfirmSubmission(contiguous, same_stand);
       }
       this.commitReservation();
   }
 
-  private popupConfirmSubmission() {
-      console.log("trawman");
+  private popupConfirmSubmission(contiguous: bool, same_stand: bool) {
+      if (!contiguous)
+        console.log("Reservation is not contiguous");
+      if (!same_stand)
+        console.log("Reservation is not on the same stand");
   }
 
   private commitReservation() {
