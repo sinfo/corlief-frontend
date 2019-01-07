@@ -24,10 +24,12 @@
     "@fortawesome/fontawesome-svg-core": "^1.2.4",
     "@fortawesome/free-solid-svg-icons": "^5.3.1",
     "@ng-bootstrap/ng-bootstrap": "^3.2.0",
+    "@ngx-translate/core": "^11.0.1",
+    "@ngx-translate/http-loader": "^4.0.0",
     "core-js": "^2.5.4",
     "ng-lazyload-image": "^4.0.0",
     "ngx-clipboard": "^11.1.7",
-    "rxjs": "^6.0.0",
+    "rxjs": "^6.3.3",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {
