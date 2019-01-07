@@ -8,6 +8,8 @@ import { DeckService } from 'src/app/deck/deck.service';
 import { CanvasService } from '../../admin/venues/venue/venue-image/canvas/canvas.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
+import { NgbTooltip, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
+
 import { Credentials } from '../credentials';
 import { Availability } from '../../admin/venues/venue/venue';
 import { Event } from 'src/app/deck/event';
@@ -42,7 +44,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     private deckService: DeckService,
     private venuesService: VenuesService,
     private canvasService: CanvasService,
-    private reservationService: ReservationsService
+    private reservationService: ReservationsService,
+    private modalService: NgbModal
   ) {
     this.credentials = this.companyService.getCredentials();
     this.showAllReservations = false;
@@ -173,20 +176,45 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       : false;
   }
 
-  private makeReservation() {
-      const contiguous = this.latestReservation.daysAreContiguous();
-      const same_stand = this.latestReservation.standIsSame();
+  private makeReservation(content) {
+      const contiguous : boolean = this.latestReservation.daysAreContiguous();
+      const same_stand : boolean = this.latestReservation.standIsSame();
       if (! ( contiguous && same_stand ) ) {
-        this.popupConfirmSubmission(contiguous, same_stand);
+        this.popupConfirmSubmission(content, contiguous, same_stand);
       }
-      this.commitReservation();
+      else {
+        this.commitReservation();
+      }
   }
 
-  private popupConfirmSubmission(contiguous: bool, same_stand: bool) {
+  private popupConfirmSubmission(content, contiguous: boolean, same_stand: boolean) {
       if (!contiguous)
         console.log("Reservation is not contiguous");
       if (!same_stand)
         console.log("Reservation is not on the same stand");
+      this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+          this.closeResult = `${result}`;
+          console.log(`Closed with: ${result}`);
+          console.log(this.closeResult);
+          if (this.closeResult === 'Confirmed') {
+              this.commitReservation();
+          }
+      }, (reason) => {
+          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          console.log(`Dismissed ${this.getDismissReason(reason)}`);
+      });
+  }
+
+  private getDismissReason(reason: any): string {
+    if (reason === ModalDismissReasons.ESC) {
+      return 'by pressing ESC';
+    }
+    else if (reason === ModalDismissReasons.BACKDROP_CLICK) {
+      return 'by clicking on a backdrop';
+    }
+    else {
+      return `with: ${reason}`;
+    }
   }
 
   private commitReservation() {
