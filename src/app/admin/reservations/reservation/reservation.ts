@@ -136,7 +136,7 @@ export class Reservation {
 
     daysAreContiguous(): boolean {
         this.stands.sort((s1, s2) => s1.day - s2.day);
-        var last = -1;
+        let last : number = -1;
         for (const _stand of this.stands) {
             if (last != -1 && _stand.day - last != 1) {
                 return false;
@@ -149,7 +149,7 @@ export class Reservation {
 
     standIsSame(): boolean {
         if (this.stands.length == 0) return true;
-        var _id = this.stands[0].standId;
+        let _id : number = this.stands[0].standId;
         for (const _stand of this.stands) {
             if (_id != _stand.standId)
                 return false;
