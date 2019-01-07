@@ -14,7 +14,7 @@ import { Event } from 'src/app/deck/event';
 import { Stand } from '../../admin/venues/venue/stand';
 import { Reservation, Stand as ReservationStand } from '../../admin/reservations/reservation/reservation';
 import { CanvasState } from 'src/app/admin/venues/venue/venue-image/canvas/canvasCommunication';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-company-reservations',
@@ -70,13 +70,12 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       this.deckService.updateEvent(availability.venue.edition);
       this.venuesService.setAvailability(availability);
       this.canvasService.selectDay(1);
-      this.english = this.translate.currentLang === 'en';
-      
+      this.english = this.translate.getDefaultLang() === 'en';
     });
   }
 
   ngOnInit() {
-    this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent =>{
+    this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent => {
       this.english = !this.english;
     });
   }

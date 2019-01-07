@@ -8,9 +8,9 @@ import { DeckService } from 'src/app/deck/deck.service';
 import { Credentials } from '../credentials';
 import { Event } from 'src/app/deck/event';
 
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 
-@Component({  
+@Component({
   selector: 'app-welcome',
   templateUrl: './welcome.component.html',
   styleUrls: ['./welcome.component.css']
@@ -21,14 +21,13 @@ export class WelcomeComponent implements OnInit {
     private companyService: CompanyService,
     private deckService: DeckService,
     private translate: TranslateService) {
-      this.english = this.translate.currentLang === 'en';
+    this.english = this.translate.getDefaultLang() === 'en';
   }
 
   credentials: Credentials;
 
   event: Event;
   private eventSubscription: Subscription;
-  private translateSubscription: Subscription;
   private page: number;
   private english: boolean;
 
@@ -40,12 +39,11 @@ export class WelcomeComponent implements OnInit {
     this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         this.event = event;
-        console.log(event);
       });
 
-      this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent => {
-        this.english = !this.english;
-      });
+    this.translate.onLangChange.subscribe(LangChangeEvent => {
+      this.english = LangChangeEvent.lang === 'en';
+    });
   }
 
   next() {

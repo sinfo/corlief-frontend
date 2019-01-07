@@ -10,20 +10,34 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class CompanyComponent implements OnInit {
 
+  languageSet = 'en';
+
+  langs = [
+    {
+      flag: 'assets/flags/pt.svg',
+      lang: 'pt',
+    },
+    {
+      flag: 'assets/flags/gb.svg',
+      lang: 'en',
+    }
+  ];
+
   constructor(
     private deckService: DeckService,
     private translate: TranslateService
-    ) {
-      this.translate.setDefaultLang('pt');
-     }
+  ) {
+    this.translate.setDefaultLang(this.languageSet);
+  }
 
   ngOnInit() {
     this.deckService.updateEvent();
   }
 
-  private changeLang(){
-    if(this.translate.currentLang === 'en'){ this.translate.use('pt'); }
-    else { this.translate.use('en');}
+  private changeLang(lang: string) {
+    if (this.languageSet === lang) { return; }
+    this.translate.use(lang);
+    this.languageSet = lang;
   }
 
 }

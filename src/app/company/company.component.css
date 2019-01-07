@@ -56,3 +56,29 @@ nav {
     height: 90vh;
     padding: 3vh;
 }
+
+#lang {
+    width: 8%;
+    margin-left: 0.5%;
+    margin-right: 0.5%;
+
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#lang img {
+    height: 100%;
+    width: auto;
+    border-radius: 50%;
+    opacity: 0.5;
+}
+
+#lang img:hover {
+    cursor: pointer;
+}
+
+#lang img.active {
+    opacity: 1;
+    cursor: default;
+}
