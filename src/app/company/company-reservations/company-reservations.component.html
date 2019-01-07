@@ -18,7 +18,8 @@
       </div>
 
       <div class="options">
-        <div class="day" *ngFor="let day of selectedDay.allDays" [ngClass]="{'selected': day === selectedDay.day}" (click)="changeDay(day)" [innerHTML]="'reservations.day' | translate: {day: day}">
+        <div class="day" *ngFor="let day of selectedDay.allDays" [ngClass]="{'selected': day === selectedDay.day}"
+          (click)="changeDay(day)" [innerHTML]="'reservations.day' | translate: {day: day}">
         </div>
       </div>
 
@@ -56,11 +57,12 @@
       <span>
         <b>{{credentials.companyName}}</b>
       </span>
-      <span [innerHTML]="'reservations.reservations' |translate "></span>
+      <span [innerHTML]="'reservations.reservations' | translate "></span>
     </div>
 
     <ng-container *ngIf="!showAllReservations && latestReservation">
-      <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays" class="missing">
+      <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays"
+        class="missing">
         <h6 [innerHTML]="'reservations.remaining' | translate: {days: credentials.participationDays - latestReservation.stands.length}">
         </h6>
       </div>
@@ -74,36 +76,30 @@
           <button class="btn btn-danger" (click)="cancelReservation()" [innerHTML]="'reservations.cancel' | translate"></button>
         </div>
 
-<<<<<<< HEAD
-          <div *ngIf="latestReservation && latestReservation.issued === undefined && latestReservation.stands.length === credentials.participationDays"
-            class="action submit">
-            <button class="btn btn-primary" (click)="makeReservation(confirmReservationPopup)">Submit reservation</button>
-          </div>
-=======
         <div *ngIf="latestReservation && latestReservation.issued === undefined && latestReservation.stands.length === credentials.participationDays"
           class="action submit">
-          <button class="btn btn-primary" (click)="makeReservation()" [innerHTML]="'reservations.submit' | translate"></button>
->>>>>>> master
+          <button class="btn btn-primary" (click)="makeReservation(confirmReservationPopup)" [innerHTML]="'reservations.submit' | translate">Submit
+            reservation</button>
         </div>
       </div>
-      </ng-container>
+    </ng-container>
 
-      <ng-container *ngIf="showAllReservations">
-        <div class="allReservations">
-          <div *ngFor="let reservation of reservations" class="reservation showAll">
-            <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
-          </div>
+    <ng-container *ngIf="showAllReservations">
+      <div class="allReservations">
+        <div *ngFor="let reservation of reservations" class="reservation showAll">
+          <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
         </div>
-      </ng-container>
+      </div>
+    </ng-container>
 
     <div class="history">
       <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.current' | translate">
       </button>
-      <button *ngIf="showAllReservations == false" class="btn btn-primary" (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.previous' | translate">
+      <button *ngIf="showAllReservations == false" class="btn btn-primary" (click)="alternateShowAllReservations()"
+        [innerHTML]=" 'reservations.previous' | translate">
       </button>
     </div>
 
-<<<<<<< HEAD
 
   </div>
 </span>
@@ -118,21 +114,19 @@
   </div>
   <div class="modal-body">
     <h6>
-      Your reservation does meet SINFO's guidelines, because
-      <b *ngIf="latestReservation.daysAreContiguous() === false">it is not on consecutive days</b>
-      <span *ngIf="latestReservation.daysAreContiguous() === false && latestReservation.standIsSame() ===false"> and </span>
-      <b *ngIf="latestReservation.standIsSame() === false">it is not on the same stand</b>
+      {{ 'reservationWarning.msg1' | translate }}
+      <b *ngIf="latestReservation.daysAreContiguous() === false">{{ 'reservationWarning.msg2' | translate }}</b>
+      <span *ngIf="latestReservation.daysAreContiguous() === false && latestReservation.standIsSame() ===false"> {{
+        'reservationWarning.msg3' | translate }}
+      </span>
+      <b *ngIf="latestReservation.standIsSame() === false">{{ 'reservationWarning.msg4' | translate }}</b>
     </h6>
-    <h6>Do you wish to proceed?</h6>
+    <h6>{{ 'reservationWarning.msg5' | translate }}</h6>
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-danger" (click)="modal.close('Cancelled')">Cancel</button>
-    <button class="btn btn-success"(click)="modal.close('Confirmed')">Confirm</button>
+    <button class="btn btn-danger" (click)="modal.close('Cancelled')">{{ 'reservationWarning.cancel' | translate }}</button>
+    <button class="btn btn-success" (click)="modal.close('Confirmed')">{{ 'reservationWarning.confirm' | translate }}</button>
   </div>
 
 </ng-template>
-=======
-    </div>
->>>>>>> master
-
