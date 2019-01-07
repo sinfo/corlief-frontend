@@ -54,10 +54,7 @@
   <div class="reservations">
 
     <div class="title">
-      <span>
-        <b>{{credentials.companyName}}</b>
-      </span>
-      <span [innerHTML]="'reservations.reservations' | translate "></span>
+      <span> <b>{{credentials.companyName}}</b> {{ 'reservations.reservations' | translate }}</span>
     </div>
 
     <ng-container *ngIf="!showAllReservations && latestReservation">
@@ -128,5 +125,4 @@
     <button class="btn btn-danger" (click)="modal.close('Cancelled')">{{ 'reservationWarning.cancel' | translate }}</button>
     <button class="btn btn-success" (click)="modal.close('Confirmed')">{{ 'reservationWarning.confirm' | translate }}</button>
   </div>
-
 </ng-template>
