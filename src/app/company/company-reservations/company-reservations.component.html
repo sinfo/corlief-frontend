@@ -119,7 +119,13 @@
     </button>
   </div>
   <div class="modal-body">
-    <span>Dummy message</span>
+    <h6>
+      Your reservation does meet SINFO's guidelines, because
+      <b *ngIf="latestReservation.daysAreContiguous() === false">it is not on consecutive days</b>
+      <span *ngIf="latestReservation.daysAreContiguous() === false && latestReservation.standIsSame() ===false"> and </span>
+      <b *ngIf="latestReservation.standIsSame() === false">it is not on the same stand</b>
+    </h6>
+    <h6>Do you wish to proceed?</h6>
   </div>
 
   <div class="modal-footer">

@@ -39,6 +39,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private showAllReservations: boolean;
 
+
   constructor(
     private companyService: CompanyService,
     private deckService: DeckService,
@@ -188,19 +189,27 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   }
 
   private popupConfirmSubmission(content, contiguous: boolean, same_stand: boolean) {
-      if (!contiguous)
-        console.log("Reservation is not contiguous");
-      if (!same_stand)
-        console.log("Reservation is not on the same stand");
+      /*
+      let message:string = ""
+      if (!contiguous) {
+          message += "Your reservation is not on consecutive days.\n"
+          console.log("Reservation is not contiguous");
+      }
+      if (!same_stand) {
+          message += "Your reservation is not on the same stand.\n"
+          console.log("Reservation is not on the same stand");
+      }
+      */
+
       this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
-          this.closeResult = `${result}`;
+          let closeResult: string = `${result}`;
           console.log(`Closed with: ${result}`);
-          console.log(this.closeResult);
-          if (this.closeResult === 'Confirmed') {
+          console.log(closeResult);
+          if (closeResult === 'Confirmed') {
               this.commitReservation();
           }
       }, (reason) => {
-          this.closeResult = `Dismissed ${this.getDismissReason(reason)}`;
+          let closeResult: string = `Dismissed ${this.getDismissReason(reason)}`;
           console.log(`Dismissed ${this.getDismissReason(reason)}`);
       });
   }
