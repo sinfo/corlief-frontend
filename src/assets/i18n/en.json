@@ -11,7 +11,7 @@
             "p1": "Thank you very much for being part of {{event}}, we hope to make this edition the best one so far!",
             "p2": "On this app you can book your stands for every SINFO day, happening from ",
             "p3": {
-                "body": "May we remind you that {{companyName}} is entitled to <b>{{participationDays}}</b> stand day(s)! "
+                "body": "May we remind you that {{companyName}} is entitled to <b>{{participationDays}}</b> stand day{{plural}}! "
             }
         }
     },

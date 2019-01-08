@@ -18,8 +18,9 @@
 
           <p>
             <b class="extra" [innerHTML]="'page0.text.p3.body' | translate: {
-              companyName: credentials.companyName, 
-              participationDays: credentials.participationDays }"></b>
+              companyName: credentials.companyName,
+              participationDays: credentials.participationDays,
+              plural: credentials.participationDays > 1 ? 's' : '' }"></b>
           </p>
 
         </div>
