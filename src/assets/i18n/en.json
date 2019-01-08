@@ -8,30 +8,30 @@
     "page0": {
         "title": "Welcome <b>{{companyName}}</b> !",
         "text": {
-            "p1": "Thank you very much for being a part of this year's SINFO, which we hope is the best one so far!",
-            "p2": "On this app you can book your <i>stands</i> for every SINFO day, happening from ",
+            "p1": "Thank you very much for being part of {{event}}, we hope to make this edition the best one so far!",
+            "p2": "On this app you can book your stands for every SINFO day, happening from ",
             "p3": {
-                "body": "May we remind you that {{companyName}} is entitled to <b>{{participationDays}}</b>  <i>stand</i> day(s)! "
+                "body": "May we remind you that {{companyName}} is entitled to <b>{{participationDays}}</b> stand day(s)! "
             }
         }
     },
     "page1": {
         "title": "How does Corlief work?",
-        "subtitle": "To book <i>stands</i>, just follow the following steps:",
+        "subtitle": "To book stands, just follow the next steps:",
         "text": {
             "1": "Pick a day",
-            "2": "Pick the <i>stand</i> for that day",
-            "3": "Repeat for every dat you're entitled to",
+            "2": "Pick the stand for that day",
+            "3": "Repeat for every day you're entitled to",
             "4": "Submit your reservation",
-            "5": "Wait for our comission to aprove and confirm you reservation"
+            "5": "Wait for our team to aprove it and confirm your reservation"
         }
     },
     "page2": {
-        "title": "We also ask:",
+        "title": "We'll ask you a few things first:",
         "text": {
             "p1": {
-                "bold": "Try to book always the same <i>stand</i> ",
-                "normal": ", as it simplifies and agilizes our work and may lead to your <i>stands</i> being rejected."
+                "bold": "Always try to book the same stand",
+                "normal": ", as it simplifies and agilizes our work and may lead to your stands being rejected."
             },
             "p2": {
                 "normal1": "Anytime possible ",
@@ -40,7 +40,7 @@
             },
             "p3": {
                 "warning": "Warning: ",
-                "normal": "The commision cannot and will not store any material other than that which will remain on your <i>stand</i> for the following day."
+                "normal": "The commission cannot and will not store any material other than that which will remain on your stand for the following day."
             }
         },
         "thanks": "Thank you very much!"
