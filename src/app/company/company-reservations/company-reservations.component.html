@@ -60,7 +60,7 @@
     <ng-container *ngIf="!showAllReservations && latestReservation">
       <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays"
         class="missing">
-        <h6 [innerHTML]="'reservations.remaining' | translate: {days: credentials.participationDays - latestReservation.stands.length}">
+        <h6 [innerHTML]="'reservations.remaining' | translate: {days: credentials.participationDays - latestReservation.stands.length, plural: (credentials.participationDays - latestReservation.stands.length) > 1 ? 's' : '' }">
         </h6>
       </div>
 
