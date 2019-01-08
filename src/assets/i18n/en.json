@@ -55,7 +55,7 @@
         "info": "Please choose a stand for this day",
         "button": "< Back to explanation",
         "reservations": "Reservations",
-        "remaining": "You can still book <b>{{days}}</b> days",
+        "remaining": "You can still book <b>{{days}}</b> day{{plural}}",
         "cancel": "Cancel reservation",
         "submit": "Submit reservation",
         "current": "Show current reservations",
