@@ -8,7 +8,7 @@ import { ClipboardService } from 'ngx-clipboard';
 import { NgbTooltip, NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 
-import { Link, LinkForm } from './link';
+import { Link, LinkForm, LinkEdit } from './link';
 import { Company } from 'src/app/deck/company';
 import { Event } from 'src/app/deck/event';
 
@@ -27,6 +27,7 @@ export class LinkComponent implements OnInit {
   loadingSrc = 'assets/img/loading.gif';
 
   linkForm: FormGroup;
+  editLinkForm: FormGroup;
   extendLinkForm: FormGroup;
 
   closeLinkFormResult: string;
@@ -95,8 +96,26 @@ export class LinkComponent implements OnInit {
       });
   }
 
+  edit(modal) {
+    const linkEdit = new LinkEdit(this.editLinkForm);
+    this.linksService.edit(linkEdit, this.event, this.company.id)
+      .subscribe(link => {
+        modal.close();
+        this.linksService.updateLinks(this.event.id as string);
+      });
+  }
+
   openLinkForm(content) {
     this.linkForm = Link.linkForm(this.company, this.event);
+    this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
+      this.closeLinkFormResult = `Closed with: ${result}`;
+    }, (reason) => {
+      this.closeLinkFormResult = `Dismissed ${this.getDismissReason(reason)}`;
+    });
+  }
+
+  openEditLinkForm(content) {
+    this.editLinkForm = LinkEdit.editLinkForm(this.company.link, this.event);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeLinkFormResult = `Closed with: ${result}`;
     }, (reason) => {

@@ -31,10 +31,10 @@
     padding: 2%;
 }
 
-.content .info div {
+/*.content .info div {
     margin-top: 2%;
     margin-bottom: 2%;
-}
+}*/
 
 .content-with-link {
     justify-content: space-between !important;
@@ -109,7 +109,7 @@
 }
 
 .form input, .form select {
-    width: 75%;
+    width: 70%;
 }
 
 .modal-footer {
@@ -159,6 +159,11 @@
     flex-direction: row;
     flex-wrap: wrap;
     justify-content: space-evenly;
+}
+
+.actions-buttons button {
+    width: 35%;
+    margin: 1%;
 }
 
 .extendLink {

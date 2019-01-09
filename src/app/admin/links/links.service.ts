@@ -12,7 +12,7 @@ import { Credentials } from '../login/credentials';
 
 import { DeckService } from 'src/app/deck/deck.service';
 
-import { Link, LinkForm } from './link/link';
+import { Link, LinkForm, LinkEdit } from './link/link';
 import { Companies } from './link/companies';
 import { Company } from 'src/app/deck/company';
 import { Event } from 'src/app/deck/event';
@@ -109,6 +109,13 @@ export class LinksService {
   extend(companyId: String, edition: String, form: { expirationDate: Date }): Observable<Link> {
     return this.http.put<Link>(
       `${this.corlief}/company/${companyId}/edition/${edition}/extend`,
+      form,
+      { headers: this.headers });
+  }
+
+  edit(form: LinkEdit, event: Event, companyId: String): Observable<Link> {
+    return this.http.put<Link>(
+      `${this.corlief}/company/${companyId}/edition/${event.id}`,
       form,
       { headers: this.headers });
   }

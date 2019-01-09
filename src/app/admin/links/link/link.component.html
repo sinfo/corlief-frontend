@@ -71,6 +71,11 @@
         {{ company.link.contacts.company }}
       </div>
 
+      <div class="memberEmail" *ngIf="company.link.contacts.member">
+        <b>Member contact:</b>
+        {{ company.link.contacts.member }}
+      </div>
+
       <hr class="divider" />
 
       <div class="actions">
@@ -86,6 +91,7 @@
 
         <span class="actions-buttons" *ngIf="extendLinkForm === undefined">
           <button class="btn btn-primary" (click)="alternateExtendLinkFormVisibility()">Extend</button>
+          <button class="btn btn-warning" (click)="openEditLinkForm(editLinkFormWindow)">Edit</button>
           <button class="btn btn-success" (click)="check()" *ngIf="company.link.valid">Check</button>
           <button class="btn btn-danger" (click)="revoke()" *ngIf="company.link.valid">Revoke</button>
         </span>
@@ -148,6 +154,49 @@
   <div class="modal-footer">
     <button class="btn btn-danger" (click)="modal.close('Cancelled')">Cancel</button>
     <button class="btn btn-success" [disabled]="!linkForm.valid" (click)="submitLink(modal)">Submit</button>
+  </div>
+
+</ng-template>
+
+<ng-template #editLinkFormWindow let-modal>
+  <div class="modal-header">
+    <h4 class="modal-title" id="modal-basic-title">Create link for {{company.name}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form [formGroup]="editLinkForm" class="form">
+
+      <div>
+        <label>Company email:</label>
+        <input class="form-control" type="email" formControlName="companyContact" placeholder="{{company.name}} employer's email">
+      </div>
+
+      <div>
+        <label>Member email:</label>
+        <input class="form-control" type="email" formControlName="memberContact" placeholder="Member's email">
+      </div>
+
+      <div>
+        <label>Days:</label>
+        <select class="form-control" formControlName="participationDays">
+          <option *ngFor="let day of (event | getArrayOfParticipationDays)" [value]="day" [selected]="day === company.link.participationDays">{{day}}</option>
+        </select>
+      </div>
+
+      <div>
+        <label>Kind:</label>
+        <input required class="form-control" type="text" formControlName="advertisementKind" placeholder="Ex: Silver, Gold...">
+      </div>
+
+    </form>
+
+  </div>
+
+  <div class="modal-footer">
+    <button class="btn btn-danger" (click)="modal.close('Cancelled')">Cancel</button>
+    <button class="btn btn-success" [disabled]="!editLinkForm.valid" (click)="edit(modal)">Submit</button>
   </div>
 
 </ng-template>

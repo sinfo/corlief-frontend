@@ -6,6 +6,47 @@ import { FormGroup, FormControl, ValidatorFn, AbstractControl, Validators } from
 export type Advertisement =
     'SILVER' | 'GOLD' | 'PLATINUM' | 'DIAMOND' | 'STARTUP';
 
+export class LinkEdit {
+    companyId: String;
+    companyContact: String;
+    memberContact: String;
+    advertisementKind: Advertisement;
+    participationDays: number;
+
+    constructor(form: FormGroup) {
+        const data = form.value;
+
+        this.companyContact = data.companyContact;
+        this.memberContact = data.memberContact;
+        this.advertisementKind = data.advertisementKind;
+        this.participationDays = data.participationDays;
+    }
+
+    static editLinkForm(link: Link, event: Event): FormGroup {
+        const duration = event.duration.getDate();
+
+        return new FormGroup({
+            companyContact: new FormControl(link.contacts.company, [
+                Validators.required,
+                Validators.email
+            ]),
+            memberContact: new FormControl(link.contacts.member, [
+                Validators.required,
+                Validators.email
+            ]),
+            participationDays: new FormControl(link.participationDays, [
+                Validators.required,
+                Validators.min(1),
+                Validators.max(duration)
+            ]),
+            advertisementKind: new FormControl(link.advertisementKind, [
+                Validators.required,
+                Validators.minLength(0)
+            ])
+        });
+    }
+}
+
 export class Link {
     companyId: String;
     contacts: {
@@ -60,6 +101,23 @@ export class Link {
                 Validators.required,
                 this.expirationDateValidator()
             ])
+        });
+    }
+
+    static linkFromEditLinkForm(link: Link, form: FormGroup, event: Event): Link {
+        const data = form.value;
+        return new Link({
+            companyId: data.companyId,
+            contacts: {
+                company: data.companyEmail,
+                member: data.memberEmail
+            },
+            edition: event.id,
+            created: link.created,
+            token: link.token,
+            valid: link.valid,
+            advertisementKind: data.advertisementKind,
+            participationDays: data.participationDays
         });
     }
 
