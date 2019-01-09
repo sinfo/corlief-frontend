@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Event } from 'src/app/deck/event';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
-import {TranslateService} from '@ngx-translate/core';
+import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
 
@@ -17,7 +17,7 @@ export class ReservationCardComponent implements OnInit {
   @Input() event: Event;
   @Output() removeStandEvent = new EventEmitter<{ day: number, id: number }>();
 
-  private english: boolean
+  private english: boolean;
   private translateSubscription: Subscription;
 
   status: String;
@@ -26,7 +26,7 @@ export class ReservationCardComponent implements OnInit {
     private translate: TranslateService
   ) {
     this.english = this.translate.currentLang === 'en';
-   }
+  }
 
   ngOnInit() {
     this.status = this.reservation.feedback ? this.reservation.feedback.status : null;

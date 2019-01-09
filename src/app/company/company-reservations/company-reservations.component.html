@@ -65,7 +65,7 @@
       </div>
 
       <div *ngIf="latestReservation" class="reservation">
-        <app-reservation-card [reservation]="latestReservation" [event]="event"></app-reservation-card>
+        <app-reservation-card [reservation]="latestReservation" [event]="event" (removeStandEvent)="removePendingStand($event)"></app-reservation-card>
       </div>
 
       <div class="info">
@@ -84,7 +84,7 @@
     <ng-container *ngIf="showAllReservations">
       <div class="allReservations">
         <div *ngFor="let reservation of reservations" class="reservation showAll">
-          <app-reservation-card [reservation]="reservation" [event]="event"></app-reservation-card>
+          <app-reservation-card [reservation]="reservation" [event]="event" (removeStandEvent)="removePendingStand($event)"></app-reservation-card>
         </div>
       </div>
     </ng-container>

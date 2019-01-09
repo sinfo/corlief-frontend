@@ -9,7 +9,8 @@
   <div class="stands">
     <div *ngFor="let stand of reservation.stands | standsDisplay : event" class="stand" [ngClass]="{'booked': stand.id !== undefined}">
       <div class="info">
-        <b [innerHTML] = "'reservations.day' | translate: {day: stand.day} "></b> ({{ english? (stand.date | date : 'MMMM d') : (stand.date | ptDate: stand.date)}})
+        <b [innerHTML]="'reservations.day' | translate: {day: stand.day} "></b> ({{ english? (stand.date | date : 'MMMM
+        d') : (stand.date | ptDate: stand.date)}})
         <span *ngIf="stand.id !== undefined">
           <b>- Stand {{stand.id + 1}}</b>
         </span>
