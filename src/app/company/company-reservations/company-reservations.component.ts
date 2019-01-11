@@ -90,7 +90,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   }
 
   public clickStandFromCanvas(stand) {
-    this.clickStand(stand.id);
+    this.clickStand(stand.id, this.isFreeStand(stand.id));
   }
 
   private updateReservations() {
