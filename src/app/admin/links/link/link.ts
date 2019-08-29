@@ -121,9 +121,8 @@ export class Link {
         });
     }
 
+    // TODO does it need event
     static extendLinkForm(event: Event): FormGroup {
-        const duration = event.duration.getDate();
-
         return new FormGroup({
             expirationDate: new FormControl(new Date(), [
                 Validators.required,

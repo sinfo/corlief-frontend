@@ -41,10 +41,8 @@ export class ReservationsComponent implements OnInit {
   private eventSubscription: Subscription;
   private companiesSubscription: Subscription;
   private venuesSubscription: Subscription;
-  private availabilitySubscription: Subscription;
   private reservationsSubscription: Subscription;
 
-  private reservationFilter: string;
   public filteredReservation: Reservation;
 
   constructor(
@@ -134,6 +132,7 @@ export class ReservationsComponent implements OnInit {
 
   formatter = (r: Reservation) => r.company.name;
 
+  // TODO is currI necessary
   private filterCompaniesHelper(company: string) {
     return function (total: Reservation[], curr: Reservation, currI: number, arr: Reservation[]): Reservation[] {
       let filter = curr.company.name.toLowerCase().indexOf(company.toLowerCase()) > -1;

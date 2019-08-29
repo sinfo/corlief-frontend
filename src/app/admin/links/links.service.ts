@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs/internal/Observable';
-import { of } from 'rxjs';
 import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 import { Subscription } from 'rxjs/internal/Subscription';
 
@@ -34,7 +33,7 @@ export class LinksService {
 
   private companiesSubject: ReplaySubject<Companies> = new ReplaySubject<Companies>();
 
-  private headers: HttpHeaders;
+  private readonly headers: HttpHeaders;
 
   constructor(
     private http: HttpClient,
@@ -102,6 +101,7 @@ export class LinksService {
     return this.http.get<Link[]>(`${this.corlief}/validity`, { headers: this.headers });
   }
 
+  // TODO why is it unused
   getCompaniesWithMissingLinks(): Observable<Company[]> {
     return this.http.get<Company[]>(`${this.corlief}/missing`, { headers: this.headers });
   }
@@ -124,7 +124,7 @@ export class LinksService {
     this.http.get<Link>(
       `${this.corlief}/company/${companyId}/edition/${edition}/revoke`,
       { headers: this.headers }
-    ).subscribe(link => {
+    ).subscribe(() => {
       this.updateLinks(edition as string);
     });
   }

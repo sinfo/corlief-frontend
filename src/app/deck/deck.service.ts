@@ -13,7 +13,6 @@ import { StorageService } from '../storage.service';
 
 import { Credentials } from '../admin/login/credentials';
 import { Event } from './event';
-import { Venue } from '../admin/venues/venue/venue';
 import { Company } from './company';
 
 
@@ -24,9 +23,8 @@ export class DeckService {
 
   public events: [Event];
   public event: Event;
-  private companies: Company[];
 
-  private deck = `${environment.deck}/api`;
+  private deck = `${environment.deck}`;
   private credentials: Credentials;
 
   private eventSubject: ReplaySubject<Event> = new ReplaySubject<Event>();

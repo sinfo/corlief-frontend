@@ -4,7 +4,6 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { VenuesService } from '../../venues.service';
 import { CanvasService } from './canvas/canvas.service';
-import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 
 import { Venue } from '../venue';
 import { Stand } from 'src/app/admin/venues/venue/stand';
@@ -19,7 +18,6 @@ export class VenueImageComponent implements OnInit, OnDestroy {
 
   private venueSubscription: Subscription;
   private canvasSubscription: Subscription;
-  private reservationsSubscription: Subscription;
 
   venue: Venue;
 
@@ -29,14 +27,11 @@ export class VenueImageComponent implements OnInit, OnDestroy {
   @Output() standClick: EventEmitter<Stand> = new EventEmitter();
 
   private loadingSrc = 'assets/img/loading.gif';
-  private confirmStand: boolean;
-  private newStand: Stand;
   private canvasOn = false;
 
   constructor(
     private venuesService: VenuesService,
-    private canvasService: CanvasService,
-    private reservationsService: ReservationsService
+    private canvasService: CanvasService
   ) { }
 
   ngOnInit() {

@@ -28,8 +28,7 @@ export class ReservationsService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService,
-    private companyService: CompanyService
+    private storage: StorageService
   ) {
     const credentials = this.storage.getItem('credentials') as Credentials;
 

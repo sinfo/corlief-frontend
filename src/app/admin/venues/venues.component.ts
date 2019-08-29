@@ -1,8 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpResponse, HttpEventType } from '@angular/common/http';
-
-import { VenuesService } from 'src/app/admin/venues/venues.service';
-import { Venue } from './venue/venue';
 
 @Component({
   selector: 'app-venues',
@@ -11,7 +7,7 @@ import { Venue } from './venue/venue';
 })
 export class VenuesComponent implements OnInit {
 
-  constructor(private venuesService: VenuesService) { }
+  constructor() { }
 
   ngOnInit() {
   }

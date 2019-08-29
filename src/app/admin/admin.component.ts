@@ -3,7 +3,6 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
 
 import { VenuesService } from './venues/venues.service';
-import { LinksService } from './links/links.service';
 import { DeckService } from '../deck/deck.service';
 
 import { Event } from '../deck/event';
@@ -30,7 +29,7 @@ export class AdminComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.venuesService.getVenue().subscribe(
       venue => this.updateData(venue),
-      error => this.deckService.updateEvent()
+      () => this.deckService.updateEvent()
     );
 
     this.eventSubscription = this.deckService.getEventSubject()
@@ -41,7 +40,7 @@ export class AdminComponent implements OnInit, OnDestroy {
 
           this.venuesService.getVenue(event.id).subscribe(
             venue => this.updateData(venue),
-            error => this.updateData(null)
+            () => this.updateData(null)
           );
         }
       });

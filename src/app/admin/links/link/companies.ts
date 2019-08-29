@@ -58,6 +58,7 @@ export class Companies {
         return result;
     }
 
+    // TODO why is it unused
     update(companies: Company[], links: Link[]) {
         if (!links.length) { return; }
         this.updateCompanies(companies, links[0].edition);
@@ -65,8 +66,7 @@ export class Companies {
     }
 
     updateCompanies(companies: Company[], edition: String) {
-        const filtered = <Company[]>companies.filter(c => Company.filter(c, edition));
-        this.all = filtered;
+      this.all = <Company[]>companies.filter(c => Company.filter(c, edition));
     }
 
     updateLinks(links: Link[]) {

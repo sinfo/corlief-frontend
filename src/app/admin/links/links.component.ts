@@ -49,7 +49,7 @@ export class LinksComponent implements OnInit, OnDestroy {
       .filter(c => c.id !== link.companyId)[0];
 
     this.companies.withLink.valid = this.companies.withLink.valid
-      .filter(c => company.id !== company.id) as Company[];
+      .filter(() => company.id !== company.id) as Company[];
 
     this.companies.withLink.invalid.push(company);
   }

@@ -1,6 +1,5 @@
-import { Component, OnInit, OnChanges, OnDestroy, Input } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/internal/Subscription';
-import { Subject } from 'rxjs';
 
 import { VenuesService } from 'src/app/admin/venues/venues.service';
 import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/canvas.service';
@@ -53,7 +52,7 @@ export class VenueComponent implements OnInit, OnDestroy {
       });
 
     this.eventSubscription = this.deckService.getEventSubject()
-      .subscribe(event => {
+      .subscribe(() => {
         this.canEdit = this.deckService.isSelectedEventCurrent();
       });
   }
@@ -100,6 +99,7 @@ export class VenueComponent implements OnInit, OnDestroy {
     }
   }
 
+  // TODO does it need id
   deselectStand(id: number) {
     this.canvasService.revert();
   }

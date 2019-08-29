@@ -25,7 +25,7 @@ export class CompanyGuard implements CanActivate {
       return false;
     }
 
-    return new Promise<boolean>((resolve, reject) => {
+    return new Promise<boolean>(resolve => {
       this.companyService.auth(token).subscribe(
         credentials => {
           this.companyService.saveToken(token);
@@ -36,7 +36,7 @@ export class CompanyGuard implements CanActivate {
           }
 
           resolve(true);
-        }, error => {
+        }, () => {
           this.companyService.clearToken();
           this.router.navigate(['unauthorized']);
           resolve(false);

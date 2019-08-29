@@ -15,7 +15,6 @@ export class ReservationComponent implements OnInit {
   @Input() confirmationBlocked: boolean;
 
   private loadingSrc = 'assets/img/loading.gif';
-  private maxWidth: '10';
 
   constructor(
     private reservationsService: ReservationsService,
@@ -29,12 +28,12 @@ export class ReservationComponent implements OnInit {
     if (!this.adminMode) { return; }
 
     this.reservationsService.confirm(this.reservation.companyId)
-      .subscribe(reservation => this.reservationsService.updateWithLatest());
+      .subscribe(() => this.reservationsService.updateWithLatest());
   }
 
   cancel() {
     this.reservationsService.cancel(this.reservation.companyId)
-      .subscribe(reservation => this.reservationsService.updateWithLatest());
+      .subscribe(() => this.reservationsService.updateWithLatest());
   }
 
   remove(warningWindow) {
@@ -48,7 +47,7 @@ export class ReservationComponent implements OnInit {
 
   removeWarning(content) {
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' })
-      .result.then((result) => {
+      .result.then(() => {
       });
   }
 

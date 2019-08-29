@@ -75,7 +75,7 @@ export class CanvasData {
         }
     }
 
-    private colorFromReservation(selected?: boolean): string {
+    private colorFromReservation(): string {
         if (this.reservation.feedback) {
             if (this.reservation.feedback.status === 'CANCELLED') {
                 return CanvasData.COLOR_RESERVATION.CANCELLED;

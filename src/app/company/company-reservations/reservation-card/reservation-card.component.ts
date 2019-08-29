@@ -30,7 +30,7 @@ export class ReservationCardComponent implements OnInit {
 
   ngOnInit() {
     this.status = this.reservation.feedback ? this.reservation.feedback.status : null;
-    this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent => {
+    this.translateSubscription = this.translate.onLangChange.subscribe(() => {
       this.english = !this.english;
     });
   }

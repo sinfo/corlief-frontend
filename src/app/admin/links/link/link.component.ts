@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormsModule, FormGroup } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 
 import { environment } from '../../../../environments/environment';
 
@@ -59,7 +59,7 @@ export class LinkComponent implements OnInit {
 
   submitLink(modal) {
     this.linksService.uploadLink(<LinkForm>this.linkForm.value)
-      .subscribe(link => {
+      .subscribe(() => {
         modal.close();
         this.linksService.updateLinks(this.event.id as string);
       });
@@ -99,7 +99,7 @@ export class LinkComponent implements OnInit {
   edit(modal) {
     const linkEdit = new LinkEdit(this.editLinkForm);
     this.linksService.edit(linkEdit, this.event, this.company.id)
-      .subscribe(link => {
+      .subscribe(() => {
         modal.close();
         this.linksService.updateLinks(this.event.id as string);
       });
