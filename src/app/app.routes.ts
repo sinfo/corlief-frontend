@@ -4,16 +4,14 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminGuard } from './auth/admin.guard';
 import { CompanyGuard } from './auth/company.guard';
 
-import { LoginComponent } from 'src/app/admin/login/login.component';
-import { NotfoundComponent } from 'src/app/notfound/notfound.component';
-import { AdminComponent } from 'src/app/admin/admin.component';
-import { LinksComponent } from 'src/app/admin/links/links.component';
-import { VenuesComponent } from 'src/app/admin/venues/venues.component';
-import { CompanyComponent } from 'src/app/company/company.component';
-import { UnauthorizedComponent } from 'src/app/unauthorized/unauthorized.component';
-import { ReservationsComponent } from 'src/app/admin/reservations/reservations.component';
-import { WelcomeComponent } from 'src/app/company/welcome/welcome.component';
-import { CompanyReservationsComponent } from 'src/app/company/company-reservations/company-reservations.component';
+import { NotfoundComponent } from 'src/app/views/notfound/notfound.component';
+import { AdminComponent } from 'src/app/views/admin/admin.component';
+import { LinksComponent } from 'src/app/views/admin/links/links.component';
+import { VenuesComponent } from 'src/app/views/admin/venues/venues.component';
+import { CompanyComponent } from 'src/app/views/company/company.component';
+import { ReservationsComponent } from 'src/app/views/admin/reservations/reservations.component';
+import { WelcomeComponent } from 'src/app/views/company/welcome/welcome.component';
+import { CompanyReservationsComponent } from 'src/app/views/company/company-reservations/company-reservations.component';
 
 const appRoutes: Routes = [
   {
@@ -21,11 +19,6 @@ const appRoutes: Routes = [
     component: AdminComponent,
     canActivate: [AdminGuard],
     children: [
-      {
-        path: '',
-        pathMatch: 'full',
-        redirectTo: 'reservations'
-      },
       {
         path: 'venues',
         component: VenuesComponent,
@@ -44,17 +37,12 @@ const appRoutes: Routes = [
     ]
   },
   {
-    path: 'token/:token',
-    component: CompanyComponent,
-    canActivate: [CompanyGuard]
-  },
-  {
-    path: '',
+    path: 'company',
     component: CompanyComponent,
     canActivate: [CompanyGuard],
     children: [
       {
-        path: '',
+        path: ':token',
         pathMatch: 'full',
         component: WelcomeComponent,
         canActivate: [CompanyGuard]
@@ -65,14 +53,6 @@ const appRoutes: Routes = [
         canActivate: [CompanyGuard]
       }
     ]
-  },
-  {
-    path: 'login',
-    component: LoginComponent
-  },
-  {
-    path: 'unauthorized',
-    component: UnauthorizedComponent
   },
   {
     path: '**',

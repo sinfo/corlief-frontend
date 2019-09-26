@@ -1,0 +1,114 @@
+<span *ngIf="credentials && event">
+  <div class="content">
+
+    <div class="paragraphs">
+      <div *ngIf="page===0">
+        <p class="title" *ngIf="page==0" [innerHTML]="'page0.title' | translate: {companyName: credentials.companyName}">
+        </p>
+
+        <div class="text">
+
+          <p [innerHTML]="'page0.text.p1' | translate: {event: event.name}">
+          </p>
+
+          <p>
+            <span [innerHTML]="'page0.text.p2' | translate"></span>
+            <span> {{english ? (event.date | dateEn: event.duration) : (event.date | datePt: event.duration) }}</span>
+          </p>
+
+          <p>
+            <b class="extra" [innerHTML]="'page0.text.p3.body' | translate: {
+              companyName: credentials.companyName,
+              participationDays: credentials.participationDays }"></b>
+          </p>
+
+        </div>
+
+      </div>
+
+      <div *ngIf="page===1 ">
+
+        <p class="title" [innerHTML]=" 'page1.title' | translate ">
+        </p>
+
+        <div class="text">
+
+          <p [innerHTML]=" 'page1.subtitle' | translate">
+          </p>
+
+          <p>
+            <b class="extra">1.</b> <span [innerHTML]=" 'page1.text.1' | translate"></span>
+          </p>
+
+          <p>
+            <b class="extra">2.</b> <span [innerHTML]=" 'page1.text.2' | translate"></span>
+          </p>
+
+          <p>
+            <b class="extra">3.</b> <span [innerHTML]=" 'page1.text.3' | translate"></span>
+          </p>
+
+          <p>
+            <b class="extra">4.</b> <span [innerHTML]=" 'page1.text.4' | translate"></span>
+          </p>
+
+          <p>
+            <b class="extra">5.</b><span [innerHTML]=" 'page1.text.5' | translate"></span>
+          </p>
+
+        </div>
+
+      </div>
+
+      <div *ngIf="page===2 ">
+
+        <p class="title " [innerHTML]=" 'page2.title' | translate">
+        </p>
+
+        <div class="text">
+          <p>
+            <b class="extra" [innerHTML]=" 'page2.text.p1.bold' | translate"></b>
+            <span [innerHTML]="'page2.text.p1.normal' | translate"></span>
+          </p>
+
+          <p>
+            <span [innerHTML]="'page2.text.p2.normal1' | translate"></span>
+            <b class="extra" [innerHTML]="'page2.text.p2.bold' | translate"></b>
+            <span [innerHTML]="'page2.text.p2.normal2' | translate"></span>
+          </p>
+
+          <p>
+            <b class="extra" [innerHTML]="'page2.text.p3.warning' | translate"></b>
+            <span [innerHTML]="'page2.text.p3.normal' | translate"></span>
+          </p>
+
+          <p [innerHTML]="'page2.thanks' | translate">
+          </p>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <div class="buttons" [ngClass]="{'one_button': page===0}">
+      <span class="nav-buttons" *ngIf="page > 0">
+        <a (click)="back()" [innerHTML]="'buttons.back' | translate">
+        </a>
+      </span>
+
+      <span class="nav-buttons" *ngIf="page < 2">
+        <a (click)="next()" [innerHTML]="'buttons.next' | translate">
+        </a>
+      </span>
+
+      <span class="reservations-link" *ngIf="page==2">
+        <!--TODO what is chage state-->
+        <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
+          [innerHTML]="'buttons.reserve' | translate">
+        </a>
+      </span>
+    </div>
+
+  </div>
+</span>

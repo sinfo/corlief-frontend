@@ -1,7 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
 
-import { CompanyService } from '../company/company.service';
+import {AuthService} from '../services/auth.service';
+import {environment} from '../../environments/environment';
+import {CompanyService} from '../views/company/company.service';
+import {CorliefService} from '../services/corlief.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +12,9 @@ import { CompanyService } from '../company/company.service';
 export class CompanyGuard implements CanActivate {
 
   constructor(
+    private authService: AuthService,
     private companyService: CompanyService,
+    private corliefService: CorliefService,
     private router: Router
   ) { }
 
@@ -17,18 +22,18 @@ export class CompanyGuard implements CanActivate {
     next: ActivatedRouteSnapshot,
     state: RouterStateSnapshot
   ): Promise<boolean> | boolean {
-    const token = next.params.token || this.companyService.getToken();
+    const token = next.params.token || this.authService.getToken();
     const tokenURL = state.url.includes('/token');
 
     if (token === null) {
-      this.router.navigate(['unauthorized']);
+      window.location.href = `${environment.frontend}`;
       return false;
     }
 
     return new Promise<boolean>(resolve => {
-      this.companyService.auth(token).subscribe(
+      this.corliefService.authenticateCompany(token).subscribe(
         credentials => {
-          this.companyService.saveToken(token);
+          this.authService.saveToken(token);
           this.companyService.updateCredentials(credentials);
 
           if (tokenURL) {
@@ -37,8 +42,7 @@ export class CompanyGuard implements CanActivate {
 
           resolve(true);
         }, () => {
-          this.companyService.clearToken();
-          this.router.navigate(['unauthorized']);
+          this.authService.logout()
           resolve(false);
         }
       );
