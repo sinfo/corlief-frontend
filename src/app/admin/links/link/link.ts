@@ -151,6 +151,8 @@ export class LinkForm {
     companyEmail: String;
     participationDays: number;
     advertisementKind: String;
+    workshop: Boolean;
+    presentation: Boolean;
     activities: [Activity];
     expirationDate: Date;
 }
