@@ -2,11 +2,14 @@ import { Stand } from './stand';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
 import { Event } from 'src/app/deck/event';
 import { Company } from 'src/app/deck/company';
+import { Activity } from './activity';
 
 export class Venue {
     edition: String;
     image: String;
     stands: Stand[];
+    presentations: Activity[];
+    workshops: Activity[];
 
     constructor(edition: String, image: String) {
         this.edition = edition;
