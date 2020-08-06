@@ -13,57 +13,175 @@
     <app-venue-image [maxWidth]="40" [state]="canvasState"></app-venue-image>
   </div>
 
-  <div class="stands">
+  <div>
+    <div class="stands">
 
-    <div class="title">
+      <div class="title">
 
-      <h3>Stands</h3>
+        <h3>Stands</h3>
 
-      <span class="title-icon" *ngIf="canEdit">
-        <span class="icon lock" (click)="alternateLock()">
-          <fa-icon *ngIf="lockedStands" [icon]="['fas', 'lock']"></fa-icon>
-        </span>
-
-        <span *ngIf="!lockedStands">
+        <span class="title-icon" *ngIf="canEdit">
           <span class="icon lock" (click)="alternateLock()">
-            <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+            <fa-icon *ngIf="lockedStands" [icon]="['fas', 'lock']"></fa-icon>
           </span>
 
-          <span class="icon delete" [ngClass]="{'active': pendingDeletion}" (click)="alternatePendingDeletion()">
-            <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+          <span *ngIf="!lockedStands">
+            <span class="icon lock" (click)="alternateLock()">
+              <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+            </span>
+
+            <span class="icon delete" [ngClass]="{'active': pendingDeletion}" (click)="alternatePendingDeletion()">
+              <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+            </span>
           </span>
         </span>
-      </span>
 
-    </div>
+      </div>
 
-    <div class="stands-list">
+      <div class="stands-list">
 
-      <div class="stand" *ngFor="let stand of venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)">
-        <div class="stand border" [ngClass]="{'delete': pendingDeletion}" (click)="clickStand(stand.id)">
-          {{stand.id + 1}}
+        <div class="stand" *ngFor="let stand of venue.stands | sortStands" (mouseover)="selectStand(stand)"
+          (mouseleave)="deselectStand(stand.id)">
+          <div class="stand border" [ngClass]="{'delete': pendingDeletion}" (click)="clickStand(stand.id)">
+            {{stand.id + 1}}
+          </div>
         </div>
-      </div>
 
-      <div class="stand" *ngIf="confirmStand === undefined">
-        <button class="btn btn-primary" (click)="newStandPreparations()" [disabled]="lockedStands" *ngIf="confirmStand === undefined">
-          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-        </button>
-      </div>
+        <div class="stand" *ngIf="confirmStand === undefined">
+          <button class="btn btn-primary" (click)="newStandPreparations()" [disabled]="lockedStands"
+            *ngIf="confirmStand === undefined">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+          </button>
+        </div>
 
-      <div class="stand" *ngIf="confirmStand !== undefined">
-        <button class="btn btn-success" (click)="uploadStand()" [disabled]="!confirmStand">
-          <fa-icon [icon]="['fas', 'check']"></fa-icon>
-        </button>
-      </div>
+        <div class="stand" *ngIf="confirmStand !== undefined">
+          <button class="btn btn-success" (click)="uploadStand()" [disabled]="!confirmStand">
+            <fa-icon [icon]="['fas', 'check']"></fa-icon>
+          </button>
+        </div>
 
-      <div class="stand" *ngIf="confirmStand !== undefined">
-        <button class="btn btn-danger" (click)="cancelStand()">
-          <fa-icon [icon]="['fas', 'times']"></fa-icon>
-        </button>
+        <div class="stand" *ngIf="confirmStand !== undefined">
+          <button class="btn btn-danger" (click)="cancelStand()">
+            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+          </button>
+        </div>
+
       </div>
 
     </div>
 
+    <div class="stands">
+
+      <div class="title">
+
+        <h3>Presentations</h3>
+
+        <span class="title-icon" *ngIf="canEdit">
+          <span class="icon lock" (click)="alternateLockPresentations()">
+            <fa-icon *ngIf="lockedPresentations" [icon]="['fas', 'lock']"></fa-icon>
+          </span>
+
+          <span *ngIf="!lockedPresentations">
+            <span class="icon lock" (click)="alternateLockPresentations()">
+              <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+            </span>
+
+            <span class="icon delete" [ngClass]="{'active': pendingDeletion}" (click)="alternatePendingDeletion()">
+              <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+            </span>
+          </span>
+        </span>
+
+      </div>
+
+      <div>
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">
+                ID
+              </th>
+              <th scope="col">
+                Start Time
+              </th>
+              <th scope="col">
+                End Time
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let presentation of venue.presentations">
+              <th scope="row">
+                {{presentation.id}}
+              </th>
+              <td>
+                {{presentation.start}}
+              </td>
+              <td>
+                {{presentation.end}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <div class="stands">
+
+      <div class="title">
+
+        <h3>Workshops</h3>
+
+        <span class="title-icon" *ngIf="canEdit">
+          <span class="icon lock" (click)="alternateLockWorkshops()">
+            <fa-icon *ngIf="lockedWorkshops" [icon]="['fas', 'lock']"></fa-icon>
+          </span>
+
+          <span *ngIf="!lockedWorkshops">
+            <span class="icon lock" (click)="alternateLockWorkshops()">
+              <fa-icon [icon]="['fas', 'lock-open']"></fa-icon>
+            </span>
+
+            <span class="icon delete" [ngClass]="{'active': pendingDeletion}" (click)="alternatePendingDeletion()">
+              <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+            </span>
+          </span>
+        </span>
+
+      </div>
+
+      <div>
+        <table class="table table-bordered table-striped">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">
+                ID
+              </th>
+              <th scope="col">
+                Start Time
+              </th>
+              <th scope="col">
+                End Time
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let workshop of venue.workshops">
+              <th scope="row">
+                {{workshop.id}}
+              </th>
+              <td>
+                {{workshop.start}}
+              </td>
+              <td>
+                {{workshop.end}}
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
   </div>
 </div>

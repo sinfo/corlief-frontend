@@ -9,6 +9,7 @@ import { DeckService } from 'src/app/deck/deck.service';
 import { CanvasState } from './venue-image/canvas/canvasCommunication';
 import { Venue } from './venue';
 import { Stand } from './stand';
+import { Activity } from './activity';
 
 @Component({
   selector: 'app-venue',
@@ -24,9 +25,13 @@ export class VenueComponent implements OnInit, OnDestroy {
 
   venue: Venue;
   private newStand: Stand;
+  private newPresentation: Activity;
+  private newWorkshop: Activity;
 
   private confirmStand: boolean;
   private lockedStands: boolean;
+  private lockedPresentations: boolean;
+  private lockedWorkshops: boolean;
   private pendingDeletion = false;
 
   canEdit: boolean;
@@ -67,13 +72,26 @@ export class VenueComponent implements OnInit, OnDestroy {
 
   private reset() {
     this.newStand = undefined;
+    this.newPresentation = undefined;
+    this.newWorkshop = undefined;
     this.confirmStand = undefined;
+
     this.lockedStands = true;
+    this.lockedPresentations = true;
+    this.lockedWorkshops = true;
   }
 
   alternateLock() {
     this.pendingDeletion = false;
     this.lockedStands = !this.lockedStands;
+  }
+
+  alternateLockPresentations() {
+    this.lockedPresentations = !this.lockedPresentations;
+  }
+
+  alternateLockWorkshops() {
+    this.lockedWorkshops = !this.lockedWorkshops;
   }
 
   alternatePendingDeletion() {
