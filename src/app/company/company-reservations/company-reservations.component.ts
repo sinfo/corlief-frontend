@@ -149,10 +149,36 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       && this.latestReservation.stands.length < this.credentials.participationDays;
   }
 
+  private clickableWs(id) {
+    return this.latestReservation && this.latestReservation.issued === undefined
+      && !this.isOccupiedWs(id)
+      && this.credentials.workshop;
+  }
+
+  private clickablePres(id) {
+    return this.latestReservation && this.latestReservation.issued === undefined
+      && !this.isOccupiedWs(id)
+      && this.credentials.presentation;
+  }
+
   private clickStand(standId: number, free: boolean) {
-    if(free){
+    if (free) {
       const stand = new ReservationStand(this.selectedDay.day, standId);
       this.latestReservation.update(this.credentials.participationDays, stand);
+      this.reservationService.setReservation(this.latestReservation);
+    }
+  }
+
+  private clickWs(wsId: number, free: boolean) {
+    if (free) {
+      this.latestReservation.workshop = wsId;
+      this.reservationService.setReservation(this.latestReservation);
+    }
+  }
+
+  private clickPres(wsId: number, free: boolean) {
+    if (free) {
+      this.latestReservation.presentation = wsId;
       this.reservationService.setReservation(this.latestReservation);
     }
   }
@@ -186,6 +212,58 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     return this.latestReservation
       ? this.latestReservation.hasStand(stand) && this.latestReservation.isConfirmed()
       : false;
+  }
+
+  private isFreeWs(wsId: number) {
+    return !this.isConfirmedWs(wsId) &&
+      !this.isPendingWs(wsId) &&
+      this.availability.isWsFree(wsId);
+  }
+
+  private isOccupiedWs(wsId: number) {
+    return !this.isConfirmedWs(wsId) &&
+      !this.isPendingWs(wsId) &&
+      !this.availability.isWsFree(wsId);
+  }
+
+  private isPendingWs(wsid: number) {
+    return !this.isConfirmedWs(wsid) &&
+      this.latestReservation &&
+      this.latestReservation.workshop &&
+      this.latestReservation.workshop === wsid;
+  }
+
+  private isConfirmedWs(wsId: number) {
+    return this.latestReservation &&
+      this.latestReservation.workshop &&
+      this.latestReservation.workshop === wsId &&
+      this.latestReservation.isConfirmed();
+  }
+
+  private isFreePres(wsId: number) {
+    return !this.isConfirmedPres(wsId) &&
+      !this.isPendingPres(wsId) &&
+      this.availability.isPresFree(wsId);
+  }
+
+  private isOccupiedPres(wsId: number) {
+    return !this.isConfirmedPres(wsId) &&
+      !this.isPendingPres(wsId) &&
+      !this.availability.isPresFree(wsId);
+  }
+
+  private isPendingPres(wsid: number) {
+    return !this.isConfirmedPres(wsid) &&
+      this.latestReservation &&
+      this.latestReservation.presentation &&
+      this.latestReservation.presentation === wsid;
+  }
+
+  private isConfirmedPres(wsId: number) {
+    return this.latestReservation &&
+      this.latestReservation.presentation &&
+      this.latestReservation.presentation === wsId &&
+      this.latestReservation.isConfirmed();
   }
 
   private makeReservation(content) {

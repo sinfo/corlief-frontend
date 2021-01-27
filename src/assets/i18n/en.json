@@ -52,7 +52,7 @@
     },
     "reservations": {
         "day": "Day {{day}}",
-        "info": "Please choose a stand for this day",
+        "info": "Please choose your options for this day",
         "button": "< Back to explanation",
         "reservations": "Reservations",
         "remaining": "You can still book <b>{{days}}</b> days",

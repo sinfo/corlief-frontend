@@ -4,6 +4,8 @@ import { Event } from 'src/app/deck/event';
 import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { Venue } from 'src/app/admin/venues/venue/venue';
+import { Credentials } from '../../credentials';
 
 
 @Component({
@@ -15,6 +17,8 @@ export class ReservationCardComponent implements OnInit {
 
   @Input() reservation: Reservation;
   @Input() event: Event;
+  @Input() venue: Venue;
+  @Input() credentials: Credentials;
   @Output() removeStandEvent = new EventEmitter<{ day: number, id: number }>();
 
   private english: boolean;

@@ -43,6 +43,8 @@ export class Reservation {
     stands: Stand[];
     feedback?: Feedback;
     company?: Company;
+    workshop?: number;
+    presentation?: number;
 
     constructor(reservation?: Reservation) {
         if (reservation) {
@@ -52,6 +54,8 @@ export class Reservation {
             this.issued = reservation.issued;
             this.stands = Stand.fromArray(reservation.stands);
             this.feedback = reservation.feedback;
+            this.workshop = reservation.workshop;
+            this.presentation = reservation.presentation;
         } else {
             this.stands = [] as Stand[];
         }
@@ -107,6 +111,12 @@ export class Reservation {
                     return false;
                 }
             }
+            if (this.workshop && reservation.workshop && this.workshop === reservation.workshop) {
+                return false;
+            }
+            if (this.presentation && reservation.presentation && this.presentation === reservation.presentation) {
+                return false;
+            }
         }
 
         return true;
@@ -136,7 +146,7 @@ export class Reservation {
 
     daysAreContiguous(): boolean {
         this.stands.sort((s1, s2) => s1.day - s2.day);
-        let last : number = -1;
+        let last: number = -1;
         for (const _stand of this.stands) {
             if (last != -1 && _stand.day - last != 1) {
                 return false;
@@ -149,7 +159,7 @@ export class Reservation {
 
     standIsSame(): boolean {
         if (this.stands.length == 0) return true;
-        let _id : number = this.stands[0].standId;
+        let _id: number = this.stands[0].standId;
         for (const _stand of this.stands) {
             if (_id != _stand.standId)
                 return false;

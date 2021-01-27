@@ -25,7 +25,21 @@ export class Availability {
             id: number;
             free: boolean;
             company?: Company;
-        }]
+        }];
+        workshops: [{
+            id: number;
+            free: boolean;
+            company?: Company;
+            start: Date;
+            end: Date;
+        }];
+        presentations: [{
+            id: number;
+            free: boolean;
+            company?: Company;
+            start: Date;
+            end: Date;
+        }];
     }];
 
     constructor(availability: Availability) {
@@ -42,7 +56,21 @@ export class Availability {
                     id: number;
                     free: boolean;
                     company?: Company;
-                }]
+                }];
+                workshops: [{
+                    id: number;
+                    free: boolean;
+                    company?: Company;
+                    start: Date;
+                    end: Date;
+                }];
+                presentations: [{
+                    id: number;
+                    free: boolean;
+                    company?: Company;
+                    start: Date;
+                    end: Date;
+                }];
             }[]
         };
 
@@ -54,9 +82,44 @@ export class Availability {
         });
 
         for (let day = 1; day <= event.getDuration(); day++) {
+
+            const ws = venue.workshops.filter(w => w.day === day).map(w => {
+                return {
+                    id: w.id,
+                    free: true,
+                    start: new Date(w.start),
+                    end: new Date(w.end)
+                };
+            });
+
+            const pres = venue.presentations.filter(p => p.day === day).map(p => {
+                return {
+                    id: p.id,
+                    free: true,
+                    start: new Date(p.start),
+                    end: new Date(p.end)
+                };
+            });
+
             result.availability.push({
                 day: day,
-                stands: Array.from(stands) as [{ id: number; free: boolean; company?: Company; }]
+                stands: Array.from(stands) as [{ id: number; free: boolean; company?: Company; }],
+                workshops: Array.from(ws) as [{
+                    id: number;
+                    free: boolean;
+                    company?: Company;
+                    start: Date;
+                    end: Date;
+                }],
+                presentations: Array.from(pres) as [{
+                    id: number;
+                    free: boolean;
+                    company?: Company;
+                    start: Date;
+                    end: Date;
+                }],
+
+
             });
         }
 
@@ -83,6 +146,25 @@ export class Availability {
                     company: Company.findById(reservation.companyId, companies)
                 };
             }
+            this.availability.forEach(day => {
+                if (reservation.workshop) {
+                    day.workshops.forEach(ws => {
+                        if (ws.id === reservation.workshop) {
+                            ws.free = false;
+                            ws.company = Company.findById(reservation.companyId, companies);
+                        }
+                    });
+                }
+                if (reservation.presentation) {
+                    day.presentations.forEach(p => {
+                        if (p.id === reservation.presentation) {
+                            p.free = false;
+                            p.company = Company.findById(reservation.companyId, companies);
+                        }
+                    });
+                }
+            });
+
         }
     }
 
@@ -97,5 +179,25 @@ export class Availability {
         const stand = stands.filter(_stand => _stand.id === standId);
 
         return stand.length === 0 ? false : stand[0].free;
+    }
+
+    isWsFree(wsId: number) {
+        for (const day of this.availability) {
+            for (const ws of day.workshops) {
+                if (ws.id === wsId) {
+                    return ws.free;
+                }
+            }
+        }
+    }
+
+    isPresFree(wsId: number) {
+        for (const day of this.availability) {
+            for (const ws of day.presentations) {
+                if (ws.id === wsId) {
+                    return ws.free;
+                }
+            }
+        }
     }
 }
