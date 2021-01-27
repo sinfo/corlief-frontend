@@ -68,7 +68,7 @@ export class CompanyService {
 
   makeReservation(reservation: Reservation): Observable<Reservation> {
     return this.http.post<Reservation>(
-      `${this.corlief}/reservation`, reservation.stands, this.getHeaders()
+      `${this.corlief}/reservation`, { stands: reservation.stands }, this.getHeaders()
     );
   }
 

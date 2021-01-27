@@ -1,0 +1,26 @@
+<h2 mat-dialog-title>{{data.title}}
+  <hr>
+</h2>
+
+<mat-dialog-content>
+
+  <p>Select day</p>
+  <input type="number" [(ngModel)]="data.result.day" min="1" max="{{data.duration}}">
+  <hr>
+
+  <p> Start Time</p>
+  <ngb-timepicker [(ngModel)]="data.result.start" [spinners]="false"></ngb-timepicker>
+  <hr>
+
+  <p> End Time</p>
+  <ngb-timepicker [(ngModel)]="data.result.end" [spinners]="false"></ngb-timepicker>
+  <hr>
+</mat-dialog-content>
+
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="data.result" cdkFocusInitial [disabled]="!data.result.start || 
+    !data.result.end || 
+    data.result.start.hour > data.result.end.hour|| 
+    (data.result.start.hour == data.result.end.hour && data.result.start.minute > data.result.end.minute)">Ok</button>
+</div>

@@ -12,6 +12,7 @@ import { Venue, Availability } from './venue/venue';
 import { Stand } from './venue/stand';
 import { Company } from 'src/app/deck/company';
 import { of } from 'rxjs';
+import { Activity } from './venue/activity';
 
 @Injectable({
   providedIn: 'root'
@@ -95,5 +96,21 @@ export class VenuesService {
 
   deleteStand(id: number): Observable<Venue> {
     return this.http.delete<Venue>(`${this.url}/stand/${id}`, { headers: this.headers });
+  }
+
+  uploadWorkshop(ws: Activity): Observable<Venue> {
+    return this.http.post<Venue>(`${this.url}/workshop`, ws, { headers: this.headers });
+  }
+
+  deleteWorkshop(id: number): Observable<Venue> {
+    return this.http.delete<Venue>(`${this.url}/workshop/${id}`, { headers: this.headers });
+  }
+
+  uploadPresentation(p: Activity): Observable<Venue> {
+    return this.http.post<Venue>(`${this.url}/presentation`, p, { headers: this.headers });
+  }
+
+  deletePresentation(id: number): Observable<Venue> {
+    return this.http.delete<Venue>(`${this.url}/presentation/${id}`, { headers: this.headers });
   }
 }
