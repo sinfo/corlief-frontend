@@ -20,6 +20,9 @@ export class ReservationCardComponent implements OnInit {
   @Input() venue: Venue;
   @Input() credentials: Credentials;
   @Output() removeStandEvent = new EventEmitter<{ day: number, id: number }>();
+  @Output() removeWorkshopEvent = new EventEmitter<any>();
+  @Output() removePresentationEvent = new EventEmitter<any>();
+
 
   private english: boolean;
   private translateSubscription: Subscription;
@@ -37,10 +40,18 @@ export class ReservationCardComponent implements OnInit {
     this.translateSubscription = this.translate.onLangChange.subscribe(LangChangeEvent => {
       this.english = !this.english;
     });
+    console.log(this.venue);
   }
 
   removeStand(stand: { day: number, id: number }) {
     this.removeStandEvent.emit(stand);
   }
 
+  removeWorkshop() {
+    this.removeWorkshopEvent.emit();
+  }
+
+  removePresentation() {
+    this.removePresentationEvent.emit();
+  }
 }

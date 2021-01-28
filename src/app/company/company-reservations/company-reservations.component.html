@@ -29,7 +29,8 @@
     <div class="canvas-wrapper">
 
       <div class="canvas">
-        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [state]="canvasState">
+        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [maxWidth]="25"
+          [state]="canvasState">
         </app-venue-image>
       </div>
 
@@ -63,8 +64,7 @@
         <h5>Presentations</h5>
 
         <div class="stands-list">
-          <div class="activity free clickable"
-            *ngFor="let ws of availability.availability[selectedDay.day -1 ].presentations"
+          <div class="activity" *ngFor="let ws of availability.availability[selectedDay.day -1 ].presentations"
             (click)="clickPres(ws.id, isFreePres(ws.id))"
             [ngClass]="{'free': isFreePres(ws.id), 'occupied': isOccupiedPres(ws.id), 'clickable': clickablePres(ws.id), 'pending': isPendingPres(ws.id), 'confirmed': isConfirmedPres(ws.id)}">
             <div class="activity-id">{{ws.id + 1}}</div>
@@ -101,8 +101,10 @@
       </div>
 
       <div *ngIf="latestReservation" class="reservation">
-        <app-reservation-card [reservation]="latestReservation" [event]="event" [venue]="venue"
-          [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"></app-reservation-card>
+        <app-reservation-card [reservation]="latestReservation" [event]="event" [venue]="availability.venue"
+          [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"
+          (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)">
+        </app-reservation-card>
       </div>
 
       <div class="info">
@@ -112,8 +114,11 @@
             [innerHTML]="'reservations.cancel' | translate"></button>
         </div>
 
-        <div
-          *ngIf="latestReservation && latestReservation.issued === undefined && latestReservation.stands.length === credentials.participationDays"
+        <div *ngIf="latestReservation 
+          && latestReservation.issued === undefined 
+          && (latestReservation.stands.length === credentials.participationDays || availability.venue.stands.length === 0)
+          && ((credentials.workshop && latestReservation.workshop !== undefined) || !credentials.workshop)
+          && ((credentials.presentation && latestReservation.presentation !== undefined) || !credentials.presentation)"
           class="action submit">
           <button class="btn btn-primary" (click)="makeReservation(confirmReservationPopup)"
             [innerHTML]="'reservations.submit' | translate">Submit
@@ -125,8 +130,10 @@
     <ng-container *ngIf="showAllReservations">
       <div class="allReservations">
         <div *ngFor="let reservation of reservations" class="reservation showAll">
-          <app-reservation-card [reservation]="reservation" [event]="event" [venue]="venue" [credentials]="credentials"
-            (removeStandEvent)="removePendingStand($event)"></app-reservation-card>
+          <app-reservation-card [reservation]="reservation" [event]="event" [venue]="availability.venue"
+            [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"
+            (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)">
+          </app-reservation-card>
         </div>
       </div>
     </ng-container>
@@ -156,8 +163,8 @@
     <h6>
       {{ 'reservationWarning.msg1' | translate }}
       <b *ngIf="latestReservation.daysAreContiguous() === false">{{ 'reservationWarning.msg2' | translate }}</b>
-      <span *ngIf="latestReservation.daysAreContiguous() === false && latestReservation.standIsSame() ===false"> {{
-        'reservationWarning.msg3' | translate }}
+      <span *ngIf="latestReservation.daysAreContiguous() === false && latestReservation.standIsSame() ===false">
+        {{'reservationWarning.msg3' | translate }}
       </span>
       <b *ngIf="latestReservation.standIsSame() === false">{{ 'reservationWarning.msg4' | translate }}</b>
     </h6>

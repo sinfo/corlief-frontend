@@ -39,7 +39,6 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private reservations: Reservation[];
   private latestReservation: Reservation;
-
   private showAllReservations: boolean;
 
 
@@ -157,7 +156,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private clickablePres(id) {
     return this.latestReservation && this.latestReservation.issued === undefined
-      && !this.isOccupiedWs(id)
+      && !this.isOccupiedPres(id)
       && this.credentials.presentation;
   }
 
@@ -186,6 +185,16 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   removePendingStand(stand: { day: number, id: number }) {
     const s = new ReservationStand(stand.day, stand.id);
     this.latestReservation.update(this.credentials.participationDays, s);
+    this.reservationService.setReservation(this.latestReservation);
+  }
+
+  removeWorkshop(event: any) {
+    this.latestReservation.workshop = undefined;
+    this.reservationService.setReservation(this.latestReservation);
+  }
+
+  removePresentation(event: any) {
+    this.latestReservation.presentation = undefined;
     this.reservationService.setReservation(this.latestReservation);
   }
 
@@ -229,13 +238,13 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   private isPendingWs(wsid: number) {
     return !this.isConfirmedWs(wsid) &&
       this.latestReservation &&
-      this.latestReservation.workshop &&
+      this.latestReservation.workshop !== undefined &&
       this.latestReservation.workshop === wsid;
   }
 
   private isConfirmedWs(wsId: number) {
     return this.latestReservation &&
-      this.latestReservation.workshop &&
+      this.latestReservation.workshop !== undefined &&
       this.latestReservation.workshop === wsId &&
       this.latestReservation.isConfirmed();
   }
@@ -255,13 +264,13 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   private isPendingPres(wsid: number) {
     return !this.isConfirmedPres(wsid) &&
       this.latestReservation &&
-      this.latestReservation.presentation &&
+      this.latestReservation.presentation !== undefined &&
       this.latestReservation.presentation === wsid;
   }
 
   private isConfirmedPres(wsId: number) {
     return this.latestReservation &&
-      this.latestReservation.presentation &&
+      this.latestReservation.presentation !== undefined &&
       this.latestReservation.presentation === wsId &&
       this.latestReservation.isConfirmed();
   }

@@ -60,6 +60,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { ActivityDialogComponent } from './admin/venues/venue/dialogs/activity-dialog/activity-dialog.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material';
+import { ActivityDisplayPipe } from './company/company-reservations/reservation-card/activity-display.pipe';
 
 library.add(fas);
 
@@ -94,6 +95,7 @@ library.add(fas);
     ReservationCardComponent,
     StandsDisplayPipe,
     ActivityDialogComponent,
+    ActivityDisplayPipe,
   ],
   imports: [
     BrowserModule,

@@ -24,15 +24,31 @@
       </div>
     </div>
 
-    <div class="stand" *ngIf="credentials.workshop">
+    <div class="stand" *ngIf="credentials.workshop" [ngClass]="{'booked': reservation.workshop !== undefined}">
       <div class="info">
         <b>Workshop:</b>
+        <span *ngIf="reservation.workshop !== undefined"
+          [innerHTML]="reservation.workshop | activityDisplay: venue : 'workshops'">
+        </span>
+      </div>
+
+      <div class="action" *ngIf="reservation.workshop !== undefined && reservation.feedback === undefined"
+        (click)="removeWorkshop()">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </div>
     </div>
 
-    <div class="stand" *ngIf="credentials.presentation">
+    <div class="stand" *ngIf="credentials.presentation" [ngClass]="{'booked': reservation.presentation !== undefined}">
       <div class="info">
         <b>Presentation:</b>
+        <span *ngIf="reservation.presentation !== undefined"
+          [innerHTML]="reservation.presentation | activityDisplay: venue : 'presentations'">
+        </span>
+      </div>
+
+      <div class="action" *ngIf="reservation.presentation !== undefined && reservation.feedback === undefined"
+        (click)="removePresentation()">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </div>
     </div>
   </div>
