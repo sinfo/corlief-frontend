@@ -79,7 +79,6 @@ export class VenueComponent implements OnInit, OnDestroy {
     dialogConfig.data = { title: 'Create Workshop', duration: this.duration };
     const dialogRef = this.matDialog.open(ActivityDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       const start = new Date(0);
       start.setUTCHours(result.start.hour - 1); // Terrible fix to keep all times in UTC+0100
       start.setUTCMinutes(result.start.minute);
@@ -110,7 +109,6 @@ export class VenueComponent implements OnInit, OnDestroy {
     dialogConfig.data = { title: 'Create Presentation', duration: this.duration };
     const dialogRef = this.matDialog.open(ActivityDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
       const start = new Date(0);
       start.setUTCHours(result.start.hour - 1); // Terrible fix to keep all times in UTC+0100
       start.setUTCMinutes(result.start.minute);
@@ -136,6 +134,36 @@ export class VenueComponent implements OnInit, OnDestroy {
     });
   }
 
+  newLunchTalkDialog() {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.data = { title: 'Create Lunch Talk', duration: this.duration };
+    const dialogRef = this.matDialog.open(ActivityDialogComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(result => {
+      const start = new Date(0);
+      start.setUTCHours(result.start.hour - 1); // Terrible fix to keep all times in UTC+0100
+      start.setUTCMinutes(result.start.minute);
+      const end = new Date(0);
+      end.setUTCHours(result.end.hour - 1);
+      end.setUTCMinutes(result.end.minute);
+      const newLT = new Activity(result.day, start, end);
+      this.venuesService.uploadLunchTalk(newLT).subscribe(
+        (venue: Venue) => {
+          this.venuesService.setVenue(venue);
+          this.venue = venue;
+        },
+        error => {
+          if (error.status === 422) {
+            console.error('Bad data', error);
+          } else if (error.status === 401) {
+            console.error('Unauthorized', error);
+          } else {
+            console.error(error);
+          }
+        }
+      );
+    });
+  }
+
   deleteWorkshop(id: number) {
     this.venuesService.deleteWorkshop(id).subscribe(venue => {
       this.venuesService.setVenue(venue);
@@ -144,6 +172,12 @@ export class VenueComponent implements OnInit, OnDestroy {
 
   deletePresentation(id: number) {
     this.venuesService.deletePresentation(id).subscribe(venue => {
+      this.venuesService.setVenue(venue);
+    });
+  }
+
+  deleteLunchTalk(id: number) {
+    this.venuesService.deleteLunchTalk(id).subscribe(venue => {
       this.venuesService.setVenue(venue);
     });
   }

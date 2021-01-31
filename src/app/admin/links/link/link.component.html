@@ -71,6 +71,11 @@
         {{ company.link.presentation? "Yes" : "No" }}
       </div>
 
+      <div>
+        <b>Lunch Talk:</b>
+        {{ company.link.lunchTalk? "Yes" : "No" }}
+      </div>
+
       <div *ngIf="company.link.expirationDate">
         <b>Valid until:</b>
         {{ company.link.expirationDate | date:'dd/MM/yyyy' }}
@@ -168,6 +173,11 @@
       <div>
         <label>Presentation:</label>
         <input class="form-control" type="checkbox" formControlName="presentation">
+      </div>
+
+      <div>
+        <label>Lunch Talk:</label>
+        <input class="form-control" type="checkbox" formControlName="lunchTalk">
       </div>
 
     </form>

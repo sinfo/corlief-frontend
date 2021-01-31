@@ -60,7 +60,8 @@
         "cancel": "Cancelar reserva",
         "submit": "Submeter reserva",
         "current": "Mostrar reservas atuais",
-        "previous": "Mostrar reservas prévias"
+        "previous": "Mostrar reservas prévias",
+        "presentation": "Apresentações"
     },
     "reservationWarning": {
         "msg1": "A sua reserva não vai de encontro às guias dadas pela SINFO, pois",

@@ -14,7 +14,8 @@
         <b [innerHTML]="'reservations.day' | translate: {day: stand.day} "></b> ({{ !english? (stand.date | date : 'MMMM
         d') : (stand.date | ptDate: stand.date)}})
         <span *ngIf="stand.id !== undefined">
-          <b>- Stand {{stand.id + 1}}</b>
+          <b *ngIf="limitedStands">- Stand {{stand.id + 1}}</b>
+          <b *ngIf="!limitedStands">You chose this day!</b>
         </span>
       </div>
 
@@ -48,6 +49,20 @@
 
       <div class="action" *ngIf="reservation.presentation !== undefined && reservation.feedback === undefined"
         (click)="removePresentation()">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </div>
+    </div>
+
+    <div class="stand" *ngIf="credentials.lunchTalk" [ngClass]="{'booked': reservation.lunchTalk !== undefined}">
+      <div class="info">
+        <b>Lunch Talk:</b>
+        <span *ngIf="reservation.lunchTalk !== undefined"
+          [innerHTML]="reservation.lunchTalk | activityDisplay: venue : 'lunchTalks'">
+        </span>
+      </div>
+
+      <div class="action" *ngIf="reservation.lunchTalk !== undefined && reservation.feedback === undefined"
+        (click)="removeLunchTalk()">
         <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </div>
     </div>

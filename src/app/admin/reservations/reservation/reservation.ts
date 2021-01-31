@@ -7,9 +7,9 @@ export class Feedback {
 
 export class Stand {
     day: number;
-    standId: number;
+    standId?: number;
 
-    constructor(day: number, standId: number) {
+    constructor(day: number, standId?: number) {
         this.day = day;
         this.standId = standId;
     }
@@ -26,7 +26,7 @@ export class Stand {
 
     isInArray(stands: Stand[]): boolean {
         for (const stand of stands) {
-            if (stand.day === this.day && stand.standId === this.standId) {
+            if (stand.day === this.day && (stand.standId !== undefined && this.standId !== undefined && stand.standId === this.standId)) {
                 return true;
             }
         }
@@ -45,6 +45,7 @@ export class Reservation {
     company?: Company;
     workshop?: number;
     presentation?: number;
+    lunchTalk?: number;
 
     constructor(reservation?: Reservation) {
         if (reservation) {
@@ -56,6 +57,7 @@ export class Reservation {
             this.feedback = reservation.feedback;
             this.workshop = reservation.workshop;
             this.presentation = reservation.presentation;
+            this.lunchTalk = reservation.lunchTalk;
         } else {
             this.stands = [] as Stand[];
         }
@@ -117,6 +119,9 @@ export class Reservation {
             if (this.presentation && reservation.presentation && this.presentation === reservation.presentation) {
                 return false;
             }
+            if (this.lunchTalk && reservation.lunchTalk && this.lunchTalk === reservation.lunchTalk) {
+                return false;
+            }
         }
 
         return true;
@@ -158,11 +163,12 @@ export class Reservation {
     }
 
     standIsSame(): boolean {
-        if (this.stands.length == 0) return true;
-        let _id: number = this.stands[0].standId;
+        if (this.stands.length === 0) { return true; }
+        const _id: number = this.stands[0].standId;
         for (const _stand of this.stands) {
-            if (_id != _stand.standId)
+            if (_id !== _stand.standId) {
                 return false;
+            }
         }
 
         return true;

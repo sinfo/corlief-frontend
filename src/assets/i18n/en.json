@@ -59,7 +59,8 @@
         "cancel": "Cancel reservation",
         "submit": "Submit reservation",
         "current": "Show current reservations",
-        "previous": "Show previous reservations"
+        "previous": "Show previous reservations",
+        "presentation": "Presentations"
     },
     "reservationWarning": {
         "msg1": "Your reservation does meet SINFO's guidelines, because",

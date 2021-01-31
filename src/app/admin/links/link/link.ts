@@ -62,6 +62,7 @@ export class Link {
     expirationDate?: Date;
     workshop: boolean;
     presentation: boolean;
+    lunchTalk: boolean;
 
     constructor(link: Link) {
         this.companyId = link.companyId;
@@ -75,6 +76,7 @@ export class Link {
         this.expirationDate = link.expirationDate;
         this.workshop = link.workshop;
         this.presentation = link.presentation;
+        this.lunchTalk = link.lunchTalk;
     }
 
     static linkForm(company: Company, event: Event): FormGroup {
@@ -110,6 +112,9 @@ export class Link {
             ]),
             presentation: new FormControl(false, [
                 Validators.required
+            ]),
+            lunchTalk: new FormControl(false, [
+                Validators.required
             ])
         });
     }
@@ -129,7 +134,8 @@ export class Link {
             advertisementKind: data.advertisementKind,
             participationDays: data.participationDays,
             workshop: link.workshop,
-            presentation: link.presentation
+            presentation: link.presentation,
+            lunchTalk: link.lunchTalk
         });
     }
 
@@ -167,4 +173,5 @@ export class LinkForm {
     expirationDate: Date;
     workshop: boolean;
     presentation: boolean;
+    lunchTalk: boolean;
 }

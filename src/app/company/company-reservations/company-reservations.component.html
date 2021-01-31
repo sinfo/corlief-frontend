@@ -39,7 +39,7 @@
 
         <h5>Stands</h5>
 
-        <div class="stands-list">
+        <div class="stands-list" *ngIf="limitedStands">
           <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands"
             (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)"
             (click)="clickStand(stand.id, isFreeStand(stand.id))"
@@ -48,9 +48,17 @@
           </div>
         </div>
 
-        <h5>Workshops</h5>
 
-        <div class="stands-list">
+        <div class="stands-list" *ngIf="!limitedStands">
+          <div class="btn btn-primary" (click)="chooseDay()"
+            [ngClass]="{'btn-primary': isFreeStand(), 'disabled': isOccupiedStand(), 'disabled':!clickableStand() && !isPendingBook() , 'btn-primary': clickableStand(), 'btn-danger': isPendingBook(), 'btn-success': isConfirmedBook()}">
+            {{ isPendingBook()? "Deselect this day": (isConfirmedBook()? "Selected day" : "Select this day")}}
+          </div>
+        </div>
+
+        <h5 *ngIf="credentials.workshop">Workshops</h5>
+
+        <div class="stands-list" *ngIf="credentials.workshop">
           <div class="activity" *ngFor="let ws of availability.availability[selectedDay.day -1 ].workshops"
             (click)="clickWs(ws.id, isFreeWs(ws.id))"
             [ngClass]="{'free': isFreeWs(ws.id), 'occupied': isOccupiedWs(ws.id), 'clickable': clickableWs(ws.id), 'pending': isPendingWs(ws.id), 'confirmed': isConfirmedWs(ws.id)}">
@@ -61,12 +69,25 @@
           </div>
         </div>
 
-        <h5>Presentations</h5>
+        <h5 [innerHTML]="'reservations.presentation' | translate" *ngIf="credentials.presentation"></h5>
 
-        <div class="stands-list">
+        <div class="stands-list" *ngIf="credentials.presentation">
           <div class="activity" *ngFor="let ws of availability.availability[selectedDay.day -1 ].presentations"
             (click)="clickPres(ws.id, isFreePres(ws.id))"
             [ngClass]="{'free': isFreePres(ws.id), 'occupied': isOccupiedPres(ws.id), 'clickable': clickablePres(ws.id), 'pending': isPendingPres(ws.id), 'confirmed': isConfirmedPres(ws.id)}">
+            <div class="activity-id">{{ws.id + 1}}</div>
+            <div>{{ws.start | date:'H:mm'}}</div>
+            <div>-</div>
+            <div>{{ws.end | date:'H:mm'}}</div>
+          </div>
+        </div>
+
+        <h5 *ngIf="credentials.lunchTalk">Lunch Talks</h5>
+
+        <div class="stands-list" *ngIf="credentials.lunchTalk">
+          <div class="activity" *ngFor="let ws of availability.availability[selectedDay.day -1 ].lunchTalks"
+            (click)="clickLT(ws.id, isFreeLT(ws.id))"
+            [ngClass]="{'free': isFreeLT(ws.id), 'occupied': isOccupiedLT(ws.id), 'clickable': clickableLT(ws.id), 'pending': isPendingLT(ws.id), 'confirmed': isConfirmedLT(ws.id)}">
             <div class="activity-id">{{ws.id + 1}}</div>
             <div>{{ws.start | date:'H:mm'}}</div>
             <div>-</div>
@@ -103,7 +124,8 @@
       <div *ngIf="latestReservation" class="reservation">
         <app-reservation-card [reservation]="latestReservation" [event]="event" [venue]="availability.venue"
           [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"
-          (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)">
+          (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)"
+          (removeLunchTalkEvent)="removeLunchTalk($event)">
         </app-reservation-card>
       </div>
 
@@ -132,7 +154,8 @@
         <div *ngFor="let reservation of reservations" class="reservation showAll">
           <app-reservation-card [reservation]="reservation" [event]="event" [venue]="availability.venue"
             [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"
-            (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)">
+            (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)"
+            (removeLunchTalkEvent)="removeLunchTalk($event)">
           </app-reservation-card>
         </div>
       </div>

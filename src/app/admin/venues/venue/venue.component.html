@@ -111,5 +111,27 @@
       </div>
     </div>
 
+    <div class="title">
+      <h3>Lunch Talks</h3>
+    </div>
+
+    <div class="stands-list">
+      <div class="activity" *ngFor="let p of venue.lunchTalks">
+        <p>ID: {{p.id}}</p>
+        <p>Day: {{p.day}}</p>
+        <p>Start: {{p.start | date:'H:mm z'}}</p>
+        <p>End: {{p.end | date:'H:mm z' }}</p>
+        <button class="delete-btn" *ngIf="canEdit" (click)="deleteLunchTalk(p.id)">
+          <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+        </button>
+      </div>
+
+      <div class="stand">
+        <button class="btn btn-primary" (click)="newLunchTalkDialog()" [disabled]="!canEdit">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>

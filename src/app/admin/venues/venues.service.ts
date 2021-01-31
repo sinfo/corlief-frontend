@@ -113,4 +113,12 @@ export class VenuesService {
   deletePresentation(id: number): Observable<Venue> {
     return this.http.delete<Venue>(`${this.url}/presentation/${id}`, { headers: this.headers });
   }
+
+  uploadLunchTalk(p: Activity): Observable<Venue> {
+    return this.http.post<Venue>(`${this.url}/lunchtalk`, p, { headers: this.headers });
+  }
+
+  deleteLunchTalk(id: number): Observable<Venue> {
+    return this.http.delete<Venue>(`${this.url}/lunchtalk/${id}`, { headers: this.headers });
+  }
 }

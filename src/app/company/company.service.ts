@@ -71,7 +71,8 @@ export class CompanyService {
       `${this.corlief}/reservation`, {
       stands: reservation.stands,
       workshop: reservation.workshop,
-      presentation: reservation.presentation
+      presentation: reservation.presentation,
+      lunchTalk: reservation.lunchTalk
     }, this.getHeaders()
     );
   }

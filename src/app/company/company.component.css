@@ -58,9 +58,9 @@ nav {
 }
 
 #lang {
-    width: 8%;
+    width: 5%;
     margin-left: 0.5%;
-    margin-right: 0.5%;
+    margin-right: 5%;
 
     display: flex;
     flex-direction: row;
@@ -72,6 +72,7 @@ nav {
     width: auto;
     border-radius: 50%;
     opacity: 0.5;
+    flex-grow: 1;
 }
 
 #lang img:hover {

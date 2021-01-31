@@ -10,6 +10,7 @@ export class Venue {
     stands: Stand[];
     presentations: Activity[];
     workshops: Activity[];
+    lunchTalks: Activity[];
 
     constructor(edition: String, image: String) {
         this.edition = edition;
@@ -34,6 +35,13 @@ export class Availability {
             end: Date;
         }];
         presentations: [{
+            id: number;
+            free: boolean;
+            company?: Company;
+            start: Date;
+            end: Date;
+        }];
+        lunchTalks: [{
             id: number;
             free: boolean;
             company?: Company;
@@ -71,6 +79,13 @@ export class Availability {
                     start: Date;
                     end: Date;
                 }];
+                lunchTalks: [{
+                    id: number;
+                    free: boolean;
+                    company?: Company;
+                    start: Date;
+                    end: Date;
+                }];
             }[]
         };
 
@@ -101,6 +116,15 @@ export class Availability {
                 };
             });
 
+            const lts = venue.lunchTalks.filter(lt => lt.day === day).map(lt => {
+                return {
+                    id: lt.id,
+                    free: true,
+                    start: new Date(lt.start),
+                    end: new Date(lt.end)
+                };
+            });
+
             result.availability.push({
                 day: day,
                 stands: Array.from(stands) as [{ id: number; free: boolean; company?: Company; }],
@@ -118,7 +142,13 @@ export class Availability {
                     start: Date;
                     end: Date;
                 }],
-
+                lunchTalks: Array.from(lts) as [{
+                    id: number;
+                    free: boolean;
+                    company?: Company;
+                    start: Date;
+                    end: Date;
+                }],
 
             });
         }
@@ -147,7 +177,7 @@ export class Availability {
                 };
             }
             this.availability.forEach(day => {
-                if (reservation.workshop) {
+                if (reservation.workshop !== undefined) {
                     day.workshops.forEach(ws => {
                         if (ws.id === reservation.workshop) {
                             ws.free = false;
@@ -155,9 +185,17 @@ export class Availability {
                         }
                     });
                 }
-                if (reservation.presentation) {
+                if (reservation.presentation !== undefined) {
                     day.presentations.forEach(p => {
                         if (p.id === reservation.presentation) {
+                            p.free = false;
+                            p.company = Company.findById(reservation.companyId, companies);
+                        }
+                    });
+                }
+                if (reservation.lunchTalk !== undefined) {
+                    day.lunchTalks.forEach(p => {
+                        if (p.id === reservation.lunchTalk) {
                             p.free = false;
                             p.company = Company.findById(reservation.companyId, companies);
                         }
@@ -175,6 +213,9 @@ export class Availability {
         if (day.length === 0) { return false; }
 
         const stands = day[0].stands;
+        if (stands.length < 1) {
+            return true;
+        }
 
         const stand = stands.filter(_stand => _stand.id === standId);
 
@@ -194,6 +235,16 @@ export class Availability {
     isPresFree(wsId: number) {
         for (const day of this.availability) {
             for (const ws of day.presentations) {
+                if (ws.id === wsId) {
+                    return ws.free;
+                }
+            }
+        }
+    }
+
+    isLunchTalkFree(wsId: number) {
+        for (const day of this.availability) {
+            for (const ws of day.lunchTalks) {
                 if (ws.id === wsId) {
                     return ws.free;
                 }

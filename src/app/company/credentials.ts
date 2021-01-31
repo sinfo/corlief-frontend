@@ -7,4 +7,5 @@ export class Credentials {
     participationDays: number;
     workshop: boolean;
     presentation: boolean;
+    lunchTalk: boolean;
 }

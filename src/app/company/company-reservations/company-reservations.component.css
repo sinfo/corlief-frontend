@@ -155,9 +155,14 @@
     border-color: black;
 }
 
-.stand.pending, .stand.confirmed, .activity.pending, .activity.confirmed {
+.stand.pending, .stand.confirmed, .activity.pending{
     color: black;
     border: 2px solid #1e5abf;
+}
+
+.activity.confirmed {
+    color: black;
+    border: 2px solid #a0eeb2;
 }
 
 .stand.clickable:hover {
