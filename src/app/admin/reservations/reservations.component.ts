@@ -97,6 +97,7 @@ export class ReservationsComponent implements OnInit {
           cancelled: reservations.filter(r => r.isCancelled()) as Reservation[]
         };
 
+        console.log(this.reservations.confirmed);
         this.generateAvailability();
       });
 

@@ -45,6 +45,14 @@
                                         {{day.company ? day.company.name : ''}}
                                     </td>
                                 </tr>
+                                <tr>
+                                    <td>
+                                        Ocupation
+                                    </td>
+                                    <td *ngFor="let day of availability.availability">
+                                        {{day.nStands}}
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                         <table class="table table-bordered table-striped">

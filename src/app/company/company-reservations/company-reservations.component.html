@@ -28,7 +28,7 @@
 
     <div class="canvas-wrapper">
 
-      <div class="canvas">
+      <div class="canvas" *ngIf="limitedStands">
         <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [maxWidth]="25"
           [state]="canvasState">
         </app-venue-image>

@@ -22,6 +22,7 @@ export class Availability {
     venue?: Venue;
     availability: [{
         day: number;
+        nStands?: number;
         stands: [{
             id: number;
             free: boolean;
@@ -60,6 +61,7 @@ export class Availability {
             venue: venue,
             availability: [] as {
                 day: number;
+                nStands: number;
                 stands: [{
                     id: number;
                     free: boolean;
@@ -127,6 +129,7 @@ export class Availability {
 
             result.availability.push({
                 day: day,
+                nStands: 0,
                 stands: Array.from(stands) as [{ id: number; free: boolean; company?: Company; }],
                 workshops: Array.from(ws) as [{
                     id: number;
@@ -170,11 +173,16 @@ export class Availability {
                 const selectedStand = this.availability[day].stands
                     .map(s => s.id).indexOf(stand.standId);
 
-                this.availability[day].stands[selectedStand] = {
-                    id: stand.standId,
-                    free: false,
-                    company: Company.findById(reservation.companyId, companies)
-                };
+                if (selectedStand !== -1) {
+
+                    this.availability[day].stands[selectedStand] = {
+                        id: stand.standId,
+                        free: false,
+                        company: Company.findById(reservation.companyId, companies)
+                    };
+                } else {
+                    this.availability[day].nStands += 1;
+                }
             }
             this.availability.forEach(day => {
                 if (reservation.workshop !== undefined) {
