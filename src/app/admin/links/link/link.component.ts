@@ -60,6 +60,7 @@ export class LinkComponent implements OnInit {
   submitLink(modal) {
     this.linksService.uploadLink(<LinkForm>this.linkForm.value)
       .subscribe(link => {
+        console.log(link);
         modal.close();
         this.linksService.updateLinks(this.event.id as string);
       });
@@ -100,6 +101,7 @@ export class LinkComponent implements OnInit {
     const linkEdit = new LinkEdit(this.editLinkForm);
     this.linksService.edit(linkEdit, this.event, this.company.id)
       .subscribe(link => {
+        console.log(link);
         modal.close();
         this.linksService.updateLinks(this.event.id as string);
       });

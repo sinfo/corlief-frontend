@@ -1,9 +1,11 @@
-<div class="reservation" [ngClass]="{'confirmed': reservation.isConfirmed(), 'cancelled': reservation.isCancelled(), 'pending': reservation.isPending()}">
+<div class="reservation"
+  [ngClass]="{'confirmed': reservation.isConfirmed(), 'cancelled': reservation.isCancelled(), 'pending': reservation.isPending()}">
   <div class="reservation-content" *ngIf="reservation">
 
     <div class="status" *ngIf="reservation.company">
       <div class="company-img">
-        <img [defaultImage]="loadingSrc" [lazyLoad]="reservation.company.img" [ngStyle]="{'height': '100%', 'width': 'auto' }">
+        <img [defaultImage]="loadingSrc" [lazyLoad]="reservation.company.img"
+          [ngStyle]="{'height': '100%', 'width': 'auto' }">
       </div>
 
     </div>
@@ -22,9 +24,28 @@
             <b>Day: </b>
             {{stand.day}}
           </div>
-          <div class="reservation-stand">
+          <div class="reservation-stand" *ngIf="stand.standId">
             <b>Stand: </b>
             {{stand.standId + 1}}
+          </div>
+        </div>
+
+        <div class="reservation-stands border" *ngIf="reservation.workshop !== undefined">
+          <div class="reservation-day">
+            <b>Ws: </b>
+            {{ reservation.workshop + 1}}
+          </div>
+        </div>
+        <div class="reservation-stands border" *ngIf="reservation.presentation !== undefined">
+          <div class="reservation-day">
+            <b>Pres: </b>
+            {{ reservation.presentation + 1}}
+          </div>
+        </div>
+        <div class="reservation-stands border" *ngIf="reservation.lunchTalk !== undefined">
+          <div class="reservation-day">
+            <b>LT: </b>
+            {{ reservation.lunchTalk + 1}}
           </div>
         </div>
 
@@ -32,9 +53,12 @@
     </div>
 
     <div class="actions">
-      <button class="btn btn-danger" (click)="cancel()" *ngIf="reservation.feedback.status !== 'CANCELLED'">Cancel</button>
-      <button class="btn btn-success" (click)="confirm()" [disabled]="confirmationBlocked" *ngIf="adminMode && reservation.feedback.status === 'PENDING'">Confirm</button>
-      <button class="btn btn-danger" (click)="removeWarning(warning)" *ngIf="adminMode && reservation.feedback.status === 'CANCELLED'">Delete</button>
+      <button class="btn btn-danger" (click)="cancel()"
+        *ngIf="reservation.feedback.status !== 'CANCELLED'">Cancel</button>
+      <button class="btn btn-success" (click)="confirm()" [disabled]="confirmationBlocked"
+        *ngIf="adminMode && reservation.feedback.status === 'PENDING'">Confirm</button>
+      <button class="btn btn-danger" (click)="removeWarning(warning)"
+        *ngIf="adminMode && reservation.feedback.status === 'CANCELLED'">Delete</button>
     </div>
   </div>
 </div>

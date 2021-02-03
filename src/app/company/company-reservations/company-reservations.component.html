@@ -12,7 +12,8 @@
           <b [innerHTML]="'reservations.day' | translate: {day: selectedDay.day}"></b>
         </div>
         <div>{{english? ( selectedDay.date | date : 'MMMM d') : ( selectedDay.date | ptDate) }}</div>
-        <div [ngClass]="{'canChangeDay': selectedDay.day < event.getDuration()}" (click)="changeDay(selectedDay.day + 1)">
+        <div [ngClass]="{'canChangeDay': selectedDay.day < event.getDuration()}"
+          (click)="changeDay(selectedDay.day + 1)">
           <b>&gt;</b>
         </div>
       </div>
@@ -27,20 +28,74 @@
 
     <div class="canvas-wrapper">
 
-      <div class="canvas">
-        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [state]="canvasState"></app-venue-image>
+      <div class="canvas" *ngIf="limitedStands">
+        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [maxWidth]="25"
+          [state]="canvasState">
+        </app-venue-image>
       </div>
 
       <div class="stands">
 
-        <h6 [innerHTML]="'reservations.info' | translate"></h6>
 
-        <div class="stands-list">
-          <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands" (mouseover)="selectStand(stand)"
-            (mouseleave)="deselectStand(stand.id)" (click)="clickStand(stand.id, isFreeStand(stand.id))" [ngClass]="{'free': isFreeStand(stand.id), 'occupied': isOccupiedStand(stand.id), 'clickable': clickableStand(stand.id), 'pending': isPendingBook(stand.id), 'confirmed': isConfirmedBook(stand.id)}">
+        <h5>Stands</h5>
+
+        <div class="stands-list" *ngIf="limitedStands">
+          <div class="stand" *ngFor="let stand of availability.venue.stands | sortStands"
+            (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)"
+            (click)="clickStand(stand.id, isFreeStand(stand.id))"
+            [ngClass]="{'free': isFreeStand(stand.id), 'occupied': isOccupiedStand(stand.id), 'clickable': clickableStand(stand.id), 'pending': isPendingBook(stand.id), 'confirmed': isConfirmedBook(stand.id)}">
             {{stand.id + 1}}
           </div>
         </div>
+
+
+        <div class="stands-list" *ngIf="!limitedStands">
+          <div class="btn btn-primary" (click)="chooseDay()"
+            [ngClass]="{'btn-primary': isFreeStand(), 'disabled': isOccupiedStand(), 'disabled':!clickableStand() && !isPendingBook() , 'btn-primary': clickableStand(), 'btn-danger': isPendingBook(), 'btn-success': isConfirmedBook()}">
+            {{ isPendingBook()? "Deselect this day": (isConfirmedBook()? "Selected day" : "Select this day")}}
+          </div>
+        </div>
+
+        <h5 *ngIf="credentials.workshop">Workshops</h5>
+
+        <div class="stands-list" *ngIf="credentials.workshop">
+          <div class="activity" *ngFor="let ws of availability.availability[selectedDay.day -1 ].workshops"
+            (click)="clickWs(ws.id, isFreeWs(ws.id))"
+            [ngClass]="{'free': isFreeWs(ws.id), 'occupied': isOccupiedWs(ws.id), 'clickable': clickableWs(ws.id), 'pending': isPendingWs(ws.id), 'confirmed': isConfirmedWs(ws.id)}">
+            <div class="activity-id">{{ws.id + 1}}</div>
+            <div>{{ws.start | date:'H:mm'}}</div>
+            <div>-</div>
+            <div>{{ws.end | date:'H:mm'}}</div>
+          </div>
+        </div>
+
+        <h5 [innerHTML]="'reservations.presentation' | translate" *ngIf="credentials.presentation"></h5>
+
+        <div class="stands-list" *ngIf="credentials.presentation">
+          <div class="activity" *ngFor="let ws of availability.availability[selectedDay.day -1 ].presentations"
+            (click)="clickPres(ws.id, isFreePres(ws.id))"
+            [ngClass]="{'free': isFreePres(ws.id), 'occupied': isOccupiedPres(ws.id), 'clickable': clickablePres(ws.id), 'pending': isPendingPres(ws.id), 'confirmed': isConfirmedPres(ws.id)}">
+            <div class="activity-id">{{ws.id + 1}}</div>
+            <div>{{ws.start | date:'H:mm'}}</div>
+            <div>-</div>
+            <div>{{ws.end | date:'H:mm'}}</div>
+          </div>
+        </div>
+
+        <h5 *ngIf="credentials.lunchTalk">Lunch Talks</h5>
+
+        <div class="stands-list" *ngIf="credentials.lunchTalk">
+          <div class="activity" *ngFor="let ws of availability.availability[selectedDay.day -1 ].lunchTalks"
+            (click)="clickLT(ws.id, isFreeLT(ws.id))"
+            [ngClass]="{'free': isFreeLT(ws.id), 'occupied': isOccupiedLT(ws.id), 'clickable': clickableLT(ws.id), 'pending': isPendingLT(ws.id), 'confirmed': isConfirmedLT(ws.id)}">
+            <div class="activity-id">{{ws.id + 1}}</div>
+            <div>{{ws.start | date:'H:mm'}}</div>
+            <div>-</div>
+            <div>{{ws.end | date:'H:mm'}}</div>
+          </div>
+        </div>
+
+        <h6 [innerHTML]="'reservations.info' | translate"></h6>
 
       </div>
 
@@ -58,24 +113,37 @@
     </div>
 
     <ng-container *ngIf="!showAllReservations && latestReservation">
-      <div *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays"
+      <div
+        *ngIf="latestReservation.issued === undefined && latestReservation.stands.length < credentials.participationDays"
         class="missing">
-        <h6 [innerHTML]="'reservations.remaining' | translate: {days: credentials.participationDays - latestReservation.stands.length}">
+        <h6
+          [innerHTML]="'reservations.remaining' | translate: {days: credentials.participationDays - latestReservation.stands.length}">
         </h6>
       </div>
 
       <div *ngIf="latestReservation" class="reservation">
-        <app-reservation-card [reservation]="latestReservation" [event]="event" (removeStandEvent)="removePendingStand($event)"></app-reservation-card>
+        <app-reservation-card [reservation]="latestReservation" [event]="event" [venue]="availability.venue"
+          [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"
+          (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)"
+          (removeLunchTalkEvent)="removeLunchTalk($event)">
+        </app-reservation-card>
       </div>
 
       <div class="info">
-        <div *ngIf="latestReservation && latestReservation.isPending() && latestReservation.issued !== undefined" class="action cancel">
-          <button class="btn btn-danger" (click)="cancelReservation()" [innerHTML]="'reservations.cancel' | translate"></button>
+        <div *ngIf="latestReservation && latestReservation.isPending() && latestReservation.issued !== undefined"
+          class="action cancel">
+          <button class="btn btn-danger" (click)="cancelReservation()"
+            [innerHTML]="'reservations.cancel' | translate"></button>
         </div>
 
-        <div *ngIf="latestReservation && latestReservation.issued === undefined && latestReservation.stands.length === credentials.participationDays"
+        <div *ngIf="latestReservation 
+          && latestReservation.issued === undefined 
+          && (latestReservation.stands.length === credentials.participationDays || availability.venue.stands.length === 0)
+          && ((credentials.workshop && latestReservation.workshop !== undefined) || !credentials.workshop)
+          && ((credentials.presentation && latestReservation.presentation !== undefined) || !credentials.presentation)"
           class="action submit">
-          <button class="btn btn-primary" (click)="makeReservation(confirmReservationPopup)" [innerHTML]="'reservations.submit' | translate">Submit
+          <button class="btn btn-primary" (click)="makeReservation(confirmReservationPopup)"
+            [innerHTML]="'reservations.submit' | translate">Submit
             reservation</button>
         </div>
       </div>
@@ -84,13 +152,18 @@
     <ng-container *ngIf="showAllReservations">
       <div class="allReservations">
         <div *ngFor="let reservation of reservations" class="reservation showAll">
-          <app-reservation-card [reservation]="reservation" [event]="event" (removeStandEvent)="removePendingStand($event)"></app-reservation-card>
+          <app-reservation-card [reservation]="reservation" [event]="event" [venue]="availability.venue"
+            [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"
+            (removeWorkshopEvent)="removeWorkshop($event)" (removePresentationEvent)="removePresentation($event)"
+            (removeLunchTalkEvent)="removeLunchTalk($event)">
+          </app-reservation-card>
         </div>
       </div>
     </ng-container>
 
     <div class="history">
-      <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.current' | translate">
+      <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()"
+        [innerHTML]=" 'reservations.current' | translate">
       </button>
       <button *ngIf="showAllReservations == false" class="btn btn-primary" (click)="alternateShowAllReservations()"
         [innerHTML]=" 'reservations.previous' | translate">
@@ -113,8 +186,8 @@
     <h6>
       {{ 'reservationWarning.msg1' | translate }}
       <b *ngIf="latestReservation.daysAreContiguous() === false">{{ 'reservationWarning.msg2' | translate }}</b>
-      <span *ngIf="latestReservation.daysAreContiguous() === false && latestReservation.standIsSame() ===false"> {{
-        'reservationWarning.msg3' | translate }}
+      <span *ngIf="latestReservation.daysAreContiguous() === false && latestReservation.standIsSame() ===false">
+        {{'reservationWarning.msg3' | translate }}
       </span>
       <b *ngIf="latestReservation.standIsSame() === false">{{ 'reservationWarning.msg4' | translate }}</b>
     </h6>
@@ -122,7 +195,9 @@
   </div>
 
   <div class="modal-footer">
-    <button class="btn btn-danger" (click)="modal.close('Cancelled')">{{ 'reservationWarning.cancel' | translate }}</button>
-    <button class="btn btn-success" (click)="modal.close('Confirmed')">{{ 'reservationWarning.confirm' | translate }}</button>
+    <button class="btn btn-danger" (click)="modal.close('Cancelled')">{{ 'reservationWarning.cancel' | translate
+      }}</button>
+    <button class="btn btn-success" (click)="modal.close('Confirmed')">{{ 'reservationWarning.confirm' | translate
+      }}</button>
   </div>
 </ng-template>

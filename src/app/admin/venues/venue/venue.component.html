@@ -39,14 +39,16 @@
 
     <div class="stands-list">
 
-      <div class="stand" *ngFor="let stand of venue.stands | sortStands" (mouseover)="selectStand(stand)" (mouseleave)="deselectStand(stand.id)">
+      <div class="stand" *ngFor="let stand of venue.stands | sortStands" (mouseover)="selectStand(stand)"
+        (mouseleave)="deselectStand(stand.id)">
         <div class="stand border" [ngClass]="{'delete': pendingDeletion}" (click)="clickStand(stand.id)">
           {{stand.id + 1}}
         </div>
       </div>
 
       <div class="stand" *ngIf="confirmStand === undefined">
-        <button class="btn btn-primary" (click)="newStandPreparations()" [disabled]="lockedStands" *ngIf="confirmStand === undefined">
+        <button class="btn btn-primary" (click)="newStandPreparations()" [disabled]="lockedStands"
+          *ngIf="confirmStand === undefined">
           <fa-icon [icon]="['fas', 'plus']"></fa-icon>
         </button>
       </div>
@@ -63,6 +65,72 @@
         </button>
       </div>
 
+    </div>
+
+    <div class="title">
+      <h3>Workshops</h3>
+    </div>
+
+    <div class="stands-list">
+      <div class="activity" *ngFor="let ws of venue.workshops">
+        <p>ID: {{ws.id}}</p>
+        <p>Day: {{ws.day}}</p>
+        <p>Start: {{ws.start | date:'H:mm z'}}</p>
+        <p>End: {{ws.end | date:'H:mm z'}}</p>
+        <button class="delete-btn" *ngIf="canEdit" (click)="deleteWorkshop(ws.id)">
+          <fa-icon [icon]="['fas', 'trash-alt'] "></fa-icon>
+        </button>
+      </div>
+
+      <div class="stand">
+        <button class="btn btn-primary" (click)="newWorkshopDialog()" [disabled]="!canEdit">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="title">
+      <h3>Presentations</h3>
+    </div>
+
+    <div class="stands-list">
+      <div class="activity" *ngFor="let p of venue.presentations">
+        <p>ID: {{p.id}}</p>
+        <p>Day: {{p.day}}</p>
+        <p>Start: {{p.start | date:'H:mm z'}}</p>
+        <p>End: {{p.end | date:'H:mm z' }}</p>
+        <button class="delete-btn" *ngIf="canEdit" (click)="deletePresentation(p.id)">
+          <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+        </button>
+      </div>
+
+      <div class="stand">
+        <button class="btn btn-primary" (click)="newPresentationDialog()" [disabled]="!canEdit">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="title">
+      <h3>Lunch Talks</h3>
+    </div>
+
+    <div class="stands-list">
+      <div class="activity" *ngFor="let p of venue.lunchTalks">
+        <p>ID: {{p.id}}</p>
+        <p>Day: {{p.day}}</p>
+        <p>Start: {{p.start | date:'H:mm z'}}</p>
+        <p>End: {{p.end | date:'H:mm z' }}</p>
+        <button class="delete-btn" *ngIf="canEdit" (click)="deleteLunchTalk(p.id)">
+          <fa-icon [icon]="['fas', 'trash-alt']"></fa-icon>
+        </button>
+      </div>
+
+      <div class="stand">
+        <button class="btn btn-primary" (click)="newLunchTalkDialog()" [disabled]="!canEdit">
+          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+        </button>
+      </div>
     </div>
 
   </div>

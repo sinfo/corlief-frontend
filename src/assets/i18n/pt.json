@@ -52,7 +52,7 @@
     },
     "reservations": {
         "day": "Dia {{day}}",
-        "info": "Escolha um stand para este dia",
+        "info": "Escolha as suas opções para este dia",
         "button": "< Voltar à explicação",
         "reservations": "Reservas",
         "remaining": "Ainda pode reservar <b>{{days}}</b> dia(s)",
@@ -60,7 +60,8 @@
         "cancel": "Cancelar reserva",
         "submit": "Submeter reserva",
         "current": "Mostrar reservas atuais",
-        "previous": "Mostrar reservas prévias"
+        "previous": "Mostrar reservas prévias",
+        "presentation": "Apresentações"
     },
     "reservationWarning": {
         "msg1": "A sua reserva não vai de encontro às guias dadas pela SINFO, pois",

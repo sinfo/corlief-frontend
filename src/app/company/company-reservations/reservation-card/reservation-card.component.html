@@ -1,4 +1,5 @@
-<div class="card" *ngIf="event && reservation" [ngClass]="{'confirmed': reservation.feedback && reservation.feedback.status === 'CONFIRMED', 'cancelled': reservation.feedback && reservation.feedback.status === 'CANCELLED', 'pending': reservation.feedback && reservation.feedback.status === 'PENDING' }">
+<div class="card" *ngIf="event && reservation"
+  [ngClass]="{'confirmed': reservation.feedback && reservation.feedback.status === 'CONFIRMED', 'cancelled': reservation.feedback && reservation.feedback.status === 'CANCELLED', 'pending': reservation.feedback && reservation.feedback.status === 'PENDING' }">
   <div class="issued" *ngIf="reservation.issued">
     {{reservation.issued | date : 'dd/MM/yyyy | HH\'h\'mm\'m\'in'}}
     <span *ngIf="reservation.feedback" class="status">
@@ -7,16 +8,61 @@
   </div>
 
   <div class="stands">
-    <div *ngFor="let stand of reservation.stands | standsDisplay : event" class="stand" [ngClass]="{'booked': stand.id !== undefined}">
+    <div *ngFor="let stand of reservation.stands | standsDisplay : event" class="stand"
+      [ngClass]="{'booked': stand.id !== undefined}">
       <div class="info">
-        <b [innerHTML]="'reservations.day' | translate: {day: stand.day} "></b> ({{ english? (stand.date | date : 'MMMM
+        <b [innerHTML]="'reservations.day' | translate: {day: stand.day} "></b> ({{ !english? (stand.date | date : 'MMMM
         d') : (stand.date | ptDate: stand.date)}})
         <span *ngIf="stand.id !== undefined">
-          <b>- Stand {{stand.id + 1}}</b>
+          <b *ngIf="limitedStands">- Stand {{stand.id + 1}}</b>
+          <b *ngIf="!limitedStands">You chose this day!</b>
         </span>
       </div>
 
-      <div class="action" *ngIf="stand.id !== undefined && reservation.feedback === undefined" (click)="removeStand(stand)">
+      <div class="action" *ngIf="stand.id !== undefined && reservation.feedback === undefined"
+        (click)="removeStand(stand)">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </div>
+    </div>
+
+    <div class="stand" *ngIf="credentials.workshop" [ngClass]="{'booked': reservation.workshop !== undefined}">
+      <div class="info">
+        <b>Workshop:</b>
+        <span *ngIf="reservation.workshop !== undefined"
+          [innerHTML]="reservation.workshop | activityDisplay: venue : 'workshops'">
+        </span>
+      </div>
+
+      <div class="action" *ngIf="reservation.workshop !== undefined && reservation.feedback === undefined"
+        (click)="removeWorkshop()">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </div>
+    </div>
+
+    <div class="stand" *ngIf="credentials.presentation" [ngClass]="{'booked': reservation.presentation !== undefined}">
+      <div class="info">
+        <b>Presentation:</b>
+        <span *ngIf="reservation.presentation !== undefined"
+          [innerHTML]="reservation.presentation | activityDisplay: venue : 'presentations'">
+        </span>
+      </div>
+
+      <div class="action" *ngIf="reservation.presentation !== undefined && reservation.feedback === undefined"
+        (click)="removePresentation()">
+        <fa-icon [icon]="['fas', 'times']"></fa-icon>
+      </div>
+    </div>
+
+    <div class="stand" *ngIf="credentials.lunchTalk" [ngClass]="{'booked': reservation.lunchTalk !== undefined}">
+      <div class="info">
+        <b>Lunch Talk:</b>
+        <span *ngIf="reservation.lunchTalk !== undefined"
+          [innerHTML]="reservation.lunchTalk | activityDisplay: venue : 'lunchTalks'">
+        </span>
+      </div>
+
+      <div class="action" *ngIf="reservation.lunchTalk !== undefined && reservation.feedback === undefined"
+        (click)="removeLunchTalk()">
         <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </div>
     </div>

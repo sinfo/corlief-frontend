@@ -51,27 +51,42 @@
 
       </div>
 
-      <div class="created">
+      <div>
         <b>Created:</b>
         {{ company.link.created | date:'dd/MM/yyyy HH\'h\'mm'}}
       </div>
 
-      <div class="participationDays">
+      <div>
         <b>Participation days:</b>
         {{ company.link.participationDays }}
       </div>
 
-      <div class="expirationDate" *ngIf="company.link.expirationDate">
+      <div>
+        <b>Workshop:</b>
+        {{ company.link.workshop? "Yes" : "No" }}
+      </div>
+
+      <div>
+        <b>Presentation:</b>
+        {{ company.link.presentation? "Yes" : "No" }}
+      </div>
+
+      <div>
+        <b>Lunch Talk:</b>
+        {{ company.link.lunchTalk? "Yes" : "No" }}
+      </div>
+
+      <div *ngIf="company.link.expirationDate">
         <b>Valid until:</b>
         {{ company.link.expirationDate | date:'dd/MM/yyyy' }}
       </div>
 
-      <div class="companyEmail" *ngIf="company.link.contacts.company">
+      <div *ngIf="company.link.contacts.company">
         <b>Company contact:</b>
         {{ company.link.contacts.company }}
       </div>
 
-      <div class="memberEmail" *ngIf="company.link.contacts.member">
+      <div *ngIf="company.link.contacts.member">
         <b>Member contact:</b>
         {{ company.link.contacts.member }}
       </div>
@@ -107,7 +122,8 @@
 
   </div>
 
-  <div class="addLink addLink-animation" (click)="openLinkForm(linkFormWindow)" *ngIf="event && company.link === undefined">
+  <div class="addLink addLink-animation" (click)="openLinkForm(linkFormWindow)"
+    *ngIf="event && company.link === undefined">
     <div class="addLinkIcon">
       <fa-icon [icon]="['fas', 'link']"></fa-icon>
     </div>
@@ -134,7 +150,8 @@
 
       <div>
         <label>Kind:</label>
-        <input required class="form-control" type="text" formControlName="advertisementKind" placeholder="Ex: Silver, Gold...">
+        <input required class="form-control" type="text" formControlName="advertisementKind"
+          placeholder="Ex: Silver, Gold...">
       </div>
 
       <div>
@@ -144,7 +161,23 @@
 
       <div>
         <label>Email:</label>
-        <input class="form-control" type="email" formControlName="companyEmail" placeholder="{{company.name}} employer's email">
+        <input class="form-control" type="email" formControlName="companyEmail"
+          placeholder="{{company.name}} employer's email">
+      </div>
+
+      <div>
+        <label>Workshop:</label>
+        <input class="form-control" type="checkbox" formControlName="workshop">
+      </div>
+
+      <div>
+        <label>Presentation:</label>
+        <input class="form-control" type="checkbox" formControlName="presentation">
+      </div>
+
+      <div>
+        <label>Lunch Talk:</label>
+        <input class="form-control" type="checkbox" formControlName="lunchTalk">
       </div>
 
     </form>
@@ -170,7 +203,8 @@
 
       <div>
         <label>Company email:</label>
-        <input class="form-control" type="email" formControlName="companyContact" placeholder="{{company.name}} employer's email">
+        <input class="form-control" type="email" formControlName="companyContact"
+          placeholder="{{company.name}} employer's email">
       </div>
 
       <div>
@@ -181,13 +215,15 @@
       <div>
         <label>Days:</label>
         <select class="form-control" formControlName="participationDays">
-          <option *ngFor="let day of (event | getArrayOfParticipationDays)" [value]="day" [selected]="day === company.link.participationDays">{{day}}</option>
+          <option *ngFor="let day of (event | getArrayOfParticipationDays)" [value]="day"
+            [selected]="day === company.link.participationDays">{{day}}</option>
         </select>
       </div>
 
       <div>
         <label>Kind:</label>
-        <input required class="form-control" type="text" formControlName="advertisementKind" placeholder="Ex: Silver, Gold...">
+        <input required class="form-control" type="text" formControlName="advertisementKind"
+          placeholder="Ex: Silver, Gold...">
       </div>
 
     </form>

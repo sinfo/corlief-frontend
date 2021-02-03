@@ -66,6 +66,7 @@
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: center;
 
     width: 100%;
     padding-top: 2%;
@@ -104,5 +105,33 @@
 
 .stands .stands-list .stand div.delete:hover {
     border-color: #dc2121 !important;
+    cursor: pointer;
+}
+
+.activity{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    font-size: 2vh;
+    background-color: white;
+    border: 2px solid #00386f !important;
+    margin: 1%;
+    height: 26vh;
+    width: 21vh;
+    padding: 1vh;
+}
+
+.delete-btn{
+    background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    border-radius: 0px;
+    border: 0px;
+}
+
+.delete-btn:hover{
     cursor: pointer;
 }

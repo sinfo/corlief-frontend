@@ -39,8 +39,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private reservations: Reservation[];
   private latestReservation: Reservation;
-
   private showAllReservations: boolean;
+  private limitedStands: boolean;
 
 
   constructor(
@@ -69,6 +69,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     this.companyService.getVenueAvailability().subscribe(_availability => {
       const availability = new Availability(_availability);
       this.availability = availability;
+
+      this.limitedStands = availability.venue.stands.length !== 0;
 
       this.venuesService.setVenue(availability.venue);
       this.deckService.updateEvent(availability.venue.edition);
@@ -149,43 +151,187 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       && this.latestReservation.stands.length < this.credentials.participationDays;
   }
 
+  private clickableWs(id) {
+    return this.latestReservation && this.latestReservation.issued === undefined
+      && !this.isOccupiedWs(id)
+      && this.credentials.workshop;
+  }
+
+  private clickablePres(id) {
+    return this.latestReservation && this.latestReservation.issued === undefined
+      && !this.isOccupiedPres(id)
+      && this.credentials.presentation;
+  }
+
+  private clickableLT(id) {
+    return this.latestReservation && this.latestReservation.issued === undefined
+      && !this.isOccupiedLT(id)
+      && this.credentials.lunchTalk;
+  }
+
   private clickStand(standId: number, free: boolean) {
-    if(free){
+    if (free) {
       const stand = new ReservationStand(this.selectedDay.day, standId);
       this.latestReservation.update(this.credentials.participationDays, stand);
       this.reservationService.setReservation(this.latestReservation);
     }
   }
 
+  private clickWs(wsId: number, free: boolean) {
+    if (free) {
+      this.latestReservation.workshop = wsId;
+      this.reservationService.setReservation(this.latestReservation);
+    }
+  }
+
+  private clickPres(wsId: number, free: boolean) {
+    if (free) {
+      this.latestReservation.presentation = wsId;
+      this.reservationService.setReservation(this.latestReservation);
+    }
+  }
+
+  private clickLT(wsId: number, free: boolean) {
+    if (free) {
+      this.latestReservation.lunchTalk = wsId;
+      this.reservationService.setReservation(this.latestReservation);
+    }
+  }
+
   removePendingStand(stand: { day: number, id: number }) {
-    const s = new ReservationStand(stand.day, stand.id);
-    this.latestReservation.update(this.credentials.participationDays, s);
+    if (this.limitedStands) {
+      const s = new ReservationStand(stand.day, stand.id);
+      this.latestReservation.update(this.credentials.participationDays, s);
+      this.reservationService.setReservation(this.latestReservation);
+    } else {
+      const s = new ReservationStand(stand.day);
+      this.latestReservation.update(this.credentials.participationDays, s);
+      this.reservationService.setReservation(this.latestReservation);
+    }
+  }
+
+  removeWorkshop(event: any) {
+    this.latestReservation.workshop = undefined;
     this.reservationService.setReservation(this.latestReservation);
   }
 
-  private isFreeStand(standId: number): boolean {
+  removePresentation(event: any) {
+    this.latestReservation.presentation = undefined;
+    this.reservationService.setReservation(this.latestReservation);
+  }
+
+  removeLunchTalk(event: any) {
+    this.latestReservation.lunchTalk = undefined;
+    this.reservationService.setReservation(this.latestReservation);
+  }
+
+  private isFreeStand(standId?: number): boolean {
     return !this.isConfirmedBook(standId)
       && !this.isPendingBook(standId)
       && this.availability.isFree(this.selectedDay.day, standId);
   }
 
-  private isOccupiedStand(standId: number): boolean {
+  private isOccupiedStand(standId?: number): boolean {
     return !this.isConfirmedBook(standId)
       && !this.isPendingBook(standId)
       && !this.availability.isFree(this.selectedDay.day, standId);
   }
 
-  private isPendingBook(standId: number) {
+  private isPendingBook(standId?: number) {
     const stand = new ReservationStand(this.selectedDay.day, standId);
     return !this.isConfirmedBook(standId) && this.latestReservation
       ? this.latestReservation.hasStand(stand) : false;
   }
 
-  private isConfirmedBook(standId: number) {
+  private isConfirmedBook(standId?: number) {
     const stand = new ReservationStand(this.selectedDay.day, standId);
     return this.latestReservation
       ? this.latestReservation.hasStand(stand) && this.latestReservation.isConfirmed()
       : false;
+  }
+
+  private chooseDay() {
+    const stand = new ReservationStand(this.selectedDay.day);
+    this.latestReservation.update(this.credentials.participationDays, stand);
+    this.reservationService.setReservation(this.latestReservation);
+  }
+
+  private isFreeWs(wsId: number) {
+    return !this.isConfirmedWs(wsId) &&
+      !this.isPendingWs(wsId) &&
+      this.availability.isWsFree(wsId);
+  }
+
+  private isOccupiedWs(wsId: number) {
+    return !this.isConfirmedWs(wsId) &&
+      !this.isPendingWs(wsId) &&
+      !this.availability.isWsFree(wsId);
+  }
+
+  private isPendingWs(wsid: number) {
+    return !this.isConfirmedWs(wsid) &&
+      this.latestReservation &&
+      this.latestReservation.workshop !== undefined &&
+      this.latestReservation.workshop === wsid;
+  }
+
+  private isConfirmedWs(wsId: number) {
+    return this.latestReservation &&
+      this.latestReservation.workshop !== undefined &&
+      this.latestReservation.workshop === wsId &&
+      this.latestReservation.isConfirmed();
+  }
+
+  private isFreePres(wsId: number) {
+    return !this.isConfirmedPres(wsId) &&
+      !this.isPendingPres(wsId) &&
+      this.availability.isPresFree(wsId);
+  }
+
+  private isOccupiedPres(wsId: number) {
+    return !this.isConfirmedPres(wsId) &&
+      !this.isPendingPres(wsId) &&
+      !this.availability.isPresFree(wsId);
+  }
+
+  private isPendingPres(wsid: number) {
+    return !this.isConfirmedPres(wsid) &&
+      this.latestReservation &&
+      this.latestReservation.presentation !== undefined &&
+      this.latestReservation.presentation === wsid;
+  }
+
+  private isConfirmedPres(wsId: number) {
+    return this.latestReservation &&
+      this.latestReservation.presentation !== undefined &&
+      this.latestReservation.presentation === wsId &&
+      this.latestReservation.isConfirmed();
+  }
+
+  private isFreeLT(wsId: number) {
+    return !this.isConfirmedLT(wsId) &&
+      !this.isPendingLT(wsId) &&
+      this.availability.isLunchTalkFree(wsId);
+  }
+
+  private isOccupiedLT(wsId: number) {
+    return !this.isConfirmedLT(wsId) &&
+      !this.isPendingLT(wsId) &&
+      !this.availability.isLunchTalkFree(wsId);
+  }
+
+  private isPendingLT(wsid: number) {
+    return !this.isConfirmedLT(wsid) &&
+      this.latestReservation &&
+      this.latestReservation.lunchTalk !== undefined &&
+      this.latestReservation.lunchTalk === wsid;
+  }
+
+  private isConfirmedLT(wsId: number) {
+    return this.latestReservation &&
+      this.latestReservation.lunchTalk !== undefined &&
+      this.latestReservation.lunchTalk === wsId &&
+      this.latestReservation.isConfirmed();
   }
 
   private makeReservation(content) {
