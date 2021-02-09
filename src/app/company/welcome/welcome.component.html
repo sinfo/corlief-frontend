@@ -3,7 +3,8 @@
 
     <div class="paragraphs">
       <span *ngIf="page===0">
-        <p class="title" *ngIf="page==0" [innerHTML]="'page0.title' | translate: {companyName: credentials.companyName}">
+        <p class="title" *ngIf="page==0"
+          [innerHTML]="'page0.title' | translate: {companyName: credentials.companyName}">
         </p>
 
         <div class="text">
@@ -21,7 +22,16 @@
               companyName: credentials.companyName, 
               participationDays: credentials.participationDays }"></b>
           </p>
-
+          <p>
+            <b *ngIf="credentials.participationDays" [innerHTML]="'page0.text.p3.stand' | translate: {
+            participationDays: credentials.participationDays }"></b>
+          </p>
+          <p>
+            <b *ngIf="credentials.workshop" [innerHTML]="'page0.text.p3.workshop' | translate"></b>
+          </p>
+          <p><b *ngIf="credentials.presentation" [innerHTML]="'page0.text.p3.presentation' | translate"></b></p>
+          <p><b *ngIf="credentials.lunchTalk" [innerHTML]="'page0.text.p3.lunchTalk' | translate"></b>
+          </p>
         </div>
 
       </span>
@@ -36,24 +46,28 @@
           <p [innerHTML]=" 'page1.subtitle' | translate">
           </p>
 
-          <p>
-            <b class="extra">1.</b> <span [innerHTML]=" 'page1.text.1' | translate"></span>
+          <p *ngIf="credentials.participationDays">
+            <b class="extra"> - </b> <span [innerHTML]=" 'page1.text.1' | translate"></span>
+          </p>
+
+          <p *ngIf="credentials.workshop">
+            <b class="extra"> - </b> <span [innerHTML]=" 'page1.text.2' | translate"></span>
+          </p>
+
+          <p *ngIf="credentials.presentation">
+            <b class="extra"> - </b> <span [innerHTML]=" 'page1.text.3' | translate"></span>
+          </p>
+
+          <p *ngIf="credentials.lunchTalk">
+            <b class="extra"> - </b> <span [innerHTML]=" 'page1.text.4' | translate"></span>
           </p>
 
           <p>
-            <b class="extra">2.</b> <span [innerHTML]=" 'page1.text.2' | translate"></span>
+            <b class="extra"> - </b><span [innerHTML]=" 'page1.text.5' | translate"></span>
           </p>
 
           <p>
-            <b class="extra">3.</b> <span [innerHTML]=" 'page1.text.3' | translate"></span>
-          </p>
-
-          <p>
-            <b class="extra">4.</b> <span [innerHTML]=" 'page1.text.4' | translate"></span>
-          </p>
-
-          <p>
-            <b class="extra">5.</b><span [innerHTML]=" 'page1.text.5' | translate"></span>
+            <b class="extra"> - </b><span [innerHTML]=" 'page1.text.6' | translate"></span>
           </p>
 
         </div>
@@ -67,20 +81,14 @@
 
         <div class="text">
           <p>
-            <b class="extra" [innerHTML]=" 'page2.text.p1.bold' | translate"></b>
-            <span [innerHTML]="'page2.text.p1.normal' | translate"></span>
-          </p>
-
-          <p>
-            <span [innerHTML]="'page2.text.p2.normal1' | translate"></span>
             <b class="extra" [innerHTML]="'page2.text.p2.bold' | translate"></b>
             <span [innerHTML]="'page2.text.p2.normal2' | translate"></span>
           </p>
 
-          <p>
+          <!-- <p>
             <b class="extra" [innerHTML]="'page2.text.p3.warning' | translate"></b>
             <span [innerHTML]="'page2.text.p3.normal' | translate"></span>
-          </p>
+          </p> -->
 
           <p [innerHTML]="'page2.thanks' | translate">
           </p>
@@ -103,8 +111,8 @@
       </span>
 
       <span class="reservations-link" *ngIf="page==2">
-        <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected" [routerLinkActiveOptions]="{exact: true}"
-          [innerHTML]="'buttons.reserve' | translate">
+        <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected"
+          [routerLinkActiveOptions]="{exact: true}" [innerHTML]="'buttons.reserve' | translate">
         </a>
       </span>
     </div>

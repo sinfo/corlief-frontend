@@ -57,7 +57,6 @@ export class VenueComponent implements OnInit, OnDestroy {
       .subscribe(venue => {
         this.reset();
         this.venue = venue;
-        console.log(venue.workshops);
       });
 
     this.eventSubscription = this.deckService.getEventSubject()

@@ -73,7 +73,7 @@
 
     <div class="stands-list">
       <div class="activity" *ngFor="let ws of venue.workshops">
-        <p>ID: {{ws.id}}</p>
+        <p>ID: {{ws.id + 1}}</p>
         <p>Day: {{ws.day}}</p>
         <p>Start: {{ws.start | date:'H:mm z'}}</p>
         <p>End: {{ws.end | date:'H:mm z'}}</p>
@@ -95,7 +95,7 @@
 
     <div class="stands-list">
       <div class="activity" *ngFor="let p of venue.presentations">
-        <p>ID: {{p.id}}</p>
+        <p>ID: {{p.id + 1}}</p>
         <p>Day: {{p.day}}</p>
         <p>Start: {{p.start | date:'H:mm z'}}</p>
         <p>End: {{p.end | date:'H:mm z' }}</p>
@@ -117,7 +117,7 @@
 
     <div class="stands-list">
       <div class="activity" *ngFor="let p of venue.lunchTalks">
-        <p>ID: {{p.id}}</p>
+        <p>ID: {{p.id + 1}}</p>
         <p>Day: {{p.day}}</p>
         <p>Start: {{p.start | date:'H:mm z'}}</p>
         <p>End: {{p.end | date:'H:mm z' }}</p>
