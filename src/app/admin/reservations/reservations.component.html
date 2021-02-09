@@ -46,9 +46,9 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td>
+                                    <th scope="row">
                                         Ocupation
-                                    </td>
+                                    </th>
                                     <td *ngFor="let day of availability.availability">
                                         {{day.nStands}}
                                     </td>
@@ -67,11 +67,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <tr *ngFor="let ws of availability | buildTable : 'workshops'">
-                                    <td></td>
-                                    <td *ngFor="let day of availability.availability">
-                                        {{day.day === ws.day? (ws.free? ws.id +1: ws.company.name) : ''}}
+                                <tr *ngFor="let stand of availability | buildTable : 'workshops'">
+                                    <th scope="row">
+                                        {{stand.row + 1}}
+                                    </th>
+                                    <td *ngFor="let day of stand.days">
+                                        {{day.free ? (day.id? day.id + 1: '') : day.company.name}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -88,11 +89,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <tr *ngFor="let ws of availability | buildTable : 'presentations'">
-                                    <td></td>
-                                    <td *ngFor="let day of availability.availability">
-                                        {{day.day === ws.day? (ws.free? ws.id +1: ws.company.name) : ''}}
+                                <tr *ngFor="let stand of availability | buildTable : 'presentations'">
+                                    <th scope="row">
+                                        {{stand.row + 1}}
+                                    </th>
+                                    <td *ngFor="let day of stand.days">
+                                        {{day.free ? (day.id? day.id + 1: '') : day.company.name}}
                                     </td>
                                 </tr>
                             </tbody>
@@ -109,11 +111,12 @@
                                 </tr>
                             </thead>
                             <tbody>
-
-                                <tr *ngFor="let ws of availability | buildTable : 'lunchTalks'">
-                                    <td></td>
-                                    <td *ngFor="let day of availability.availability">
-                                        {{day.day === ws.day? (ws.free? ws.id +1: ws.company.name) : ''}}
+                                <tr *ngFor="let stand of availability | buildTable : 'lunchTalks'">
+                                    <th scope="row">
+                                        {{stand.row + 1}}
+                                    </th>
+                                    <td *ngFor="let day of stand.days">
+                                        {{day.free ? (day.id? day.id + 1: '') : day.company.name}}
                                     </td>
                                 </tr>
                             </tbody>

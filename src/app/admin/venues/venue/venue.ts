@@ -163,7 +163,9 @@ export class Availability {
     }
 
     fillReservations(reservations: Reservation[], companies: Company[]) {
-        const confirmed = reservations.filter(r => r.isConfirmed());
+        const confirmed = reservations.filter(r => r.isConfirmed()).sort((r1, r2) => {
+            return r1.issued > r2.issued ? 1 : 0;
+        });
 
         for (const reservation of confirmed) {
             for (const stand of reservation.stands) {
@@ -181,8 +183,14 @@ export class Availability {
                         company: Company.findById(reservation.companyId, companies)
                     };
                 } else {
-                    this.availability[day].nStands += 1;
+
+                    this.availability[day].stands.push({
+                        id: this.availability[day].nStands,
+                        free: false,
+                        company: Company.findById(reservation.companyId, companies)
+                    });
                 }
+                this.availability[day].nStands += 1;
             }
             this.availability.forEach(day => {
                 if (reservation.workshop !== undefined) {
@@ -258,5 +266,25 @@ export class Availability {
                 }
             }
         }
+    }
+
+    getMaxOccupation() {
+        let max = 0;
+        for (const day of this.availability) {
+            if (day.nStands > max) {
+                max = day.nStands;
+            }
+        }
+        return max;
+    }
+
+    getMaxActivity(activity: string) {
+        let max = 0;
+        for (const day of this.availability) {
+            if (day[activity].length > max) {
+                max = day[activity].length;
+            }
+        }
+        return max;
     }
 }

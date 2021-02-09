@@ -15,45 +15,70 @@ export class BuildTablePipe implements PipeTransform {
     });
 
     if (!activity) {
-      return availability.venue.stands.map(stand => {
-        const result = {
-          standId: stand.id,
-          days: []
-        };
+      if (availability.venue.stands.length !== 0) {
+        return availability.venue.stands.map(stand => {
+          const result = {
+            standId: stand.id,
+            days: []
+          };
 
-        for (let day = 0; day < duration; day++) {
-          const s = availability.availability[day].stands.filter(avStand => avStand.id === stand.id)[0];
-          result.days.push({
-            free: s.free,
-            company: s.company
-          });
+          for (let day = 0; day < duration; day++) {
+            const s = availability.availability[day].stands.filter(avStand => avStand.id === stand.id)[0];
+            result.days.push({
+              free: s.free,
+              company: s.company
+            });
+          }
+
+          return result;
+        });
+      } else {
+        const max = availability.getMaxOccupation();
+        const final = [];
+        for (let i = 0; i < max; i++) {
+          const result = {
+            standId: i,
+            days: []
+          };
+
+
+          for (let day = 0; day < duration; day++) {
+            const s = availability.availability[day].stands.filter(avStand => avStand.id === i)[0];
+            result.days.push({
+              free: s ? s.free : true,
+              company: s ? s.company : null
+            });
+          }
+
+          final.push(result);
         }
-
-        return result;
-      });
+        return final;
+      }
     }
-    const k = availability.venue[activity].map(ac => {
+
+    const max = availability.getMaxActivity(activity);
+    const final = [];
+    for (let i = 0; i < max; i++) {
       const result = {
-        id: ac.id,
-        day: ac.day
-      } as {
-        id: number,
-        day: number,
-        free: boolean,
-        company?: Company
+        row: i,
+        days: []
       };
 
 
-      const s = availability.availability[ac.day - 1][activity].find(act => act.id === ac.id);
-      if (s) {
-        result.free = s.free;
-        result.company = s.company;
+      for (let day = 0; day < duration; day++) {
+        const s = availability.availability[day][activity].sort((a1, a2) => {
+          return a1.start > a2.start ? 1 : (a1.end > a2.end ? 1 : 0);
+        })[i];
+        result.days.push({
+          free: s ? s.free : true,
+          company: s ? s.company : null,
+          id: s ? s.id : null
+        });
       }
 
-      return result;
-    });
-
-    return k;
+      final.push(result);
+    }
+    return final;
   }
 
 }

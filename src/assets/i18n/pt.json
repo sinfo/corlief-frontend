@@ -11,7 +11,11 @@
             "p1": "Desde já queríamos agradecer a vossa participação na {{event}}, e esperamos que esta edição seja a melhor de sempre!",
             "p2": "Nesta aplicação poderá reservar os <i>stands</i> para cada um dos vários dias da SINFO, a decorrer de ",
             "p3": {
-                "body": "Relembramos que a {{companyName}} tem direito a <b>{{participationDays}}</b> dia(s) de stand! "
+                "body": "Relembramos que a {{companyName}} tem direito a:",
+                "stand": " <b>{{participationDays}}</b> dia(s) de stand",
+                "workshop": "<b>1</b> Workshop",
+                "presentation": "<b>1</b> Apresentação",
+                "lunchTalk": "<b>1</b> Lunch Talk"
             }
         }
     },
@@ -19,24 +23,25 @@
         "title": "Como funciona o Corlief?",
         "subtitle": "Para reservar os <i>stands</i> deverá seguir os seguintes passos:",
         "text": {
-            "1": "Escolher o dia",
-            "2": "Escolher o <i>stand</i> para esse dia",
-            "3": "Repetir para todos os dias a que tiverem direito",
-            "4": "Submeter a reserva",
-            "5": "Aguardar pela confirmação por parte da comissão da SINFO"
+            "1": "Escolher os dias em que desejam participar",
+            "2": "Escolher o workshop",
+            "3": "Escolher a apresentação",
+            "4": "Escolher a lunch talk",
+            "5": "Submeter a reserva",
+            "6": "Aguardar pela confirmação por parte da comissão da SINFO"
         }
     },
     "page2": {
         "title": "Pedimos ainda:",
         "text": {
             "p1": {
-                "bold": "Reserve sempre que possível o mesmo <i>stand</i> ",
-                "normal": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de marcação de <i>stand</i>."
+                "bold": "Reserve as suas atividades, sempre que possível, em dias que irão participar com stand ",
+                "normal": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva."
             },
             "p2": {
                 "normal1": "Sempre que possível ",
-                "bold": "reserve dias consecutivos",
-                "normal2": ", novamente por questões idênticas às mencionadas acima."
+                "bold": "Reserve dias consecutivos ",
+                "normal2": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva."
             },
             "p3": {
                 "warning": "Aviso: ",
