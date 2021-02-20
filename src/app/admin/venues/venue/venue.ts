@@ -228,7 +228,7 @@ export class Availability {
 
         if (day.length === 0) { return false; }
 
-        if (standId === undefined && day[0].nStands >= 3) { return false; }
+        if (standId === undefined && day[0].nStands >= 25) { return false; }
         const stands = day[0].stands;
 
         if (stands.length < 1) {
