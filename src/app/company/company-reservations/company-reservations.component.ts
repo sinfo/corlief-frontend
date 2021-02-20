@@ -60,13 +60,15 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     this.eventSubscription = this.deckService.getEventSubject()
       .subscribe(event => {
         const days = [];
-        for (let i = 1; i <= event.getDuration(); i++) { days.push(i); }
+        const valid = [];
+        for (let i = 1; i <= event.getDuration(); i++) { days.push(i); valid.push(true); }
 
         this.event = event;
         this.selectedDay = { day: 1, date: event.date, allDays: days };
       });
 
     this.companyService.getVenueAvailability().subscribe(_availability => {
+      console.log(_availability);
       const availability = new Availability(_availability);
       this.availability = availability;
 
@@ -251,6 +253,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
   }
 
   private chooseDay() {
+    if (!this.availability.isFree(this.selectedDay.day, undefined)) { return; }
     const stand = new ReservationStand(this.selectedDay.day);
     this.latestReservation.update(this.credentials.participationDays, stand);
     this.reservationService.setReservation(this.latestReservation);
