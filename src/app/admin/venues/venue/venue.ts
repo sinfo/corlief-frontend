@@ -228,6 +228,7 @@ export class Availability {
 
         if (day.length === 0) { return false; }
 
+        console.log(day[0].nStands);
         if (standId === undefined && day[0].nStands >= 25) { return false; }
         const stands = day[0].stands;
 

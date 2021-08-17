@@ -75,8 +75,8 @@
       <div class="activity" *ngFor="let ws of venue.workshops">
         <p>ID: {{ws.id + 1}}</p>
         <p>Day: {{ws.day}}</p>
-        <p>Start: {{ws.start | date:'H:mm z'}}</p>
-        <p>End: {{ws.end | date:'H:mm z'}}</p>
+        <p>Start: {{ws.start | date:'H:mm z':'GMT'}}</p>
+        <p>End: {{ws.end | date:'H:mm z':'GMT'}}</p>
         <button class="delete-btn" *ngIf="canEdit" (click)="deleteWorkshop(ws.id)">
           <fa-icon [icon]="['fas', 'trash-alt'] "></fa-icon>
         </button>

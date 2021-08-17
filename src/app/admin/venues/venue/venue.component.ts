@@ -79,10 +79,11 @@ export class VenueComponent implements OnInit, OnDestroy {
     const dialogRef = this.matDialog.open(ActivityDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       const start = new Date(0);
-      start.setUTCHours(result.start.hour - 1); // Terrible fix to keep all times in UTC+0100
+      start.setUTCHours(result.start.hour);
       start.setUTCMinutes(result.start.minute);
+      console.log(start)
       const end = new Date(0);
-      end.setUTCHours(result.end.hour - 1);
+      end.setUTCHours(result.end.hour);
       end.setUTCMinutes(result.end.minute);
       const newWs = new Activity(result.day, start, end);
       this.venuesService.uploadWorkshop(newWs).subscribe(
