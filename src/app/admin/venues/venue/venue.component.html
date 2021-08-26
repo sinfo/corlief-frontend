@@ -67,29 +67,46 @@
 
     </div>
 
-    <div class="title">
-      <h3>Workshops</h3>
-    </div>
+    <div>
 
-    <div class="stands-list">
-      <div class="activity" *ngFor="let ws of venue.workshops">
-        <p>ID: {{ws.id + 1}}</p>
-        <p>Day: {{ws.day}}</p>
-        <p>Start: {{ws.start | date:'H:mm z':'GMT'}}</p>
-        <p>End: {{ws.end | date:'H:mm z':'GMT'}}</p>
-        <button class="delete-btn" *ngIf="canEdit" (click)="deleteWorkshop(ws.id)">
-          <fa-icon [icon]="['fas', 'trash-alt'] "></fa-icon>
-        </button>
+      <div class="title">
+        <h3>Activities</h3>
+      </div>
+      <hr>
+
+      <div *ngFor="let activity of venue.activities">
+        <div class="title">
+          <h5>{{activity.kind}}s</h5>
+        </div>
+
+        <div class="stands-list">
+          <div class="activity" *ngFor="let act of activity.slots">
+            <p>ID: {{act.id + 1}}</p>
+            <p>Day: {{act.day}}</p>
+            <p>Start: {{act.start | date:'H:mm z':'GMT'}}</p>
+            <p>End: {{act.end | date:'H:mm z':'GMT'}}</p>
+            <button class="delete-btn" *ngIf="canEdit" (click)="deleteActivity(act.id, activity.kind)">
+              <fa-icon [icon]="['fas', 'trash-alt'] "></fa-icon>
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="stands-list">
+        <div class="stand">
+          <button class="btn btn-primary" (click)="newActivityDialog()" [disabled]="!canEdit">
+            <fa-icon [icon]="['fas', 'plus']"></fa-icon>
+          </button>
+        </div>
       </div>
 
-      <div class="stand">
-        <button class="btn btn-primary" (click)="newWorkshopDialog()" [disabled]="!canEdit">
-          <fa-icon [icon]="['fas', 'plus']"></fa-icon>
-        </button>
-      </div>
+
     </div>
 
-    <div class="title">
+
+
+    <!-- <div class="title">
       <h3>Presentations</h3>
     </div>
 
@@ -131,7 +148,7 @@
           <fa-icon [icon]="['fas', 'plus']"></fa-icon>
         </button>
       </div>
-    </div>
+    </div> -->
 
   </div>
 </div>

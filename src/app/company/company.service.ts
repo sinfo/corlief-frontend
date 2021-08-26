@@ -70,9 +70,7 @@ export class CompanyService {
     return this.http.post<Reservation>(
       `${this.corlief}/reservation`, {
       stands: reservation.stands,
-      workshop: reservation.workshop,
-      presentation: reservation.presentation,
-      lunchTalk: reservation.lunchTalk
+      activities: reservation.activities
     }, this.getHeaders()
     );
   }

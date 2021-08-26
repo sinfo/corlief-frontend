@@ -4,6 +4,17 @@
 
 <mat-dialog-content>
 
+  <p>Select Kind</p>
+  <input matInput type="text" [(ngModel)]="data.result.option" placeholder="Pick a kind" [formControl]="textControl"
+    [matAutocomplete]="auto">
+
+  <mat-autocomplete #auto="matAutocomplete">
+    <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+      {{option}}
+    </mat-option>
+  </mat-autocomplete>
+  <hr>
+
   <p>Select day</p>
   <input type="number" [(ngModel)]="data.result.day" min="1" max="{{data.duration}}">
   <hr>
@@ -19,7 +30,7 @@
 
 <div mat-dialog-actions>
   <button mat-button (click)="onNoClick()">Cancel</button>
-  <button mat-button [mat-dialog-close]="data.result" cdkFocusInitial [disabled]="!data.result.start || 
+  <button mat-button [mat-dialog-close]="data.result" cdkFocusInitial [disabled]="!data.result.option || data.result.option.length ===0 || !data.result.start || 
     !data.result.end || 
     data.result.start.hour > data.result.end.hour|| 
     (data.result.start.hour == data.result.end.hour && data.result.start.minute > data.result.end.minute)">Ok</button>

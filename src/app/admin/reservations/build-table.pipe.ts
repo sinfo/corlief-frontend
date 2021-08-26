@@ -66,7 +66,9 @@ export class BuildTablePipe implements PipeTransform {
 
 
       for (let day = 0; day < duration; day++) {
-        const s = availability.availability[day][activity].sort((a1, a2) => {
+
+        const kind = availability.availability[day].activities.find(a => a.kind === activity);
+        const s = kind.slots.sort((a1, a2) => {
           return a1.start > a2.start ? 1 : (a1.end > a2.end ? 1 : 0);
         })[i];
         result.days.push({

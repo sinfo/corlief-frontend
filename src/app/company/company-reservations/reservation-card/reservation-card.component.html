@@ -25,21 +25,21 @@
       </div>
     </div>
 
-    <div class="stand" *ngIf="credentials.workshop" [ngClass]="{'booked': reservation.workshop !== undefined}">
+
+    <div class="stand" *ngFor="let activity of credentials.activities" [ngClass]="{'booked': hasActivity(activity)}">
       <div class="info">
-        <b>Workshop:</b>
-        <span *ngIf="reservation.workshop !== undefined"
-          [innerHTML]="reservation.workshop | activityDisplay: venue : 'workshops'">
+        <b>{{activity}}:</b>
+        <span *ngIf="hasActivity(activity)" [innerHTML]="getActivity(activity) | activityDisplay: venue ">
         </span>
       </div>
 
-      <div class="action" *ngIf="reservation.workshop !== undefined && reservation.feedback === undefined"
-        (click)="removeWorkshop()">
+      <div class="action" *ngIf="hasActivity(activity) && reservation.feedback === undefined"
+        (click)="removeActivity(getActivity(activity))">
         <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </div>
     </div>
 
-    <div class="stand" *ngIf="credentials.presentation" [ngClass]="{'booked': reservation.presentation !== undefined}">
+    <!-- <div class="stand" *ngIf="credentials.presentation" [ngClass]="{'booked': reservation.presentation !== undefined}">
       <div class="info">
         <b>Presentation:</b>
         <span *ngIf="reservation.presentation !== undefined"
@@ -65,7 +65,7 @@
         (click)="removeLunchTalk()">
         <fa-icon [icon]="['fas', 'times']"></fa-icon>
       </div>
-    </div>
+    </div> -->
   </div>
 
   <div class="message" *ngIf="reservation.feedback && reservation.feedback.status === 'PENDING'">

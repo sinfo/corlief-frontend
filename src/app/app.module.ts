@@ -10,6 +10,8 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { fas } from '@fortawesome/free-solid-svg-icons';
 import { LazyLoadImageModule } from 'ng-lazyload-image';
 import { ClipboardModule } from 'ngx-clipboard';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 
 import { AppRoutes } from './app.routes';
 
@@ -116,7 +118,8 @@ library.add(fas);
     }),
     MatDialogModule,
     BrowserAnimationsModule,
-    MatButtonModule
+    MatButtonModule,
+    MatAutocompleteModule
   ],
   providers: [
     StorageService,

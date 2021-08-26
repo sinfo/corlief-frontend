@@ -36,6 +36,7 @@ export class VenueComponent implements OnInit, OnDestroy {
 
   canEdit: boolean;
   duration: number;
+  activityKinds: String[];
 
   constructor(
     private deckService: DeckService,
@@ -57,6 +58,7 @@ export class VenueComponent implements OnInit, OnDestroy {
       .subscribe(venue => {
         this.reset();
         this.venue = venue;
+        this.activityKinds = venue.activities.map(v => v.kind);
       });
 
     this.eventSubscription = this.deckService.getEventSubject()
@@ -73,20 +75,19 @@ export class VenueComponent implements OnInit, OnDestroy {
     this.canvasService.off();
   }
 
-  newWorkshopDialog() {
+  newActivityDialog() {
     const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = { title: 'Create Workshop', duration: this.duration };
+    dialogConfig.data = { title: 'Create Workshop', duration: this.duration, options: this.activityKinds };
     const dialogRef = this.matDialog.open(ActivityDialogComponent, dialogConfig);
     dialogRef.afterClosed().subscribe(result => {
       const start = new Date(0);
       start.setUTCHours(result.start.hour);
       start.setUTCMinutes(result.start.minute);
-      console.log(start)
       const end = new Date(0);
       end.setUTCHours(result.end.hour);
       end.setUTCMinutes(result.end.minute);
-      const newWs = new Activity(result.day, start, end);
-      this.venuesService.uploadWorkshop(newWs).subscribe(
+      const newWs = new Activity(result.day, start, end, result.option);
+      this.venuesService.uploadActivity(newWs).subscribe(
         (venue: Venue) => {
           this.venuesService.setVenue(venue);
           this.venue = venue;
@@ -104,80 +105,9 @@ export class VenueComponent implements OnInit, OnDestroy {
     });
   }
 
-  newPresentationDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = { title: 'Create Presentation', duration: this.duration };
-    const dialogRef = this.matDialog.open(ActivityDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(result => {
-      const start = new Date(0);
-      start.setUTCHours(result.start.hour - 1); // Terrible fix to keep all times in UTC+0100
-      start.setUTCMinutes(result.start.minute);
-      const end = new Date(0);
-      end.setUTCHours(result.end.hour - 1);
-      end.setUTCMinutes(result.end.minute);
-      const newPres = new Activity(result.day, start, end);
-      this.venuesService.uploadPresentation(newPres).subscribe(
-        (venue: Venue) => {
-          this.venuesService.setVenue(venue);
-          this.venue = venue;
-        },
-        error => {
-          if (error.status === 422) {
-            console.error('Bad data', error);
-          } else if (error.status === 401) {
-            console.error('Unauthorized', error);
-          } else {
-            console.error(error);
-          }
-        }
-      );
-    });
-  }
 
-  newLunchTalkDialog() {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.data = { title: 'Create Lunch Talk', duration: this.duration };
-    const dialogRef = this.matDialog.open(ActivityDialogComponent, dialogConfig);
-    dialogRef.afterClosed().subscribe(result => {
-      const start = new Date(0);
-      start.setUTCHours(result.start.hour - 1); // Terrible fix to keep all times in UTC+0100
-      start.setUTCMinutes(result.start.minute);
-      const end = new Date(0);
-      end.setUTCHours(result.end.hour - 1);
-      end.setUTCMinutes(result.end.minute);
-      const newLT = new Activity(result.day, start, end);
-      this.venuesService.uploadLunchTalk(newLT).subscribe(
-        (venue: Venue) => {
-          this.venuesService.setVenue(venue);
-          this.venue = venue;
-        },
-        error => {
-          if (error.status === 422) {
-            console.error('Bad data', error);
-          } else if (error.status === 401) {
-            console.error('Unauthorized', error);
-          } else {
-            console.error(error);
-          }
-        }
-      );
-    });
-  }
-
-  deleteWorkshop(id: number) {
-    this.venuesService.deleteWorkshop(id).subscribe(venue => {
-      this.venuesService.setVenue(venue);
-    });
-  }
-
-  deletePresentation(id: number) {
-    this.venuesService.deletePresentation(id).subscribe(venue => {
-      this.venuesService.setVenue(venue);
-    });
-  }
-
-  deleteLunchTalk(id: number) {
-    this.venuesService.deleteLunchTalk(id).subscribe(venue => {
+  deleteActivity(id: number, kind: String) {
+    this.venuesService.deleteActivity(id, kind).subscribe(venue => {
       this.venuesService.setVenue(venue);
     });
   }

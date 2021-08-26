@@ -8,13 +8,15 @@ export class Venue {
     edition: String;
     image: String;
     stands: Stand[];
-    presentations: Activity[];
-    workshops: Activity[];
-    lunchTalks: Activity[];
+    activities: {
+        kind: String,
+        slots: Activity[]
+    }[];
 
     constructor(edition: String, image: String) {
         this.edition = edition;
         this.image = image;
+        this.activities = [];
     }
 }
 
@@ -28,26 +30,15 @@ export class Availability {
             free: boolean;
             company?: Company;
         }];
-        workshops: [{
-            id: number;
-            free: boolean;
-            company?: Company;
-            start: Date;
-            end: Date;
-        }];
-        presentations: [{
-            id: number;
-            free: boolean;
-            company?: Company;
-            start: Date;
-            end: Date;
-        }];
-        lunchTalks: [{
-            id: number;
-            free: boolean;
-            company?: Company;
-            start: Date;
-            end: Date;
+        activities: [{
+            kind: String;
+            slots: [{
+                id: number;
+                free: boolean;
+                company?: Company;
+                start: Date;
+                end: Date;
+            }]
         }];
     }];
 
@@ -67,27 +58,16 @@ export class Availability {
                     free: boolean;
                     company?: Company;
                 }];
-                workshops: [{
-                    id: number;
-                    free: boolean;
-                    company?: Company;
-                    start: Date;
-                    end: Date;
-                }];
-                presentations: [{
-                    id: number;
-                    free: boolean;
-                    company?: Company;
-                    start: Date;
-                    end: Date;
-                }];
-                lunchTalks: [{
-                    id: number;
-                    free: boolean;
-                    company?: Company;
-                    start: Date;
-                    end: Date;
-                }];
+                activities: {
+                    slots: {
+                        id: number;
+                        free: boolean;
+                        company?: Company;
+                        start: Date;
+                        end: Date;
+                    }[];
+                    kind: String;
+                }[];
             }[]
         };
 
@@ -100,58 +80,38 @@ export class Availability {
 
         for (let day = 1; day <= event.getDuration(); day++) {
 
-            const ws = venue.workshops.filter(w => w.day === day).map(w => {
-                return {
-                    id: w.id,
-                    free: true,
-                    start: new Date(w.start),
-                    end: new Date(w.end)
-                };
-            });
+            const activityDay = [] as {
+                slots: {
+                    id: number;
+                    free: boolean;
+                    company?: Company;
+                    start: Date;
+                    end: Date;
+                }[];
+                kind: String;
+            }[];
 
-            const pres = venue.presentations.filter(p => p.day === day).map(p => {
-                return {
-                    id: p.id,
-                    free: true,
-                    start: new Date(p.start),
-                    end: new Date(p.end)
-                };
-            });
+            for (const activity of venue.activities) {
+                const acts = activity.slots.filter(a => a.day === day).map(a => {
+                    return {
+                        id: a.id,
+                        free: true,
+                        start: new Date(a.start),
+                        end: new Date(a.end)
+                    };
+                });
 
-            const lts = venue.lunchTalks.filter(lt => lt.day === day).map(lt => {
-                return {
-                    id: lt.id,
-                    free: true,
-                    start: new Date(lt.start),
-                    end: new Date(lt.end)
-                };
-            });
+                activityDay.push({
+                    kind: activity.kind,
+                    slots: acts
+                });
+            }
 
             result.availability.push({
                 day: day,
                 nStands: 0,
                 stands: Array.from(stands) as [{ id: number; free: boolean; company?: Company; }],
-                workshops: Array.from(ws) as [{
-                    id: number;
-                    free: boolean;
-                    company?: Company;
-                    start: Date;
-                    end: Date;
-                }],
-                presentations: Array.from(pres) as [{
-                    id: number;
-                    free: boolean;
-                    company?: Company;
-                    start: Date;
-                    end: Date;
-                }],
-                lunchTalks: Array.from(lts) as [{
-                    id: number;
-                    free: boolean;
-                    company?: Company;
-                    start: Date;
-                    end: Date;
-                }],
+                activities: activityDay,
 
             });
         }
@@ -193,29 +153,18 @@ export class Availability {
                 this.availability[day].nStands += 1;
             }
             this.availability.forEach(day => {
-                if (reservation.workshop !== undefined) {
-                    day.workshops.forEach(ws => {
-                        if (ws.id === reservation.workshop) {
-                            ws.free = false;
-                            ws.company = Company.findById(reservation.companyId, companies);
+
+                for (const activity of reservation.activities) {
+                    for (const dayAct of day.activities) {
+                        if (dayAct.kind === activity.kind) {
+                            for (const slot of dayAct.slots) {
+                                if (slot.id === activity.id) {
+                                    slot.free = false;
+                                    slot.company = Company.findById(reservation.companyId, companies);
+                                }
+                            }
                         }
-                    });
-                }
-                if (reservation.presentation !== undefined) {
-                    day.presentations.forEach(p => {
-                        if (p.id === reservation.presentation) {
-                            p.free = false;
-                            p.company = Company.findById(reservation.companyId, companies);
-                        }
-                    });
-                }
-                if (reservation.lunchTalk !== undefined) {
-                    day.lunchTalks.forEach(p => {
-                        if (p.id === reservation.lunchTalk) {
-                            p.free = false;
-                            p.company = Company.findById(reservation.companyId, companies);
-                        }
-                    });
+                    }
                 }
             });
 
@@ -228,7 +177,6 @@ export class Availability {
 
         if (day.length === 0) { return false; }
 
-        console.log(day[0].nStands);
         if (standId === undefined && day[0].nStands >= 25) { return false; }
         const stands = day[0].stands;
 
@@ -241,36 +189,20 @@ export class Availability {
         return stand.length === 0 ? false : stand[0].free;
     }
 
-    isWsFree(wsId: number) {
+    isActivityFree(id: number, kind: String) {
         for (const day of this.availability) {
-            for (const ws of day.workshops) {
-                if (ws.id === wsId) {
-                    return ws.free;
+            for (const activity of day.activities) {
+                if (activity.kind === kind) {
+                    for (const slot of activity.slots) {
+                        if (slot.id === id) {
+                            return slot.free;
+                        }
+                    }
                 }
             }
         }
+        return false;
     }
-
-    isPresFree(wsId: number) {
-        for (const day of this.availability) {
-            for (const ws of day.presentations) {
-                if (ws.id === wsId) {
-                    return ws.free;
-                }
-            }
-        }
-    }
-
-    isLunchTalkFree(wsId: number) {
-        for (const day of this.availability) {
-            for (const ws of day.lunchTalks) {
-                if (ws.id === wsId) {
-                    return ws.free;
-                }
-            }
-        }
-    }
-
     getMaxOccupation() {
         let max = 0;
         for (const day of this.availability) {
@@ -284,8 +216,9 @@ export class Availability {
     getMaxActivity(activity: string) {
         let max = 0;
         for (const day of this.availability) {
-            if (day[activity].length > max) {
-                max = day[activity].length;
+            const act = day.activities.find(a => a.kind === activity);
+            if (act && act.slots.length > max) {
+                max = act.slots.length;
             }
         }
         return max;
