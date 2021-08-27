@@ -58,6 +58,7 @@
     "reservations": {
         "day": "Day {{day}}",
         "info": "Please choose your options for this day",
+        "warning": "Warning: All dates are in GMT (or UTC) timezone. Please keep this in mind",
         "button": "< Back to explanation",
         "reservations": "Reservations",
         "remaining": "You can still book <b>{{days}}</b> days",

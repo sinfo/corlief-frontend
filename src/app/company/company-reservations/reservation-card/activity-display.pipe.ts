@@ -14,7 +14,8 @@ export class ActivityDisplayPipe implements PipeTransform {
     const act = venue.activities.find(x => x.kind === activity.kind);
     for (const a of act.slots) {
       if (a.id === activity.id) {
-        return ` Slot ${a.id + 1} on Day ${a.day} (${formatDate(a.start, 'H:mm', 'en-US')} - ${formatDate(a.end, 'H:mm', 'en-US')})`;
+        return ` Slot ${a.id + 1} on Day ${a.day}
+        (${formatDate(a.start, 'H:mm', 'en-US', 'GMT')} - ${formatDate(a.end, 'H:mm', 'en-US', 'GMT')})`;
       }
     }
   }

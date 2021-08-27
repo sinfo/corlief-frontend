@@ -66,9 +66,9 @@
               (click)="clickActivity(ws.id, activity, isFreeActivity(ws.id, activity))"
               [ngClass]="{'free': isFreeActivity(ws.id, activity), 'occupied': isOccupiedActivity(ws.id, activity), 'clickable': clickableActivity(ws.id, activity), 'pending': isPendingActivity(ws.id, activity), 'confirmed': isConfirmedActivity(ws.id, activity)}">
               <div class="activity-id">{{ws.id + 1}}</div>
-              <div>{{ws.start | date:'H:mm'}}</div>
+              <div>{{ws.start | date:'H:mm':'GMT'}}</div>
               <div>-</div>
-              <div>{{ws.end | date:'H:mm'}}</div>
+              <div>{{ws.end | date:'H:mm':'GMT'}}</div>
             </div>
           </div>
         </span>
@@ -98,6 +98,7 @@
             <div>{{ws.end | date:'H:mm'}}</div>
           </div>
         </div> -->
+
 
         <h6 [innerHTML]="'reservations.info' | translate"></h6>
 
@@ -130,6 +131,12 @@
           [credentials]="credentials" (removeStandEvent)="removePendingStand($event)"
           (removeActivityEvent)="removeActivity($event)">
         </app-reservation-card>
+      </div>
+
+      <div class="warning">
+        <fa-icon [icon]="['fas', 'exclamation-triangle']" size='2x'></fa-icon>
+
+        <h5 style="margin-left: 5%;" [innerHTML]="'reservations.warning' | translate"></h5>
       </div>
 
       <div class="info">
