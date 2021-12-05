@@ -77,7 +77,6 @@ export class Availability {
                 free: true
             };
         });
-
         for (let day = 1; day <= event.getDuration(); day++) {
 
             const activityDay = [] as {
