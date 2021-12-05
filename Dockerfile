@@ -18,4 +18,4 @@ FROM nginx:alpine
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 RUN nginx -t -c /etc/nginx/nginx.conf
 
-COPY --from=builder /app/dist/ /dist/
+COPY --from=builder /app/dist/corlief-frontend /dist/
