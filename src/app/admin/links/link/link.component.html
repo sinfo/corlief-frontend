@@ -62,6 +62,13 @@
       </div>
 
       <div>
+        <b>Activities:</b>
+        <div *ngFor="let activity of company.link.activities">
+          {{activity}}
+        </div>
+      </div>
+
+      <!-- <div>
         <b>Workshop:</b>
         {{ company.link.workshop? "Yes" : "No" }}
       </div>
@@ -74,7 +81,7 @@
       <div>
         <b>Lunch Talk:</b>
         {{ company.link.lunchTalk? "Yes" : "No" }}
-      </div>
+      </div> -->
 
       <div *ngIf="company.link.expirationDate">
         <b>Valid until:</b>
@@ -165,19 +172,9 @@
           placeholder="{{company.name}} employer's email">
       </div>
 
-      <div>
-        <label>Workshop:</label>
-        <input class="form-control" type="checkbox" formControlName="workshop">
-      </div>
-
-      <div>
-        <label>Presentation:</label>
-        <input class="form-control" type="checkbox" formControlName="presentation">
-      </div>
-
-      <div>
-        <label>Lunch Talk:</label>
-        <input class="form-control" type="checkbox" formControlName="lunchTalk">
+      <div *ngFor="let kind of kinds">
+        <label>{{kind}}:</label>
+        <input class="form-control" type="checkbox" formControlName="{{kind}}">
       </div>
 
     </form>

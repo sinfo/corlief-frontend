@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Event } from 'src/app/deck/event';
-import { Reservation } from 'src/app/admin/reservations/reservation/reservation';
+import { Activity, Reservation } from 'src/app/admin/reservations/reservation/reservation';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { Venue } from 'src/app/admin/venues/venue/venue';
@@ -20,9 +20,11 @@ export class ReservationCardComponent implements OnInit {
   @Input() venue: Venue;
   @Input() credentials: Credentials;
   @Output() removeStandEvent = new EventEmitter<{ day: number, id: number }>();
+  // TODO: Adapt to activities
   @Output() removeWorkshopEvent = new EventEmitter<any>();
   @Output() removePresentationEvent = new EventEmitter<any>();
   @Output() removeLunchTalkEvent = new EventEmitter<any>();
+  @Output() removeActivityEvent = new EventEmitter<Activity>();
 
 
   private english: boolean;
@@ -49,15 +51,16 @@ export class ReservationCardComponent implements OnInit {
     this.removeStandEvent.emit(stand);
   }
 
-  removeWorkshop() {
-    this.removeWorkshopEvent.emit();
+  removeActivity(act: Activity) {
+    this.removeActivityEvent.emit(act);
   }
 
-  removePresentation() {
-    this.removePresentationEvent.emit();
+  hasActivity(activity) {
+    return this.reservation.activities.some(x => x.kind === activity && x.id !== undefined);
   }
 
-  removeLunchTalk() {
-    this.removeLunchTalkEvent.emit();
+  getActivity(activity) {
+
+    return this.reservation.activities.find(x => x.kind === activity && x.id !== undefined);
   }
 }

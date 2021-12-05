@@ -58,6 +58,7 @@
     "reservations": {
         "day": "Dia {{day}}",
         "info": "Escolha as suas opções para este dia",
+        "warning": "Aviso: Os horários apresentados estão em GMT (ou UTC). Por favor tenha atenção a este facto ao reservar.",
         "button": "< Voltar à explicação",
         "reservations": "Reservas",
         "remaining": "Ainda pode reservar <b>{{days}}</b> dia(s)",

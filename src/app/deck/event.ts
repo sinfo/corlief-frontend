@@ -30,6 +30,6 @@ export class Event {
     }
 
     getDuration(): number {
-        return this.duration.getDate();
+        return this.duration.getUTCDate();
     }
 }

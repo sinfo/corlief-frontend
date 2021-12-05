@@ -98,27 +98,11 @@ export class VenuesService {
     return this.http.delete<Venue>(`${this.url}/stand/${id}`, { headers: this.headers });
   }
 
-  uploadWorkshop(ws: Activity): Observable<Venue> {
-    return this.http.post<Venue>(`${this.url}/workshop`, ws, { headers: this.headers });
+  uploadActivity(p: Activity): Observable<Venue> {
+    return this.http.post<Venue>(`${this.url}/activity`, p, { headers: this.headers });
   }
 
-  deleteWorkshop(id: number): Observable<Venue> {
-    return this.http.delete<Venue>(`${this.url}/workshop/${id}`, { headers: this.headers });
-  }
-
-  uploadPresentation(p: Activity): Observable<Venue> {
-    return this.http.post<Venue>(`${this.url}/presentation`, p, { headers: this.headers });
-  }
-
-  deletePresentation(id: number): Observable<Venue> {
-    return this.http.delete<Venue>(`${this.url}/presentation/${id}`, { headers: this.headers });
-  }
-
-  uploadLunchTalk(p: Activity): Observable<Venue> {
-    return this.http.post<Venue>(`${this.url}/lunchtalk`, p, { headers: this.headers });
-  }
-
-  deleteLunchTalk(id: number): Observable<Venue> {
-    return this.http.delete<Venue>(`${this.url}/lunchtalk/${id}`, { headers: this.headers });
+  deleteActivity(id: number, kind: String): Observable<Venue> {
+    return this.http.delete<Venue>(`${this.url}/activity/${kind}/${id}`, { headers: this.headers });
   }
 }

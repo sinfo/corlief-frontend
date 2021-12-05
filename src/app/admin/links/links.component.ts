@@ -10,6 +10,8 @@ import { Company } from 'src/app/deck/company';
 
 import { Event } from 'src/app/deck/event';
 import { Link } from 'src/app/admin/links/link/link';
+import { Venue } from '../venues/venue/venue';
+import { VenuesService } from '../venues/venues.service';
 
 @Component({
   selector: 'app-links',
@@ -20,13 +22,16 @@ export class LinksComponent implements OnInit, OnDestroy {
 
   event: Event;
   companies: Companies;
+  kinds: String[];
 
   eventSubscription: Subscription;
   companiesSubscription: Subscription;
+  venuesSubscription: Subscription;
 
   constructor(
     private deckService: DeckService,
-    private linksService: LinksService
+    private linksService: LinksService,
+    private venuesService: VenuesService
   ) { }
 
   ngOnInit() {
@@ -37,11 +42,17 @@ export class LinksComponent implements OnInit, OnDestroy {
 
     this.companiesSubscription = this.linksService.getCompaniesSubscription()
       .subscribe(companies => this.companies = companies);
+
+    this.venuesSubscription = this.venuesService.getVenueSubject()
+      .subscribe(venue => {
+        this.kinds = venue.activities.map(e => e.kind);
+      });
   }
 
   ngOnDestroy() {
     this.companiesSubscription.unsubscribe();
     this.eventSubscription.unsubscribe();
+    this.venuesSubscription.unsubscribe();
   }
 
   invalidate(link: Link) {
