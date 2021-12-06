@@ -30,24 +30,15 @@
           </div>
         </div>
 
-        <div class="reservation-stands border" *ngIf="reservation.workshop !== undefined">
-          <div class="reservation-day">
-            <b>Ws: </b>
-            {{ reservation.workshop + 1}}
+        <div *ngFor="let activity of reservation.activities">
+          <div class="reservation-stands border">
+            <div class="reservation-day">
+              <b>{{activity.kind}} </b>
+              {{ activity.id + 1}}
+            </div>
           </div>
         </div>
-        <div class="reservation-stands border" *ngIf="reservation.presentation !== undefined">
-          <div class="reservation-day">
-            <b>Pres: </b>
-            {{ reservation.presentation + 1}}
-          </div>
-        </div>
-        <div class="reservation-stands border" *ngIf="reservation.lunchTalk !== undefined">
-          <div class="reservation-day">
-            <b>LT: </b>
-            {{ reservation.lunchTalk + 1}}
-          </div>
-        </div>
+
 
       </span>
     </div>

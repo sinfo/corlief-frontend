@@ -5,7 +5,5 @@ export class Credentials {
     edition: String;
     iat: number;
     participationDays: number;
-    workshop: boolean;
-    presentation: boolean;
-    lunchTalk: boolean;
+    activities: String[];
 }

@@ -14,7 +14,7 @@ import { Credentials } from '../credentials';
 import { Availability } from '../../admin/venues/venue/venue';
 import { Event } from 'src/app/deck/event';
 import { Stand } from '../../admin/venues/venue/stand';
-import { Reservation, Stand as ReservationStand } from '../../admin/reservations/reservation/reservation';
+import { Activity, Reservation, Stand as ReservationStand } from '../../admin/reservations/reservation/reservation';
 import { CanvasState } from 'src/app/admin/venues/venue/venue-image/canvas/canvasCommunication';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -68,7 +68,6 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       });
 
     this.companyService.getVenueAvailability().subscribe(_availability => {
-      console.log(_availability);
       const availability = new Availability(_availability);
       this.availability = availability;
 
@@ -153,22 +152,9 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       && this.latestReservation.stands.length < this.credentials.participationDays;
   }
 
-  private clickableWs(id) {
+  private clickableActivity(id, kind) {
     return this.latestReservation && this.latestReservation.issued === undefined
-      && !this.isOccupiedWs(id)
-      && this.credentials.workshop;
-  }
-
-  private clickablePres(id) {
-    return this.latestReservation && this.latestReservation.issued === undefined
-      && !this.isOccupiedPres(id)
-      && this.credentials.presentation;
-  }
-
-  private clickableLT(id) {
-    return this.latestReservation && this.latestReservation.issued === undefined
-      && !this.isOccupiedLT(id)
-      && this.credentials.lunchTalk;
+      && !this.isOccupiedActivity(id, kind) && this.credentials.activities.find(a => a === kind) !== undefined;
   }
 
   private clickStand(standId: number, free: boolean) {
@@ -179,23 +165,13 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  private clickWs(wsId: number, free: boolean) {
+  private clickActivity(id: number, kind: String, free: boolean) {
     if (free) {
-      this.latestReservation.workshop = wsId;
-      this.reservationService.setReservation(this.latestReservation);
-    }
-  }
+      if (this.latestReservation.activities === undefined) {
+        this.latestReservation.activities = [];
+      }
+      this.latestReservation.activities.push(new Activity(id, kind));
 
-  private clickPres(wsId: number, free: boolean) {
-    if (free) {
-      this.latestReservation.presentation = wsId;
-      this.reservationService.setReservation(this.latestReservation);
-    }
-  }
-
-  private clickLT(wsId: number, free: boolean) {
-    if (free) {
-      this.latestReservation.lunchTalk = wsId;
       this.reservationService.setReservation(this.latestReservation);
     }
   }
@@ -212,19 +188,14 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     }
   }
 
-  removeWorkshop(event: any) {
-    this.latestReservation.workshop = undefined;
+  removeActivity(act: Activity) {
+    const index = this.latestReservation.activities.findIndex((el) => el.id === act.id && el.kind === act.kind);
+    this.latestReservation.activities.splice(index, 1);
     this.reservationService.setReservation(this.latestReservation);
   }
 
-  removePresentation(event: any) {
-    this.latestReservation.presentation = undefined;
-    this.reservationService.setReservation(this.latestReservation);
-  }
-
-  removeLunchTalk(event: any) {
-    this.latestReservation.lunchTalk = undefined;
-    this.reservationService.setReservation(this.latestReservation);
+  getActivitySlots(activity) {
+    return this.availability.availability[this.selectedDay.day - 1].activities.find(x => x.kind === activity).slots;
   }
 
   private isFreeStand(standId?: number): boolean {
@@ -259,82 +230,25 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     this.reservationService.setReservation(this.latestReservation);
   }
 
-  private isFreeWs(wsId: number) {
-    return !this.isConfirmedWs(wsId) &&
-      !this.isPendingWs(wsId) &&
-      this.availability.isWsFree(wsId);
+
+  private isFreeActivity(id: number, kind: String) {
+    return !this.isConfirmedActivity(id, kind) && !this.isPendingActivity(id, kind) && this.availability.isActivityFree(id, kind);
   }
 
-  private isOccupiedWs(wsId: number) {
-    return !this.isConfirmedWs(wsId) &&
-      !this.isPendingWs(wsId) &&
-      !this.availability.isWsFree(wsId);
+  private isOccupiedActivity(id: number, kind: String) {
+    return !this.isConfirmedActivity(id, kind) && !this.isPendingActivity(id, kind) && !this.availability.isActivityFree(id, kind);
   }
 
-  private isPendingWs(wsid: number) {
-    return !this.isConfirmedWs(wsid) &&
-      this.latestReservation &&
-      this.latestReservation.workshop !== undefined &&
-      this.latestReservation.workshop === wsid;
+  private isPendingActivity(id: number, kind: String) {
+    const act = new Activity(id, kind);
+    return !this.isConfirmedActivity(id, kind) && this.latestReservation && this.latestReservation.activities &&
+      act.isInArray(this.latestReservation.activities);
   }
 
-  private isConfirmedWs(wsId: number) {
-    return this.latestReservation &&
-      this.latestReservation.workshop !== undefined &&
-      this.latestReservation.workshop === wsId &&
-      this.latestReservation.isConfirmed();
-  }
-
-  private isFreePres(wsId: number) {
-    return !this.isConfirmedPres(wsId) &&
-      !this.isPendingPres(wsId) &&
-      this.availability.isPresFree(wsId);
-  }
-
-  private isOccupiedPres(wsId: number) {
-    return !this.isConfirmedPres(wsId) &&
-      !this.isPendingPres(wsId) &&
-      !this.availability.isPresFree(wsId);
-  }
-
-  private isPendingPres(wsid: number) {
-    return !this.isConfirmedPres(wsid) &&
-      this.latestReservation &&
-      this.latestReservation.presentation !== undefined &&
-      this.latestReservation.presentation === wsid;
-  }
-
-  private isConfirmedPres(wsId: number) {
-    return this.latestReservation &&
-      this.latestReservation.presentation !== undefined &&
-      this.latestReservation.presentation === wsId &&
-      this.latestReservation.isConfirmed();
-  }
-
-  private isFreeLT(wsId: number) {
-    return !this.isConfirmedLT(wsId) &&
-      !this.isPendingLT(wsId) &&
-      this.availability.isLunchTalkFree(wsId);
-  }
-
-  private isOccupiedLT(wsId: number) {
-    return !this.isConfirmedLT(wsId) &&
-      !this.isPendingLT(wsId) &&
-      !this.availability.isLunchTalkFree(wsId);
-  }
-
-  private isPendingLT(wsid: number) {
-    return !this.isConfirmedLT(wsid) &&
-      this.latestReservation &&
-      this.latestReservation.lunchTalk !== undefined &&
-      this.latestReservation.lunchTalk === wsid;
-  }
-
-  private isConfirmedLT(wsId: number) {
-    return this.latestReservation &&
-      this.latestReservation.lunchTalk !== undefined &&
-      this.latestReservation.lunchTalk === wsId &&
-      this.latestReservation.isConfirmed();
+  private isConfirmedActivity(id: number, kind: String) {
+    const act = new Activity(id, kind);
+    return this.latestReservation && this.latestReservation.activities &&
+      act.isInArray(this.latestReservation.activities) && this.latestReservation.isConfirmed();
   }
 
   private makeReservation(content) {

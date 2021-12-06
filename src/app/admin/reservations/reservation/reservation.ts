@@ -35,6 +35,36 @@ export class Stand {
     }
 }
 
+export class Activity {
+    kind: String;
+    id?: Number;
+
+    constructor(id: Number, kind?: String) {
+        this.id = id;
+        this.kind = kind;
+    }
+
+    static fromArray(activities: Activity[]): Activity[] {
+        const result = [];
+
+        for (const activity of activities) {
+            result.push(new Activity(activity.id, activity.kind));
+        }
+
+        return result as Activity[];
+    }
+
+    isInArray(activities: Activity[]): boolean {
+        for (const activity of activities) {
+            if (activity.kind === this.kind && (activity.id !== undefined && this.id !== undefined && activity.id === this.id)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+}
+
 export class Reservation {
     id?: number;
     companyId?: String;
@@ -43,9 +73,7 @@ export class Reservation {
     stands: Stand[];
     feedback?: Feedback;
     company?: Company;
-    workshop?: number;
-    presentation?: number;
-    lunchTalk?: number;
+    activities?: Activity[];
 
     constructor(reservation?: Reservation) {
         if (reservation) {
@@ -55,11 +83,10 @@ export class Reservation {
             this.issued = reservation.issued;
             this.stands = Stand.fromArray(reservation.stands);
             this.feedback = reservation.feedback;
-            this.workshop = reservation.workshop;
-            this.presentation = reservation.presentation;
-            this.lunchTalk = reservation.lunchTalk;
+            this.activities = Activity.fromArray(reservation.activities);
         } else {
             this.stands = [] as Stand[];
+            this.activities = [] as Activity[];
         }
     }
 
@@ -113,14 +140,10 @@ export class Reservation {
                     return false;
                 }
             }
-            if (this.workshop && reservation.workshop && this.workshop === reservation.workshop) {
-                return false;
-            }
-            if (this.presentation && reservation.presentation && this.presentation === reservation.presentation) {
-                return false;
-            }
-            if (this.lunchTalk && reservation.lunchTalk && this.lunchTalk === reservation.lunchTalk) {
-                return false;
+            for (const activity of reservation.activities) {
+                if (activity.isInArray(this.activities)) {
+                    return false;
+                }
             }
         }
 
@@ -151,9 +174,9 @@ export class Reservation {
 
     daysAreContiguous(): boolean {
         this.stands.sort((s1, s2) => s1.day - s2.day);
-        let last: number = -1;
+        let last = -1;
         for (const _stand of this.stands) {
-            if (last != -1 && _stand.day - last != 1) {
+            if (last !== -1 && _stand.day - last !== 1) {
                 return false;
             }
             last = _stand.day;

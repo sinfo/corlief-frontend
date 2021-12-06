@@ -60,9 +60,7 @@ export class Link {
     advertisementKind: Advertisement;
     participationDays: number;
     expirationDate?: Date;
-    workshop: boolean;
-    presentation: boolean;
-    lunchTalk: boolean;
+    activities?: String[];
 
     constructor(link: Link) {
         this.companyId = link.companyId;
@@ -74,18 +72,16 @@ export class Link {
         this.advertisementKind = link.advertisementKind;
         this.participationDays = link.participationDays;
         this.expirationDate = link.expirationDate;
-        this.workshop = link.workshop;
-        this.presentation = link.presentation;
-        this.lunchTalk = link.lunchTalk;
+        this.activities = link.activities;
     }
 
-    static linkForm(company: Company, event: Event): FormGroup {
+    static linkForm(company: Company, event: Event, kinds: String[]): FormGroup {
         const duration = event.duration.getDate();
         const participation = company.currentParticipation;
         const advertisementKind = participation && participation.kind
             ? participation.kind : '';
 
-        return new FormGroup({
+        const controls = {
             companyId: new FormControl(company.id, [
                 Validators.required
             ]),
@@ -102,21 +98,21 @@ export class Link {
                 Validators.required,
                 Validators.minLength(0)
             ]),
-            activities: new FormControl([]),
             expirationDate: new FormControl(new Date(), [
                 Validators.required,
                 this.expirationDateValidator()
-            ]),
-            workshop: new FormControl(false, [
-                Validators.required
-            ]),
-            presentation: new FormControl(false, [
-                Validators.required
-            ]),
-            lunchTalk: new FormControl(false, [
-                Validators.required
             ])
+        };
+
+        kinds.forEach(e => {
+            controls[e.toString()] = new FormControl(false, [
+                Validators.required
+            ]);
         });
+
+
+
+        return new FormGroup(controls);
     }
 
     static linkFromEditLinkForm(link: Link, form: FormGroup, event: Event): Link {
@@ -133,9 +129,7 @@ export class Link {
             valid: link.valid,
             advertisementKind: data.advertisementKind,
             participationDays: data.participationDays,
-            workshop: link.workshop,
-            presentation: link.presentation,
-            lunchTalk: link.lunchTalk
+            activities: link.activities
         });
     }
 
@@ -159,19 +153,12 @@ export class Link {
     }
 }
 
-export class Activity {
-    kind: String;
-    date: Date;
-}
 
 export class LinkForm {
     companyId: String;
     companyEmail: String;
     participationDays: number;
     advertisementKind: String;
-    activities: [Activity];
+    activities: String[];
     expirationDate: Date;
-    workshop: boolean;
-    presentation: boolean;
-    lunchTalk: boolean;
 }

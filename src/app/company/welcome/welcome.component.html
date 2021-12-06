@@ -26,11 +26,8 @@
             <b *ngIf="credentials.participationDays" [innerHTML]="'page0.text.p3.stand' | translate: {
             participationDays: credentials.participationDays }"></b>
           </p>
-          <p>
-            <b *ngIf="credentials.workshop" [innerHTML]="'page0.text.p3.workshop' | translate"></b>
-          </p>
-          <p><b *ngIf="credentials.presentation" [innerHTML]="'page0.text.p3.presentation' | translate"></b></p>
-          <p><b *ngIf="credentials.lunchTalk" [innerHTML]="'page0.text.p3.lunchTalk' | translate"></b>
+          <p *ngFor='let activity of credentials.activities'>
+            <b>{{activity}}</b>
           </p>
         </div>
 

@@ -21,7 +21,7 @@ export class StandsDisplayPipe implements PipeTransform {
         result.push({
           day: day,
           date: new Date(date.getTime()),
-          id: stand[0].standId ? stand[0].standId : -1
+          id: stand[0].standId !== undefined ? stand[0].standId : -1
         });
       } else {
         result.push({

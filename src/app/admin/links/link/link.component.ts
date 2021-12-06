@@ -21,6 +21,7 @@ export class LinkComponent implements OnInit {
 
   @Input() company: Company;
   @Input() event: Event;
+  @Input() kinds: String[];
   @Output() invalidate = new EventEmitter<Link>();
 
   errorSrc = 'assets/img/hacky.png';
@@ -58,7 +59,16 @@ export class LinkComponent implements OnInit {
   }
 
   submitLink(modal) {
-    this.linksService.uploadLink(<LinkForm>this.linkForm.value)
+    const activities = [];
+    const form = <LinkForm>this.linkForm.value;
+    for (const kind of this.kinds) {
+      if (form[kind.toString()]) {
+        activities.push(kind);
+      }
+      delete form[kind.toString()];
+    }
+    form.activities = activities;
+    this.linksService.uploadLink(form)
       .subscribe(link => {
         modal.close();
         this.linksService.updateLinks(this.event.id as string);
@@ -106,7 +116,7 @@ export class LinkComponent implements OnInit {
   }
 
   openLinkForm(content) {
-    this.linkForm = Link.linkForm(this.company, this.event);
+    this.linkForm = Link.linkForm(this.company, this.event, this.kinds);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeLinkFormResult = `Closed with: ${result}`;
     }, (reason) => {
