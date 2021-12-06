@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - "staging"
+      - "master"
 
 jobs:
   docker:
@@ -18,7 +19,7 @@ jobs:
         password: ${{ secrets.DOCKERHUB_TOKEN }}
         
     - uses: docker/build-push-action@v2.7.0
-      name: Build and PushBackend Image
+      name: Build and Push Backend Image
       id: docker_build
       with:
         push: true
@@ -37,4 +38,4 @@ jobs:
       uses: nickgronow/kubectl@master
       with:
         config_data: ${{ secrets.KUBE_CONFIG_DATA }}
-        args: delete pod --selector="app=corlief-frontend-staging-app" --namespace=staging        
+        args: delete pod --selector="app=corlief-frontend-production-app" --namespace=production
