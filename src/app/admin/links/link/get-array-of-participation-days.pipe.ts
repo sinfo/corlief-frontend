@@ -11,7 +11,7 @@ export class GetArrayOfParticipationDaysPipe implements PipeTransform {
     const duration = event.getDuration();
     const result = [] as number[];
 
-    for (let day = 1; day <= duration; day += 1) {
+    for (let day = 0; day <= duration; day += 1) {
       result.push(day);
     }
 

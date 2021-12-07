@@ -89,9 +89,9 @@ export class Link {
                 Validators.required,
                 Validators.email
             ]),
-            participationDays: new FormControl(1, [
+            participationDays: new FormControl(0, [
                 Validators.required,
-                Validators.min(1),
+                Validators.min(0),
                 Validators.max(duration)
             ]),
             advertisementKind: new FormControl(advertisementKind, [
