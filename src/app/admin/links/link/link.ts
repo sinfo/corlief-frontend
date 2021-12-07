@@ -23,7 +23,7 @@ export class LinkEdit {
     }
 
     static editLinkForm(link: Link, event: Event): FormGroup {
-        const duration = event.duration.getDate();
+        const duration = event.getDuration();
 
         return new FormGroup({
             companyContact: new FormControl(link.contacts.company, [
@@ -76,7 +76,7 @@ export class Link {
     }
 
     static linkForm(company: Company, event: Event, kinds: String[]): FormGroup {
-        const duration = event.duration.getDate();
+        const duration = event.getDuration();
         const participation = company.currentParticipation;
         const advertisementKind = participation && participation.kind
             ? participation.kind : '';
@@ -134,7 +134,7 @@ export class Link {
     }
 
     static extendLinkForm(event: Event): FormGroup {
-        const duration = event.duration.getDate();
+        const duration = event.getDuration();
 
         return new FormGroup({
             expirationDate: new FormControl(new Date(), [
