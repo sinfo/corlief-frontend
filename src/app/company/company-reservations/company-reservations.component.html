@@ -146,14 +146,20 @@
             [innerHTML]="'reservations.cancel' | translate"></button>
         </div>
 
-        <div
-          *ngIf="latestReservation 
-          && latestReservation.issued === undefined 
-          && (latestReservation.stands.length === credentials.participationDays || availability.venue.stands.length === 0 || latestReservation.stands === undefined)"
-          class="action submit">
-          <button class="btn btn-primary" (click)="makeReservation(confirmReservationPopup)"
-            [innerHTML]="'reservations.submit' | translate">Submit
+        <div class="btn-group-vertical" role="group">
+          <button class="btn btn-primary" type="button" (click)="makeReservation(confirmReservationPopup)"
+            [innerHTML]="'reservations.submit' | translate"
+            *ngIf="latestReservation 
+            && latestReservation.issued === undefined 
+            && (latestReservation.stands.length === credentials.participationDays || availability.venue.stands.length === 0 || latestReservation.stands === undefined)">Submit
             reservation</button>
+
+          <button *ngIf="showAllReservations" class="btn btn-primary" type="button"
+            (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.current' | translate">
+          </button>
+          <button *ngIf="showAllReservations == false" class="btn btn-primary" type="button"
+            (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.previous' | translate">
+          </button>
         </div>
       </div>
     </ng-container>
@@ -167,16 +173,17 @@
           </app-reservation-card>
         </div>
       </div>
+      <div class="history">
+        <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()"
+          [innerHTML]=" 'reservations.current' | translate">
+        </button>
+        <button *ngIf="showAllReservations == false" class="btn btn-primary" (click)="alternateShowAllReservations()"
+          [innerHTML]=" 'reservations.previous' | translate">
+        </button>
+      </div>
     </ng-container>
 
-    <div class="history">
-      <button *ngIf="showAllReservations" class="btn btn-primary" (click)="alternateShowAllReservations()"
-        [innerHTML]=" 'reservations.current' | translate">
-      </button>
-      <button *ngIf="showAllReservations == false" class="btn btn-primary" (click)="alternateShowAllReservations()"
-        [innerHTML]=" 'reservations.previous' | translate">
-      </button>
-    </div>
+
 
 
   </div>
