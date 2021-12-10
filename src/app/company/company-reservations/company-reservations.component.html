@@ -11,7 +11,7 @@
         <div>
           <b [innerHTML]="'reservations.day' | translate: {day: selectedDay.day}"></b>
         </div>
-        <div>{{english? ( selectedDay.date | date : 'MMMM d') : ( selectedDay.date | ptDate) }}</div>
+        <div>{{english? ( selectedDay.date | date : 'MMMM d ':'+0000') : ( selectedDay.date | ptDate) }}</div>
         <div [ngClass]="{'canChangeDay': selectedDay.day < event.getDuration()}"
           (click)="changeDay(selectedDay.day + 1)">
           <b>&gt;</b>
@@ -149,7 +149,7 @@
         <div
           *ngIf="latestReservation 
           && latestReservation.issued === undefined 
-          && (latestReservation.stands.length === credentials.participationDays || availability.venue.stands.length === 0)"
+          && (latestReservation.stands.length === credentials.participationDays || availability.venue.stands.length === 0 || latestReservation.stands === undefined)"
           class="action submit">
           <button class="btn btn-primary" (click)="makeReservation(confirmReservationPopup)"
             [innerHTML]="'reservations.submit' | translate">Submit

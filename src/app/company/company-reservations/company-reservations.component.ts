@@ -154,7 +154,8 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private clickableActivity(id, kind) {
     return this.latestReservation && this.latestReservation.issued === undefined
-      && !this.isOccupiedActivity(id, kind) && this.credentials.activities.find(a => a === kind) !== undefined;
+      && !this.isOccupiedActivity(id, kind) && this.credentials.activities.find(a => a === kind) !== undefined
+      && this.latestReservation.activities.find(act => act.kind === kind) === undefined;
   }
 
   private clickStand(standId: number, free: boolean) {
