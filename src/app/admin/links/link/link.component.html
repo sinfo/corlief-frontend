@@ -68,21 +68,6 @@
         </div>
       </div>
 
-      <!-- <div>
-        <b>Workshop:</b>
-        {{ company.link.workshop? "Yes" : "No" }}
-      </div>
-
-      <div>
-        <b>Presentation:</b>
-        {{ company.link.presentation? "Yes" : "No" }}
-      </div>
-
-      <div>
-        <b>Lunch Talk:</b>
-        {{ company.link.lunchTalk? "Yes" : "No" }}
-      </div> -->
-
       <div *ngIf="company.link.expirationDate">
         <b>Valid until:</b>
         {{ company.link.expirationDate | date:'dd/MM/yyyy' }}
@@ -190,7 +175,7 @@
 
 <ng-template #editLinkFormWindow let-modal>
   <div class="modal-header">
-    <h4 class="modal-title" id="modal-basic-title">Create link for {{company.name}}</h4>
+    <h4 class="modal-title" id="modal-basic-title">Edit link for {{company.name}}</h4>
     <button type="button" class="close" aria-label="Close" (click)="modal.dismiss('Cross click')">
       <span aria-hidden="true">&times;</span>
     </button>
@@ -221,6 +206,11 @@
         <label>Kind:</label>
         <input required class="form-control" type="text" formControlName="advertisementKind"
           placeholder="Ex: Silver, Gold...">
+      </div>
+
+      <div *ngFor="let kind of kinds">
+        <label>{{kind}}:</label>
+        <input class="form-control" type="checkbox" formControlName="{{kind}}">
       </div>
 
     </form>

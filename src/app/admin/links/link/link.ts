@@ -12,20 +12,21 @@ export class LinkEdit {
     memberContact: String;
     advertisementKind: Advertisement;
     participationDays: number;
+    activities?: String[];
 
-    constructor(form: FormGroup) {
-        const data = form.value;
+    constructor(data) {
 
         this.companyContact = data.companyContact;
         this.memberContact = data.memberContact;
         this.advertisementKind = data.advertisementKind;
         this.participationDays = data.participationDays;
+        this.activities = data.activities;
     }
 
-    static editLinkForm(link: Link, event: Event): FormGroup {
+    static editLinkForm(link: Link, event: Event, kinds: String[]): FormGroup {
         const duration = event.getDuration();
 
-        return new FormGroup({
+        const controls = {
             companyContact: new FormControl(link.contacts.company, [
                 Validators.required,
                 Validators.email
@@ -43,7 +44,15 @@ export class LinkEdit {
                 Validators.required,
                 Validators.minLength(0)
             ])
+        };
+
+        kinds.forEach(e => {
+            controls[e.toString()] = new FormControl(link.activities.includes(e.toString()), [
+                Validators.required
+            ]);
         });
+
+        return new FormGroup(controls);
     }
 }
 
@@ -129,7 +138,7 @@ export class Link {
             valid: link.valid,
             advertisementKind: data.advertisementKind,
             participationDays: data.participationDays,
-            activities: link.activities
+            activities: data.activities
         });
     }
 
