@@ -107,7 +107,16 @@ export class LinkComponent implements OnInit {
   }
 
   edit(modal) {
-    const linkEdit = new LinkEdit(this.editLinkForm);
+    const activities = [];
+    const form = this.editLinkForm.value;
+    for (const kind of this.kinds) {
+      if (form[kind.toString()]) {
+        activities.push(kind);
+      }
+      delete form[kind.toString()];
+    }
+    form.activities = activities;
+    const linkEdit = new LinkEdit(form);
     this.linksService.edit(linkEdit, this.event, this.company.id)
       .subscribe(link => {
         modal.close();
@@ -125,7 +134,7 @@ export class LinkComponent implements OnInit {
   }
 
   openEditLinkForm(content) {
-    this.editLinkForm = LinkEdit.editLinkForm(this.company.link, this.event);
+    this.editLinkForm = LinkEdit.editLinkForm(this.company.link, this.event, this.kinds);
     this.modalService.open(content, { ariaLabelledBy: 'modal-basic-title' }).result.then((result) => {
       this.closeLinkFormResult = `Closed with: ${result}`;
     }, (reason) => {

@@ -6,15 +6,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class PtDatePipe implements PipeTransform {
 
   private translator = [
-    'Janeiro', 'Fevereiro', 'Março', 'Abril',
-    'Maio', 'Junho', 'Julho', 'Agosto',
-    'Setembro', 'Outubro', 'Novembro', 'Dezembro'
+    'Jan.', 'Fev.', 'Mar.', 'Abr.',
+    'Maio', 'Jun.', 'Jul.', 'Ago.',
+    'Set.', 'Out.', 'Nov.', 'Dez.'
   ];
 
   transform(date: Date): string {
-    const day = date.getDate();
+    const day = date.getUTCDate();
     const month = this.translator[date.getMonth()];
 
-    return `${month} ${day}`;
+    return `${day} de ${month}`;
   }
 }
