@@ -39,4 +39,4 @@ jobs:
       uses: nickgronow/kubectl@master
       with:
         config_data: ${{ secrets.KUBE_CONFIG_DATA }}
-        args: delete pod --selector="app=corlief-frontend-prod-app" --namespace=production
+        args: delete pod --selector="app=corlief-frontend-staging-app" --namespace=staging
