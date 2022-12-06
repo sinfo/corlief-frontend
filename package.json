@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "dev": "ng serve --configuration staging",
     "build": "ng build --prod --output-hashing=all && gzipper c --verbose ./dist",
     "build-dev": "ng build --configuration staging --output-hashing=all && gzipper c --verbose ./dist",
     "test": "ng test",
