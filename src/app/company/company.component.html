@@ -5,7 +5,7 @@
 
     <span class="right-side">
         <a class="btn btn-primary" href="https://sinfo.org" target="_blank" [innerHTML]="'navbar.sinfo_org' | translate"></a>
-        <a class="btn btn-primary" href="https://partners.sinfo.org" target="_blank" [innerHTML]="'navbar.partners' | translate"></a>
+        <a class="btn btn-primary" href="https://sponsors.sinfo.org" target="_blank" [innerHTML]="'navbar.partners' | translate"></a>
         <div id="lang">
             <div *ngFor="let lang of langs">
                 <img [class.active]="languageSet === lang.lang" src="{{lang.flag}}" (click)="changeLang(lang.lang)">
