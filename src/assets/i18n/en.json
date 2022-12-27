@@ -36,12 +36,12 @@
         "text": {
             "p1": {
                 "bold": "Always try to book your activities in days you will be present with a stand ",
-                "normal": ", as it simplifies and agilizes our work and may lead to you reservation being rejected."
+                "normal": ", as it simplifies and agilizes our work. Failure to do this may lead to your reservation being rejected."
             },
             "p2": {
                 "normal1": "Please book consecutive days",
                 "bold": "Please book consecutive days",
-                "normal2": ", as it simplifies and agilizes our work and may lead to you reservation being rejected."
+                "normal2": ", as it simplifies and agilizes our work. Failure to do this may lead to your reservation being rejected."
             },
             "p3": {
                 "warning": "Warning: ",

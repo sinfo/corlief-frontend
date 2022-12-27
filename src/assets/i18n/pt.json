@@ -36,12 +36,12 @@
         "text": {
             "p1": {
                 "bold": "Reserve as suas atividades, sempre que possível, em dias que irão participar com stand ",
-                "normal": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva."
+                "normal": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva, caso não seja cumprido."
             },
             "p2": {
                 "normal1": "Sempre que possível ",
                 "bold": "Reserve dias consecutivos ",
-                "normal2": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva."
+                "normal2": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva, caso não seja cumprido."
             },
             "p3": {
                 "warning": "Aviso: ",
