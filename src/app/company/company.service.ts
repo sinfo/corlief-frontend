@@ -10,6 +10,7 @@ import { Credentials } from './credentials';
 import { Availability } from '../admin/venues/venue/venue';
 import { Reservation } from '../admin/reservations/reservation/reservation';
 import { Step } from './company';
+import { Info } from '../admin/infos/info';
 
 @Injectable({
   providedIn: 'root'
@@ -82,5 +83,14 @@ export class CompanyService {
 
   getCompanyStep(): Observable<Step> {
     return this.http.get<Step>(`${this.corlief}/step`, this.getHeaders());
+  }
+
+  submitInfo(companyInfo: Info): Observable<Info> {
+    return this.http.post<Info>(
+      `${this.corlief}/info`, {
+        info: companyInfo.info,
+        titles: companyInfo.titles
+      }, this.getHeaders()
+    );
   }
 }
