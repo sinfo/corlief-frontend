@@ -28,7 +28,9 @@
             "3": "Escolher a apresentação",
             "4": "Escolher a lunch talk",
             "5": "Submeter a reserva",
-            "6": "Aguardar pela confirmação por parte da comissão da SINFO"
+            "6": "Aguardar pela confirmação por parte da comissão da SINFO",
+            "7": "Quando a reserva estiver confirmada, submeter as informações adicionais pedidas",
+            "8": "Aguardar pela confirmação por parte da comissão da SINFO"
         }
     },
     "page2": {

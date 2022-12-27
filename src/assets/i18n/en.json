@@ -28,7 +28,9 @@
             "3": "Pick the presentation slot",
             "4": "Pick the lunch talk slot",
             "5": "Submit your reservation",
-            "6": "Wait for our team to aprove it and confirm your reservation"
+            "6": "Wait for our team to aprove it and confirm your reservation",
+            "7": "Once it is approved, submit the additional information requested",
+            "8": "Wait for our team to approve it and confirm the information is correct"
         }
     },
     "page2": {
