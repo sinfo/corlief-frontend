@@ -53,7 +53,8 @@
     "buttons": {
         "back": " < Previous Page",
         "next": "Next Page >",
-        "reserve": "Book Stands >"
+        "reserve": "Book Stands >",
+        "information": "Submit Information >"
     },
     "reservations": {
         "day": "Day {{day}}",

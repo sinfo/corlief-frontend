@@ -53,7 +53,8 @@
     "buttons": {
         "back": " < Retroceder",
         "next": "Seguinte >",
-        "reserve": "Reservar Stands >"
+        "reserve": "Reservar Stands >",
+        "information": "Submeter Informação >"
     },
     "reservations": {
         "day": "Dia {{day}}",
