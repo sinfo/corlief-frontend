@@ -30,6 +30,7 @@ export class WelcomeComponent implements OnInit {
   private eventSubscription: Subscription;
   private page: number;
   private english: boolean;
+  private step: String;
 
 
   ngOnInit() {
@@ -41,9 +42,17 @@ export class WelcomeComponent implements OnInit {
         this.event = event;
       });
 
+    this.companyService.getCompanyStep().subscribe(step => { 
+      this.step = step.step; 
+    });
+
     this.translate.onLangChange.subscribe(LangChangeEvent => {
       this.english = LangChangeEvent.lang === 'en';
     });
+  }
+
+  currentStep() {
+    return this.step;
   }
 
   next() {

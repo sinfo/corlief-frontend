@@ -48,13 +48,13 @@ b.days {
     color: #00254a;
 }
 
-.reservations-link a {
+.step-button-link a {
     font-size: 3rem;
     color: #00254a;
     font-weight: 600;
 }
 
-.reservations-link a:hover {
+.step-button-link a:hover {
     text-decoration: none;
     color: #4b5763;
 }
