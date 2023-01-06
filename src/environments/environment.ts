@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   corlief: 'http://localhost:8888',
-  deck: 'http://localhost:8080',
+  deck: 'https://deck-staging.sinfo.org',
   frontend: 'http://localhost:4200'
 };
 

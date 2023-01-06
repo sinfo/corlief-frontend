@@ -1,0 +1,104 @@
+<div class="container">
+  <div [hidden]="submitted">
+    <h1>Company Information Form</h1>
+    <form (ngSubmit)="onSubmit()" #companyInfoForm="ngForm">
+      <div class="form-group">
+        <label for="numberOfPeople">Número de pessoas no stand</label>
+        <select
+          class="form-control"
+          id="numberOfPeople"
+          required
+          [(ngModel)]="model.info.numberOfPeople"
+          name="numberOfPeople"
+          #power="ngModel"
+        >
+          <option *ngFor="let num of people_stand_options" [value]="num">
+            {{ num }}
+          </option>
+        </select>
+        <div
+          [hidden]="numberOfPeople.valid || numberOfPeople.pristine"
+          class="alert alert-danger"
+        >
+          Número de pessoas no stand é obrigatório
+        </div>
+      </div>
+
+      <!-- TODO: FINISH THIS FIELD -->
+      <!-- <div class="form-group">
+            <label for="name">Matrícula do carro</label>
+            <input type="text" class="form-control" id="name"
+                   required
+                   [(ngModel)]="model.name" name="name"
+                   #name="ngModel">
+            <div [hidden]="name.valid || name.pristine"
+                 class="alert alert-danger">
+              Matrícula do carro é obrigatório
+            </div>
+          </div> -->
+
+      <!-- TODO: THIS FIELD SHOULD ONLY APPEAR DEPENDING ON THE COMPANY -->
+      <div class="form-group">
+        <label for="name">Título da apresentação</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          required
+          [(ngModel)]="model.name"
+          name="name"
+          #name="ngModel"
+        />
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          Título da apresentação é obrigatório
+        </div>
+      </div>
+
+      <!-- TODO: THIS FIELD SHOULD ONLY APPEAR DEPENDING ON THE COMPANY -->
+      <div class="form-group">
+        <label for="name">Título do workshop</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          required
+          [(ngModel)]="model.name"
+          name="name"
+          #name="ngModel"
+        />
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          Título do workshop é obrigatório
+        </div>
+      </div>
+
+      <!-- TODO: THIS FIELD SHOULD ONLY APPEAR DEPENDING ON THE COMPANY -->
+      <div class="form-group">
+        <label for="name">Título da lunch talk</label>
+        <input
+          type="text"
+          class="form-control"
+          id="name"
+          required
+          [(ngModel)]="model.name"
+          name="name"
+          #name="ngModel"
+        />
+        <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+          Título da lunch talk é obrigatório
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        class="btn btn-success"
+        [disabled]="!companyInfoForm.form.valid"
+      >
+        Submit
+      </button>
+    </form>
+  </div>
+
+  <div [hidden]="!submitted">
+    {{ model }}
+  </div>
+</div>
