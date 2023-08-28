@@ -10,9 +10,9 @@
           required
           [(ngModel)]="model.info.numberOfPeople"
           name="numberOfPeople"
-          #power="ngModel"
+          #numberOfPeople="ngModel"
         >
-          <option *ngFor="let num of people_stand_options" [value]="num">
+          <option *ngFor="let num of peopleStandOptions" [value]="num">
             {{ num }}
           </option>
         </select>
@@ -45,7 +45,7 @@
           class="form-control"
           id="name"
           required
-          [(ngModel)]="model.name"
+          [(ngModel)]="model.titles.presentation"
           name="name"
           #name="ngModel"
         />
@@ -62,7 +62,7 @@
           class="form-control"
           id="name"
           required
-          [(ngModel)]="model.name"
+          [(ngModel)]="model.titles.workshop"
           name="name"
           #name="ngModel"
         />
@@ -79,7 +79,7 @@
           class="form-control"
           id="name"
           required
-          [(ngModel)]="model.name"
+          [(ngModel)]="model.titles.lunchTalk"
           name="name"
           #name="ngModel"
         />
