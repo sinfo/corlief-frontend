@@ -15,6 +15,7 @@ import { ReservationsComponent } from 'src/app/admin/reservations/reservations.c
 import { WelcomeComponent } from 'src/app/company/welcome/welcome.component';
 import { CompanyReservationsComponent } from 'src/app/company/company-reservations/company-reservations.component';
 import { InfosComponent } from './admin/infos/infos.component';
+import { CompanyInfosComponent } from './company/company-infos/company-infos.component';
 
 const appRoutes: Routes = [
   {
@@ -68,6 +69,11 @@ const appRoutes: Routes = [
       {
         path: 'reservations',
         component: CompanyReservationsComponent,
+        canActivate: [CompanyGuard]
+      },
+      {
+        path: 'infos',
+        component: CompanyInfosComponent,
         canActivate: [CompanyGuard]
       }
     ]
