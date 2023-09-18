@@ -6,7 +6,10 @@ export const environment = {
   production: false,
   corlief: 'http://localhost:8888',
   deck: 'https://deck-staging.sinfo.org',
-  frontend: 'http://localhost:4200'
+  frontend: 'http://localhost:4200',
+  google: {
+    clientId: '475922911787-2eunqihjt791ul7kfi1ji185o7mlehq2.apps.googleusercontent.com'
+  },
 };
 
 /*

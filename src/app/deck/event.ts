@@ -1,18 +1,14 @@
 export class Event {
     id: String;
     name: String;
-    kind: String;
-    public: boolean;
-    date: Date;
-    duration: Date;
+    begin: Date;
+    end: Date;
 
     constructor(event: Event) {
         this.id = event.id;
         this.name = event.name;
-        this.kind = event.kind;
-        this.public = event.public;
-        this.date = new Date(event.date);
-        this.duration = new Date(event.duration);
+        this.begin = new Date(event.begin);
+        this.end = new Date(event.end);
     }
 
     static fromArray(events: [Event]) {
@@ -24,12 +20,14 @@ export class Event {
     }
 
     static compare(e1: Event, e2: Event) {
-        const t1 = e1.date.getTime();
-        const t2 = e2.date.getTime();
+        const t1 = e1.begin.getTime();
+        const t2 = e2.begin.getTime();
         return t1 >= t2 ? 1 : 0;
     }
 
     getDuration(): number {
-        return this.duration.getUTCDate();
+        const beginDate = new Date(this.begin).getTime()
+        const endDate = new Date(this.end).getTime()
+        return new Date(endDate - beginDate).getUTCDate()
     }
 }

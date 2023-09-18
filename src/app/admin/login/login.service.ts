@@ -3,10 +3,13 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/internal/Observable';
 
 import { environment } from '../../../environments/environment';
-import { Credentials } from './credentials';
 
 import { StorageService } from 'src/app/storage.service';
 import { Router } from '@angular/router';
+
+const httpOptions = {
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+}
 
 @Injectable({
   providedIn: 'root'
@@ -21,21 +24,24 @@ export class LoginService {
     private router: Router
   ) { }
 
-  saveCredentials(credentials: Credentials) {
-    this.storage.setItem('credentials', credentials);
+  getToken() {
+    return this.storage.getItem('corlief_token');
   }
 
-  login(user: String, token: String): Observable<Credentials> {
-    const headers = new HttpHeaders({ Authorization: `${user} ${token}` });
-    return this.http.get<Credentials>(`${this.corlief}/auth`, { headers: headers });
+  saveToken(credentials: String) {
+    this.storage.setItem('corlief_token', credentials);
+  }
+
+  login(user: String, token: String): Observable<String> {
+    return this.http.post<String>(`${this.corlief}/auth/google`, { user, token }, httpOptions);
   }
 
   logout() {
-    this.storage.removeItem('credentials');
+    this.storage.removeItem('corlief_token');
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    return this.storage.getItem('credentials') !== null;
+    return this.storage.getItem('corlief_token') !== null;
   }
 }

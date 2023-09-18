@@ -3,8 +3,7 @@ import { HttpClient, HttpHeaders, HttpRequest, HttpEvent } from '@angular/common
 import { Observable } from 'rxjs/internal/Observable';
 
 import { environment } from '../../../../environments/environment';
-import { StorageService } from 'src/app/storage.service';
-import { Credentials } from '../../login/credentials';
+import { LoginService } from '../../login/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,10 +13,9 @@ export class UploadService {
   corlief: String = environment.corlief;
   headers: HttpHeaders;
 
-  constructor(private http: HttpClient, private storage: StorageService) {
-    const credentials = <Credentials>this.storage.getItem('credentials');
+  constructor(private http: HttpClient, private loginService: LoginService) {
     this.headers = new HttpHeaders({
-      Authorization: `${credentials.user} ${credentials.token}`
+      Authorization: `Bearer ${this.loginService.getToken()}`
     });
   }
 
