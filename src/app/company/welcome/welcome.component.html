@@ -14,7 +14,7 @@
 
           <p>
             <span [innerHTML]="'page0.text.p2' | translate"></span>
-            <span> {{english ? (event.date | dateEn: event.duration) : (event.date | datePt: event.duration) }}</span>
+            <span> {{english ? (event.begin | dateEn: event.duration) : (event.begin | datePt: event.duration) }}</span>
           </p>
 
           <p>

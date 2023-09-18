@@ -35,6 +35,7 @@ import { CanvasService } from 'src/app/admin/venues/venue/venue-image/canvas/can
 import { CompanyService } from 'src/app/company/company.service';
 import { ReservationsService } from 'src/app/admin/reservations/reservations.service';
 import { DeckService } from 'src/app/deck/deck.service';
+import { JwtService } from './admin/login/jwt.service';
 
 import { AppComponent } from './app.component';
 import { LoginComponent } from './admin/login/login.component';
@@ -136,7 +137,8 @@ library.add(fas);
     UploadService,
     CanvasService,
     CompanyService,
-    ReservationsService
+    ReservationsService,
+    JwtService
   ],
   bootstrap: [AppComponent],
   entryComponents: [ActivityDialogComponent],

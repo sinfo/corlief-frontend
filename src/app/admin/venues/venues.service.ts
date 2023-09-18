@@ -5,14 +5,12 @@ import { ReplaySubject } from 'rxjs/internal/ReplaySubject';
 
 import { environment } from '../../../environments/environment';
 
-import { StorageService } from '../../storage.service';
-
-import { Credentials } from '../login/credentials';
 import { Venue, Availability } from './venue/venue';
 import { Stand } from './venue/stand';
 import { Company } from 'src/app/deck/company';
 import { of } from 'rxjs';
 import { Activity } from './venue/activity';
+import { LoginService } from '../login/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -34,12 +32,11 @@ export class VenuesService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService
+    private loginService: LoginService
   ) {
-    const credentials = <Credentials>this.storage.getItem('credentials');
-    this.headers = credentials ? new HttpHeaders({
-      Authorization: `${credentials.user} ${credentials.token}`,
-    }) : new HttpHeaders();
+    this.headers = new HttpHeaders({
+      Authorization: `Bearer ${this.loginService.getToken()}`,
+    });
   }
 
   // ------------ Venue ------------

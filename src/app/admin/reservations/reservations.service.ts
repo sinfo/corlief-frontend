@@ -9,8 +9,8 @@ import { environment } from '../../../environments/environment';
 import { StorageService } from '../../storage.service';
 import { CompanyService } from 'src/app/company/company.service';
 
-import { Credentials } from '../login/credentials';
 import { Reservation } from './reservation/reservation';
+import { LoginService } from '../login/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -28,17 +28,13 @@ export class ReservationsService {
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService,
+    private loginService: LoginService,
     private companyService: CompanyService
   ) {
-    const credentials = this.storage.getItem('credentials') as Credentials;
-
-    this.headers = credentials
-      ? new HttpHeaders({
-        'Authorization': `${credentials.user} ${credentials.token}`,
-        'Content-Type': 'application/json'
-      })
-      : null;
+    this.headers = new HttpHeaders({
+      'Authorization': `Bearer ${this.loginService.getToken()}`,
+      'Content-Type': 'application/json'
+    });
   }
 
   setReservations(reservations: Reservation[]) {

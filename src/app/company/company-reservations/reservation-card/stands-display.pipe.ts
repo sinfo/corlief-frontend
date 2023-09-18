@@ -12,7 +12,7 @@ export class StandsDisplayPipe implements PipeTransform {
   transform(stands: Stand[], event: Event): any {
     const duration = event.getDuration();
     const result = [];
-    const date = new Date(event.date);
+    const date = new Date(event.begin);
 
     for (let day = 1; day <= duration; day++) {
       const stand = stands.filter(s => s.day === day);

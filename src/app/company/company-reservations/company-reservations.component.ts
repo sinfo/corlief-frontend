@@ -64,7 +64,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
         for (let i = 1; i <= event.getDuration(); i++) { days.push(i); valid.push(true); }
 
         this.event = event;
-        this.selectedDay = { day: 1, date: event.date, allDays: days };
+        this.selectedDay = { day: 1, date: event.begin, allDays: days };
       });
 
     this.companyService.getVenueAvailability().subscribe(_availability => {
