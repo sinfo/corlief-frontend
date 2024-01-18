@@ -51,7 +51,9 @@ export class DeckService {
   private getCompanies(edition: String): void {
     this.http.get<Company[]>(
       `${this.deck}/companies?event=${edition}`
-    ).subscribe(companies => this.deckCompaniesSubject.next(companies));
+    ).subscribe(companies => {
+      this.deckCompaniesSubject.next(companies)
+    });
   }
 
   getEventSubject(): Observable<Event> {
@@ -70,7 +72,7 @@ export class DeckService {
         this.events = Event.fromArray(events).sort(Event.compare) as [Event];
 
         const filtered = edition
-          ? events.filter(e => e.id === edition)[0]
+          ? events.filter(e => e.id.toString() === edition)[0]
           : events[events.length - 1];
 
         const event = new Event(filtered);

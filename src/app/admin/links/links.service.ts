@@ -47,12 +47,12 @@ export class LinksService {
         const eventOverride = this.event !== undefined && this.event.id !== event.id;
         this.event = event;
         if (eventOverride) { this.updateLinks(event.id as string); }
-      });
 
-    this.deckCompaniesSubscription = this.deckService.getDeckCompaniesSubject()
-      .subscribe(companies => {
-        this.companies.updateCompanies(companies, this.event.id);
-        this.updateLinks();
+        this.deckCompaniesSubscription = this.deckService.getDeckCompaniesSubject()
+          .subscribe(companies => {
+            this.companies.updateCompanies(companies, this.event.id.toString());
+            this.updateLinks();
+          });
       });
   }
 

@@ -25,11 +25,11 @@ export class LoginService {
   ) { }
 
   getToken() {
-    return this.storage.getItem('corlief_token');
+    return this.storage.getItem('token')['token'];
   }
 
   saveToken(credentials: String) {
-    this.storage.setItem('corlief_token', credentials);
+    this.storage.setItem('token', credentials);
   }
 
   login(user: String, token: String): Observable<String> {
@@ -37,11 +37,11 @@ export class LoginService {
   }
 
   logout() {
-    this.storage.removeItem('corlief_token');
+    this.storage.removeItem('token');
     this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
-    return this.storage.getItem('corlief_token') !== null;
+    return this.storage.getItem('token') !== null;
   }
 }

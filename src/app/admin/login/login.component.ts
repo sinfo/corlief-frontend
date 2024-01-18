@@ -49,6 +49,7 @@ export class LoginComponent implements OnInit {
       auto_select: false,
       cancel_on_tap_outside: true,
       ux_mode: "popup",
+      hd: "sinfo.org"
     });
     this.renderGoogleButton();
   }
