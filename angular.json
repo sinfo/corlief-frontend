@@ -75,6 +75,9 @@
           "configurations": {
             "production": {
               "browserTarget": "corlief-frontend:build:production"
+            },
+            "staging": {
+              "browserTarget": "corlief-frontend:build:staging"
             }
           }
         },
@@ -128,6 +131,9 @@
           "configurations": {
             "production": {
               "devServerTarget": "corlief-frontend:serve:production"
+            },
+            "staging": {
+              "devServerTarget": "corlief-frontend:serve:staging"
             }
           }
         },

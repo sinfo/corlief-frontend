@@ -8,7 +8,6 @@ import { Subscription } from 'rxjs/internal/Subscription';
 
 import { environment } from 'src/environments/environment';
 import { StorageService } from '../../storage.service';
-import { Credentials } from '../login/credentials';
 
 import { DeckService } from 'src/app/deck/deck.service';
 
@@ -16,6 +15,7 @@ import { Link, LinkForm, LinkEdit } from './link/link';
 import { Companies } from './link/companies';
 import { Company } from 'src/app/deck/company';
 import { Event } from 'src/app/deck/event';
+import { LoginService } from '../login/login.service';
 
 @Injectable({
   providedIn: 'root'
@@ -23,31 +23,22 @@ import { Event } from 'src/app/deck/event';
 export class LinksService {
 
   private corlief = `${environment.corlief}/link`;
-  private credentials: Credentials;
-
-  companies: Companies;
-
-  event: Event;
-
-  eventSubscription: Subscription;
-  deckCompaniesSubscription: Subscription;
-
   private companiesSubject: ReplaySubject<Companies> = new ReplaySubject<Companies>();
-
   private headers: HttpHeaders;
+  companies: Companies;
+  event: Event;
+  eventSubscription: Subscription;
+  deckCompaniesSubscription: Subscription;s
 
   constructor(
     private http: HttpClient,
-    private storage: StorageService,
-    private deckService: DeckService
+    private deckService: DeckService,
+    private loginService: LoginService
   ) {
     this.companies = new Companies();
 
-    const credentials = <Credentials>this.storage.getItem('credentials');
-    this.credentials = credentials;
-
     this.headers = new HttpHeaders({
-      'Authorization': `${credentials.user} ${credentials.token}`,
+      'Authorization': `Bearer ${this.loginService.getToken()}`,
       'Content-Type': 'application/json'
     });
 
@@ -56,12 +47,12 @@ export class LinksService {
         const eventOverride = this.event !== undefined && this.event.id !== event.id;
         this.event = event;
         if (eventOverride) { this.updateLinks(event.id as string); }
-      });
 
-    this.deckCompaniesSubscription = this.deckService.getDeckCompaniesSubject()
-      .subscribe(companies => {
-        this.companies.updateCompanies(companies, this.event.id);
-        this.updateLinks();
+        this.deckCompaniesSubscription = this.deckService.getDeckCompaniesSubject()
+          .subscribe(companies => {
+            this.companies.updateCompanies(companies, this.event.id.toString());
+            this.updateLinks();
+          });
       });
   }
 

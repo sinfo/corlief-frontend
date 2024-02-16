@@ -2,7 +2,7 @@
     "navbar": {
         "corlief": "Reserva de Stands",
         "sinfo_org": "Visitar sinfo.org",
-        "partners": "Visitar partners page",
+        "partners": "Visitar página sponsors",
         "lang": "Mudar linguagem (EN)"
     },
     "page0": {
@@ -28,7 +28,9 @@
             "3": "Escolher a apresentação",
             "4": "Escolher a lunch talk",
             "5": "Submeter a reserva",
-            "6": "Aguardar pela confirmação por parte da comissão da SINFO"
+            "6": "Aguardar pela confirmação por parte da comissão da SINFO",
+            "7": "Quando a reserva estiver confirmada, submeter as informações adicionais pedidas",
+            "8": "Aguardar pela confirmação por parte da comissão da SINFO"
         }
     },
     "page2": {
@@ -36,12 +38,12 @@
         "text": {
             "p1": {
                 "bold": "Reserve as suas atividades, sempre que possível, em dias que irão participar com stand ",
-                "normal": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva."
+                "normal": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva, caso não seja cumprido."
             },
             "p2": {
                 "normal1": "Sempre que possível ",
                 "bold": "Reserve dias consecutivos ",
-                "normal2": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva."
+                "normal2": "pois por questões logísticas poderá ser complicado agilizar todo este processo e poderá levar a uma rejeição da vossa proposta de reserva, caso não seja cumprido."
             },
             "p3": {
                 "warning": "Aviso: ",
@@ -53,7 +55,8 @@
     "buttons": {
         "back": " < Retroceder",
         "next": "Seguinte >",
-        "reserve": "Reservar Stands >"
+        "reserve": "Reservar Stands >",
+        "information": "Submeter Informação >"
     },
     "reservations": {
         "day": "Dia {{day}}",

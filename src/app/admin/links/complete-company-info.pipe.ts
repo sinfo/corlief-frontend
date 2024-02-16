@@ -20,7 +20,7 @@ export class CompleteCompanyInfoPipe implements PipeTransform {
 
       if (event === undefined) { return result; }
 
-      const participation = Participation.getFromEvent(complete[index].participations, event);
+      const participation = Participation.getFromEvent(complete[index].participation, event);
 
       if (participation) {
         result.currentParticipation = participation;

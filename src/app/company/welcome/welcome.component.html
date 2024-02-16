@@ -14,7 +14,7 @@
 
           <p>
             <span [innerHTML]="'page0.text.p2' | translate"></span>
-            <span> {{english ? (event.date | dateEn: event.duration) : (event.date | datePt: event.duration) }}</span>
+            <span> {{english ? (event.begin | dateEn: event.duration) : (event.begin | datePt: event.duration) }}</span>
           </p>
 
           <p>
@@ -107,9 +107,15 @@
         </a>
       </span>
 
-      <span class="reservations-link" *ngIf="page==2">
+      <span class="step-button-link" *ngIf="page==2  && currentStep() === 'STANDS'">
         <a (click)="changeState" routerLink="/reservations" routerLinkActive="selected"
           [routerLinkActiveOptions]="{exact: true}" [innerHTML]="'buttons.reserve' | translate">
+        </a>
+      </span>
+
+      <span class="step-button-link" *ngIf="page==2 && currentStep() === 'INFO'">
+        <a (click)="changeState" routerLink="/infos" routerLinkActive="selected"
+          [routerLinkActiveOptions]="{exact: true}" [innerHTML]="'buttons.information' | translate">
         </a>
       </span>
     </div>

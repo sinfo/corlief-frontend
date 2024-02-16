@@ -2,37 +2,11 @@
   <div class="card">
 
     <div class="card-header">
-      SINFO's login
+      SINFO Authentication
     </div>
 
     <div class="card-body">
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text">User</span>
-        </div>
-        <input [(ngModel)]="user" placeholder="user">
-      </div>
-
-      <div class="input-group mb-3">
-        <div class="input-group-prepend">
-          <span class="input-group-text">Token</span>
-        </div>
-        <input [(ngModel)]="token" placeholder="token">
-      </div>
-
-      <span class="footer" [ngClass]="error ? 'with-message' : 'without-message'">
-
-        <span class="errorMessage" [hidden]="error === undefined">
-          <h6>{{error}}</h6>
-        </span>
-
-        <button class="btn" [ngClass]="loading ? 'btn-warning': 'btn-primary'" (click)="login()">
-          <fa-icon [icon]="['fas', 'sync']" [spin]="true" [hidden]="!loading"></fa-icon>
-          Login
-        </button>
-
-      </span>
-
+      <div id="google-button"></div>
     </div>
   </div>
 </span>

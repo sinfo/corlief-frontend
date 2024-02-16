@@ -14,6 +14,8 @@ import { UnauthorizedComponent } from 'src/app/unauthorized/unauthorized.compone
 import { ReservationsComponent } from 'src/app/admin/reservations/reservations.component';
 import { WelcomeComponent } from 'src/app/company/welcome/welcome.component';
 import { CompanyReservationsComponent } from 'src/app/company/company-reservations/company-reservations.component';
+import { InfosComponent } from './admin/infos/infos.component';
+import { CompanyInfosComponent } from './company/company-infos/company-infos.component';
 
 const appRoutes: Routes = [
   {
@@ -40,6 +42,11 @@ const appRoutes: Routes = [
         path: 'reservations',
         component: ReservationsComponent,
         canActivate: [AdminGuard]
+      },
+      {
+        path: 'infos',
+        component: InfosComponent,
+        canActivate: [AdminGuard]
       }
     ]
   },
@@ -62,6 +69,11 @@ const appRoutes: Routes = [
       {
         path: 'reservations',
         component: CompanyReservationsComponent,
+        canActivate: [CompanyGuard]
+      },
+      {
+        path: 'infos',
+        component: CompanyInfosComponent,
         canActivate: [CompanyGuard]
       }
     ]

@@ -5,8 +5,11 @@
 export const environment = {
   production: false,
   corlief: 'http://localhost:8888',
-  deck: 'http://localhost:8080',
-  frontend: 'http://localhost:4200'
+  deck: 'https://deck2.sinfo.org',
+  frontend: 'http://localhost:4200',
+  google: {
+    clientId: '475922911787-2eunqihjt791ul7kfi1ji185o7mlehq2.apps.googleusercontent.com'
+  },
 };
 
 /*

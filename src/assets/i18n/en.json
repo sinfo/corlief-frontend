@@ -2,7 +2,7 @@
     "navbar": {
         "corlief": "Stands reservation",
         "sinfo_org": "Visit sinfo.org",
-        "partners": "Visit partners page",
+        "partners": "Visit sponsors page",
         "lang": "Change language (PT)"
     },
     "page0": {
@@ -28,7 +28,9 @@
             "3": "Pick the presentation slot",
             "4": "Pick the lunch talk slot",
             "5": "Submit your reservation",
-            "6": "Wait for our team to aprove it and confirm your reservation"
+            "6": "Wait for our team to aprove it and confirm your reservation",
+            "7": "Once it is approved, submit the additional information requested",
+            "8": "Wait for our team to approve it and confirm the information is correct"
         }
     },
     "page2": {
@@ -36,12 +38,12 @@
         "text": {
             "p1": {
                 "bold": "Always try to book your activities in days you will be present with a stand ",
-                "normal": ", as it simplifies and agilizes our work and may lead to you reservation being rejected."
+                "normal": ", as it simplifies and agilizes our work. Failure to do this may lead to your reservation being rejected."
             },
             "p2": {
                 "normal1": "Please book consecutive days",
                 "bold": "Please book consecutive days",
-                "normal2": ", as it simplifies and agilizes our work and may lead to you reservation being rejected."
+                "normal2": ", as it simplifies and agilizes our work. Failure to do this may lead to your reservation being rejected."
             },
             "p3": {
                 "warning": "Warning: ",
@@ -53,7 +55,8 @@
     "buttons": {
         "back": " < Previous Page",
         "next": "Next Page >",
-        "reserve": "Book Stands >"
+        "reserve": "Book Stands >",
+        "information": "Submit Information >"
     },
     "reservations": {
         "day": "Day {{day}}",

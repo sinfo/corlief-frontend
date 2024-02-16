@@ -45,7 +45,7 @@ export class Companies {
             newCompany.currentParticipation =
                 company.currentParticipation
                     ? company.currentParticipation
-                    : Participation.getFromEdition(company.participations, filtered[0].edition);
+                    : Participation.getFromEdition(company.participation, filtered[0].edition);
             newCompany.link = link;
 
             if (link.valid) {
