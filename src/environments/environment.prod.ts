@@ -4,6 +4,6 @@ export const environment = {
   deck: 'https://deck.sinfo.org',
   frontend: 'https://corlief.sinfo.org',
   google: {
-    clientId: '475922911787-2eunqihjt791ul7kfi1ji185o7mlehq2.apps.googleusercontent.com'
+    clientId: '475922911787-mj5hp1pcb00329tarno2bdeclmh7schr.apps.googleusercontent.com'
   },
 }
