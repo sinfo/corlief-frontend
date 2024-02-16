@@ -28,6 +28,6 @@ export class Event {
     getDuration(): number {
         const beginDate = new Date(this.begin).getTime()
         const endDate = new Date(this.end).getTime()
-        return new Date(endDate - beginDate).getUTCDate()
+        return new Date(endDate - beginDate).getUTCDate() - 1
     }
 }
