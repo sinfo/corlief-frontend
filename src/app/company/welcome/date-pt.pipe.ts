@@ -19,10 +19,8 @@ export class DatePtPipe implements PipeTransform {
       return `${startDay} de ${startMonth}`;
     }
 
-    const endDate = new Date(start.getTime() + end.getTime());
-
-    const endDay = endDate.getDate();
-    const endMonth = this.translator[endDate.getMonth()];
+    const endDay = end.getDate();
+    const endMonth = this.translator[end.getMonth()];
 
     return start.getMonth() === end.getMonth()
       ? `${startDay} a ${endDay} de ${startMonth}`
