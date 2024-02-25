@@ -252,6 +252,13 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       act.isInArray(this.latestReservation.activities) && this.latestReservation.isConfirmed();
   }
 
+  private isReadyToSubmit() {
+    return this.latestReservation
+            && this.latestReservation.issued === undefined
+            && this.credentials.activities.every(act => this.latestReservation.activities.find(e => act === e.kind) !== undefined)
+            && (this.latestReservation.stands.length === this.credentials.participationDays || this.availability.venue.stands.length === 0 || this.latestReservation.stands === undefined);
+  }
+
   private makeReservation(content) {
     const contiguous: boolean = this.latestReservation.daysAreContiguous();
     const same_stand: boolean = this.latestReservation.standIsSame();
