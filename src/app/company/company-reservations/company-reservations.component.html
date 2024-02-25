@@ -29,14 +29,9 @@
     <div class="canvas-wrapper">
 
       <div class="canvas" *ngIf="limitedStands">
-        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [maxWidth]="25"
+        <app-venue-image (standClick)="clickStandFromCanvas($event)" [maxHeight]="55" [maxWidth]="55"
           [state]="canvasState">
         </app-venue-image>
-      </div>
-
-      <div class="stands">
-
-
         <h5>Stands</h5>
 
         <div class="stands-list" *ngIf="limitedStands">
@@ -55,9 +50,9 @@
             {{ isPendingBook()? "Deselect this day": (isConfirmedBook()? "Selected day" : "Select this day")}}
           </div>
         </div>
+      </div>
 
-
-
+      <div class="stands">
 
         <span style="width: 100%;" *ngFor="let activity of credentials.activities">
           <h5>{{activity}}</h5>

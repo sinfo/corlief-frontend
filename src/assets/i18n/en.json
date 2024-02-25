@@ -72,7 +72,7 @@
         "presentation": "Presentations"
     },
     "reservationWarning": {
-        "msg1": "Your reservation does meet SINFO's guidelines, because",
+        "msg1": "Your reservation does not meet SINFO's guidelines, because",
         "msg2": "it is not on consecutive days",
         "msg3": " and",
         "msg4": "it is not on the same stand",
