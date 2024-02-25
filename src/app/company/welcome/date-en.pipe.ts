@@ -33,10 +33,9 @@ export class DateEnPipe implements PipeTransform {
       return `${startMonth} ${startDay}${startTerm} `;
     }
 
-    const endDate = new Date(start.getTime() + end.getTime());
 
-    const endDay = endDate.getDate();
-    const endMonth = this.translator[endDate.getMonth()];
+    const endDay = end.getDate();
+    const endMonth = this.translator[end.getMonth()];
 
     var endTerm
     if(endDay === 1 || endDay === 21 || endDay === 31){
