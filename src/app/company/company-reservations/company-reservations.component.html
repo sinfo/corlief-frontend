@@ -95,7 +95,7 @@
         </div> -->
 
 
-        <h6 [innerHTML]="'reservations.info' | translate"></h6>
+        <h6 *ngIf="credentials.activities.length" [innerHTML]="'reservations.info' | translate"></h6>
 
       </div>
 
@@ -144,10 +144,7 @@
         <div class="btn-group-vertical" role="group">
           <button class="btn btn-primary" type="button" (click)="makeReservation(confirmReservationPopup)"
             [innerHTML]="'reservations.submit' | translate"
-            *ngIf="latestReservation 
-            && latestReservation.issued === undefined 
-            && (latestReservation.stands.length === credentials.participationDays || availability.venue.stands.length === 0 || latestReservation.stands === undefined)">Submit
-            reservation</button>
+            *ngIf="isReadyToSubmit()">Submit reservation</button>
 
           <button *ngIf="showAllReservations" class="btn btn-primary" type="button"
             (click)="alternateShowAllReservations()" [innerHTML]=" 'reservations.current' | translate">

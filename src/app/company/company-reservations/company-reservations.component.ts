@@ -154,8 +154,7 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
 
   private clickableActivity(id, kind) {
     return this.latestReservation && this.latestReservation.issued === undefined
-      && !this.isOccupiedActivity(id, kind) && this.credentials.activities.find(a => a === kind) !== undefined
-      && this.latestReservation.activities.find(act => act.kind === kind) === undefined;
+      && !this.isOccupiedActivity(id, kind) && this.credentials.activities.find(a => a === kind) !== undefined;
   }
 
   private clickStand(standId: number, free: boolean) {
@@ -171,6 +170,9 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       if (this.latestReservation.activities === undefined) {
         this.latestReservation.activities = [];
       }
+
+      // FIXME: This is a workaround, imo we should be using dictionaries to store activities
+      this.latestReservation.activities = this.latestReservation.activities.filter(act => act.kind !== kind);
       this.latestReservation.activities.push(new Activity(id, kind));
 
       this.reservationService.setReservation(this.latestReservation);
@@ -250,6 +252,13 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
     const act = new Activity(id, kind);
     return this.latestReservation && this.latestReservation.activities &&
       act.isInArray(this.latestReservation.activities) && this.latestReservation.isConfirmed();
+  }
+
+  private isReadyToSubmit() {
+    return this.latestReservation
+            && this.latestReservation.issued === undefined
+            && this.credentials.activities.every(act => this.latestReservation.activities.find(e => act === e.kind) !== undefined)
+            && (this.latestReservation.stands.length === this.credentials.participationDays || this.availability.venue.stands.length === 0 || this.latestReservation.stands === undefined);
   }
 
   private makeReservation(content) {
