@@ -171,6 +171,9 @@ export class CompanyReservationsComponent implements OnInit, OnDestroy {
       if (this.latestReservation.activities === undefined) {
         this.latestReservation.activities = [];
       }
+
+      // FIXME: This is a workaround, imo we should be using dictionaries to store activities
+      this.latestReservation.activities = this.latestReservation.activities.filter(act => act.kind !== kind);
       this.latestReservation.activities.push(new Activity(id, kind));
 
       this.reservationService.setReservation(this.latestReservation);
