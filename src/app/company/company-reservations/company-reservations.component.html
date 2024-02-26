@@ -95,7 +95,7 @@
         </div> -->
 
 
-        <h6 [innerHTML]="'reservations.info' | translate"></h6>
+        <h6 *ngIf="credentials.activities.length" [innerHTML]="'reservations.info' | translate"></h6>
 
       </div>
 
