@@ -12,7 +12,7 @@
       [ngClass]="{'booked': stand.id !== undefined}">
       <div class="info">
         <b [innerHTML]="'reservations.day' | translate: {day: stand.day} "></b> ({{ !english? (stand.date | date : 'MMMM
-        d') : (stand.date | ptDate: stand.date)}})
+        d':'+0000') : (stand.date | ptDate: stand.date)}})
         <span *ngIf="stand.id !== undefined">
           <b *ngIf="limitedStands">- Stand {{stand.id + 1}}</b>
           <b *ngIf="!limitedStands">You chose this day!</b>
